@@ -1,0 +1,1 @@
+([adsisearcher]::new(([adsi]"LDAP://DC=DomainDnsZones,DC=capcom,DC=local"),"(&(objectClass=*)(!(DC=@))(!(DC=*DnsZones))(!(DC=*arpa))(!(DC=_*))(!dNSTombstoned=TRUE))")).FindAll() | foreach {$_.Properties["name"] ; try{$dnsByte=[byte[]]($_.Properties["dnsrecord"][0]); if ([int]$dnsByte[2]=1) {"{0}.{1}.{2}.{3}" -f $dnsByte[24],$dnsByte[25],$dnsByte[26],$dnsByte[27]}}catch{}}
