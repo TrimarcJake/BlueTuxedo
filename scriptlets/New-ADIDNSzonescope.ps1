@@ -1,8 +1,10 @@
-function New-ADIDNSzonescopecontainer
+function New-ADIDNSZoneScope
 {
+  ## NOTE: This needs to be modified to create a SOA record or the record will disappear at replication :P
+  
     <#
     .SYNOPSIS
-    This function adds a DNS zone scope container to an Active Directory-Integrated DNS (ADIDNS) Zone through an encrypted LDAP
+    This function adds a DNS zone scope to an Active Directory-Integrated DNS (ADIDNS) Zone scope container through an encrypted LDAP
     add request.
 
     Author: Kevin Robertson (@kevin_robertson)  
@@ -11,7 +13,7 @@ function New-ADIDNSzonescopecontainer
     Modified by: Jim Sykora
     
     .DESCRIPTION
-    This function creates an ADIDNS zone scope container by connecting to LDAP and adding an object of type dnsZoneScopeContainer.
+    This function creates an ADIDNS zone scope by connecting to LDAP and adding an object of type dnsZoneScope.
 
     .PARAMETER Credential
     PSCredential object that will be used to add the ADIDNS object.
@@ -23,6 +25,10 @@ function New-ADIDNSzonescopecontainer
     .PARAMETER DistinguishedName
     Distinguished name for the ADIDNS zone. Do not include the node name.
 
+    .PARAMETER DNSRecord
+    dnsRecord attribute byte array. If not specified, New-DNSRecordArray will generate the array. See MS-DNSP for
+    details on the dnsRecord structure.
+
     .PARAMETER Domain
     The targeted domain in DNS format. This parameter is mandatory on a non-domain attached system.
 
@@ -31,6 +37,9 @@ function New-ADIDNSzonescopecontainer
 
     .PARAMETER Forest
     The targeted forest in DNS format. This parameter is mandatory on a non-domain attached system.
+
+    .PARAMETER ZoneScope
+    The ADIDNS ZoneScope name.
 
     .PARAMETER Partition
     Default = DomainDNSZones: (DomainDNSZones,ForestDNSZones,System) The AD partition name where the zone is stored.
@@ -43,6 +52,10 @@ function New-ADIDNSzonescopecontainer
 
     .PARAMETER Priority
     SRV record priority.
+
+    .PARAMETER Tombstone
+    Switch: Sets the dnsTombstoned flag to true when the node is created. This places the node in a state that
+    allows it to be modified or fully tombstoned by any authenticated user.
 
     .PARAMETER SOASerialNumber
     The current SOA serial number for the target zone. Note, using this parameter will bypass connecting to a
@@ -64,13 +77,13 @@ function New-ADIDNSzonescopecontainer
     The ADIDNS zone. This parameter is mandatory on a non-domain attached system.
 
     .EXAMPLE
-    Add a dnsZoneScopeContainer to an ADIDNS zone.
-    New-ADIDNSZoneScopeContainer -Zone 'test.local'
+    Add a dnsZoneScope to an ADIDNS zone.
+    New-ADIDNSZoneScope -Zone 'test.local' -ZoneScope 'MaliciousZoneScope'
 
     .EXAMPLE
-    Add a dnsZoneScopeContainer to a ADIDNS zone from a non-domain attached system.
+    Add a dnsZoneScope to an ADIDNS zone from a non-domain attached system.
     $credential = Get-Credential
-    New-ADIDNSZoneScopeContainer -Zone 'test.local' -DomainController dc1.test.local -Domain test.local -Credential $credential
+    New-ADIDNSZoneScope -Zone 'test.local' -ZoneScope 'MaliciousZoneScope' -DomainController dc1.test.local -Domain test.local -Credential $credential
 
     .LINK
     https://github.com/Kevin-Robertson/Powermad
@@ -84,6 +97,7 @@ function New-ADIDNSzonescopecontainer
         [parameter(Mandatory=$false)][String]$Domain,
         [parameter(Mandatory=$false)][String]$DomainController,
         [parameter(Mandatory=$false)][String]$Forest,
+        [parameter(Mandatory=$true)][String]$ZoneScope,
         [parameter(Mandatory=$false)][ValidateSet("DomainDNSZones","ForestDNSZones","System")][String]$Partition = "DomainDNSZones",
         [parameter(Mandatory=$false)][ValidateSet("A","AAAA","CNAME","DNAME","MX","NS","PTR","SRV","TXT")][String]$Type = "A",
         [parameter(Mandatory=$true)][String]$Zone,
@@ -147,11 +161,11 @@ function New-ADIDNSzonescopecontainer
         
         if($Partition -eq 'System')
         {
-            $distinguished_name = "CN=ZoneScopeContainer,DC=$Zone,CN=MicrosoftDNS,CN=$Partition"
+            $distinguished_name = "CN=$ZoneScope,CN=ZoneScopeContainer,DC=$Zone,CN=MicrosoftDNS,CN=$Partition"
         }
         else
         {
-            $distinguished_name = "CN=ZoneScopeContainer,DC=$Zone,CN=MicrosoftDNS,DC=$Partition"
+            $distinguished_name = "CN=$ZoneScope,CN=ZoneScopeContainer,DC=$Zone,CN=MicrosoftDNS,DC=$Partition"
         }
 
         $DC_array = $Domain.Split(".")
@@ -165,9 +179,8 @@ function New-ADIDNSzonescopecontainer
     }
     else 
     {
-        $distinguished_name = "CN=ZoneScopeContainer," + $DistinguishedName
+        $distinguished_name = "CN=$ZoneScope,CN=ZoneScopeContainer," + $DistinguishedName
     }
-
 
 
     $identifier = New-Object System.DirectoryServices.Protocols.LdapDirectoryIdentifier($DomainController,389)
@@ -181,7 +194,7 @@ function New-ADIDNSzonescopecontainer
         $connection = New-Object System.DirectoryServices.Protocols.LdapConnection($identifier)
     }
 
-    $object_category = "CN=Dns-Zone-Scope-Container,CN=Schema,CN=Configuration"
+    $object_category = "CN=Dns-Zone-Scope,CN=Schema,CN=Configuration"
     $forest_array = $Forest.Split(".")
 
     ForEach($DC in $forest_array)
@@ -196,11 +209,12 @@ function New-ADIDNSzonescopecontainer
         $connection.Bind()
         $request = New-Object -TypeName System.DirectoryServices.Protocols.AddRequest
         $request.DistinguishedName = $distinguished_name
-        $request.Attributes.Add((New-Object "System.DirectoryServices.Protocols.DirectoryAttribute" -ArgumentList "objectClass",@("top","dnsZoneScopeContainer"))) > $null
+        $request.Attributes.Add((New-Object "System.DirectoryServices.Protocols.DirectoryAttribute" -ArgumentList "objectClass",@("top","dnsZoneScope"))) > $null
         $request.Attributes.Add((New-Object "System.DirectoryServices.Protocols.DirectoryAttribute" -ArgumentList "objectCategory",$object_category)) > $null
+        $request.Attributes.Add((New-Object "System.DirectoryServices.Protocols.DirectoryAttribute" -ArgumentList "dc",$ZoneScope)) > $null
 
         $connection.SendRequest($request) > $null
-        Write-Output "[+] ADIDNS ZoneScopeContainer $Node added"
+        Write-Output "[+] ADIDNS ZoneScope $ZoneScope added"
     }
     catch
     {
