@@ -1,2 +1,2 @@
 # BlueTuxedo
-A tiny tool to identify and remediate common misconfigurations in Active Directory-integrated DNS
+A tiny tool built to find and fix common misconfigurations in Active Directory-Integrated DNS
