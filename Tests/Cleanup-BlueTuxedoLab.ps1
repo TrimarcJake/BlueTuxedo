@@ -11,9 +11,9 @@ foreach ($domain in $Domains) {
 
     # Remove BlueTuxedo* Users from DnsAdmins
     Get-ADUser -Filter { Name -like 'BlueTuxedo*' } | ForEach-Object {
-        Remove-ADGroupMember -Identity 'DnsAdmins' -Members $_         
+        Remove-ADGroupMember -Identity 'DnsAdmins' -Members $_ -Confirm:$false    
     }
 
     # Remove BlueTuxedo OU and all Lab Objects
-    Remove-ADObject -Identity "OU=BlueTuxedo,$DomainRoot" -Recursive -Server $domain
+    Remove-ADObject -Identity "OU=BlueTuxedo,$DomainRoot" -Recursive -Server $domain -Confirm:$false
 }
