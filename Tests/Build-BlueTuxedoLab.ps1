@@ -1,3 +1,5 @@
+#requires -Modules ActiveDirectory
+
 # Get Root
 $RootDSE = (Get-ADRootDSE).defaultNamingContext
 
