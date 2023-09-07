@@ -13,20 +13,31 @@ foreach($domain in $Domains) {
     $DomainRoot = (Get-ADDomain $domain).distinguishedName
 
     # Create New OU For Lab Objects
-    New-ADOrganizationalUnit -Name 'BlueTuxedo' -Path $DomainRoot -Server $domain -ProtectedFromAccidentalDeletion $False
+    New-ADOrganizationalUnit -Name 'BlueTuxedo' -Path $DomainRoot -Server $domain -ProtectedFromAccidentalDeletion $False -ErrorAction Ignore
 
     # Create Computer Object
-    New-ADComputer -Name "BlueTuxedoDSPN$i" -SAMAccountName "BlueTuxedoDSPN$i" -Path "OU=BlueTuxedo,$DomainRoot" -Server $domain
+    New-ADComputer -Name "BlueTuxedoDSPN$i" -SAMAccountName "BlueTuxedoDSPN$i" -Path "OU=BlueTuxedo,$DomainRoot" -Server $domain -ErrorAction Ignore
 
     # Assign Custom SPNs to Computer Object
     setspn -s "BlueTuxedo/BlueTuxedoDSPN$i" "$domain\BlueTuxedoDSPN$i"
     setspn -s "BlueTuxedo/BlueTuxedoDSPN$i.$domain" "$domain\BlueTuxedoDSPN$i"
 
     # Create New User
-    New-ADUser -Name "BlueTuxedoDnsAdmins$i" -SamAccountName "BlueTuxedoDnsAdmins$i" -Path "OU=BlueTuxedo,$DomainRoot" -Server $domain
+    New-ADUser -Name "BlueTuxedoDnsAdmins$i" -SamAccountName "BlueTuxedoDnsAdmins$i" -Path "OU=BlueTuxedo,$DomainRoot" -Server $domain -ErrorAction Ignore
 
     # Add New User to DnsAdmins
-    Add-ADGroupMember -Identity 'DnsAdmins' -Members "BlueTuxedoDnsAdmins$i" -Server $domain
+    Add-ADGroupMember -Identity 'DnsAdmins' -Members "BlueTuxedoDnsAdmins$i" -Server $domain -ErrorAction Ignore
     
+    # Check for wildcard and wpad records. If found, delete.
+    $Records = '*','wpad'
+    foreach($record in $Records) {
+        $RRTypes = 'A','AAAA','TXT'
+        foreach($rrtype in $RRTypes) {
+            if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name $record -ErrorAction Ignore) {
+                Remove-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name $record
+            }
+        }
+    }
+
     $i++
 }
