@@ -53,6 +53,11 @@ foreach($domain in $Domains) {
         # Add non-ADI Bad Conditional Forwarder (currently not working)
         # Add-DnsServerConditionalForwarderZone -Name 'bluetuxedo.nonadi' -ComputerName $ipaddress -MasterServers '0.0.0.0'
 
+        # Set Socket Pool Size To Default
+        $CurrentSettings = Get-DnsServerSetting -ComputerName $ipaddress -All
+        $CurrentSettings.SocketPoolSize = 2500
+        Set-DnsServerSetting -ComputerName $ipaddress -InputObject $CurrentSettings
+
         $j++
     }
 
