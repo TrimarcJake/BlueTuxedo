@@ -17,11 +17,10 @@ foreach ($domain in $Domains) {
     # Remove BlueTuxedo OU and all Lab Objects
     Remove-ADObject -Identity "OU=BlueTuxedo,$DomainRoot" -Recursive -Server $domain -Confirm:$false
 
-    # Restore default GQBL entries
     # Get All ADI DNS Server Addresses in Domain
     $IPAddresses = (Resolve-DnsName -Type NS -Name $domain).IP4Address
 
-    # Replace default GQBL entries with a GUID (can't have a blank GQBL?)
+    # Restore default GQBL entries
     foreach ($ipaddress in $IPAddresses) {
         Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List 'isatap','wpad'
     }
