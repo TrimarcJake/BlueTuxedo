@@ -26,10 +26,10 @@ foreach ($domain in $Domains) {
     setspn -s "$LabName/$LabName-DSPN$i.$domain" "$domain\$LabName-DSPN$i"
 
     # Create New User
-    New-ADUser -Name "$LabName-DnsAdmins$i" -SamAccountName "$LabName-DnsAdmins$i" -Path "OU=$LabName,$DomainRoot" -Server $domain -ErrorAction Ignore
+    New-ADUser -Name "$LabName-DnsA$i" -SamAccountName "$LabName-DnsA$i" -Path "OU=$LabName,$DomainRoot" -Server $domain -ErrorAction Ignore
 
     # Add New User to DnsAdmins
-    Add-ADGroupMember -Identity 'DnsAdmins' -Members "$LabName-DnsAdmins$i" -Server $domain -ErrorAction Ignore
+    Add-ADGroupMember -Identity 'DnsAdmins' -Members "$LabName-DnsA$i" -Server $domain -ErrorAction Ignore
     
     # Check for wildcard and wpad records. If found, delete.
     $Records = '*', 'wpad'
@@ -50,15 +50,18 @@ foreach ($domain in $Domains) {
         # Replace default GQBL entries with a GUID (can't have a blank GQBL?)
         Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List (New-Guid)
 
-        # Create a suspicious Forwarder
-        $Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
+        # Add a suspicious Forwarder
+        [array]$Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
         if ($Forwarders -notcontains $SusDNS) {
             $Forwarders += $SusDNS
+            Set-DnsServerForwarder -ComputerName $ipaddress -IPAddress $Forwarders
         }
-        Set-DnsServerForwarder -ComputerName $ipaddress -IPAddress $Forwarders
 
         # Add non-ADI Bad Conditional Forwarder
-        Add-DnsServerConditionalForwarderZone -Name 'conditionalforwarder.$LabName.nonadi' -ComputerName $ipaddress -MasterServers $SusDNS
+        Add-DnsServerConditionalForwarderZone -Name "conditionalforwarder.$LabName.nonadi" -ComputerName $ipaddress -MasterServers $SusDNS
+        
+        # Add suspicious Secondary Zone
+        # Add-DnsServerSecondaryZone -ComputerName $domain -Name "secondaryzone$i$j.$LabName.adi" -MasterServers $SusDNS
 
         # Set Socket Pool Size To Default
         $CurrentSettings = Get-DnsServerSetting -ComputerName $ipaddress -All
@@ -70,11 +73,10 @@ foreach ($domain in $Domains) {
 
     # Add Suspicious ADI Zones, Forwarder Zones, etc.
     $Scopes = 'Forest', 'Domain', 'Legacy'
-    foreeach ($scope in $Scopes) {
-        Add-DnsServerConditionalForwarderZone -ComputerName $domain -Name "$Scope.conditionalforwarder.$LabName.adi" -ReplicationScope $scope -MasterServers $SusDNS
-        Add-DnsServerPrimaryZone -Name "$Scope.primaryzone.$LabName.adi" -ReplicationScope $scope
-        Add-DnsServerSecondaryZone -Name "$Scope.secondaryzone.$LabName.adi" -ReplicationScope $scope -MasterServers $SusDNS
-        Add-DnsServerStubZone -Name "$Scope.stubzone.$LabName.adi" -ReplicationScope $scope -MasterServers $SusDNS
+    foreach ($scope in $Scopes) {
+        Add-DnsServerConditionalForwarderZone -ComputerName $domain -Name "$LabName$i.conditionalforwarder.$scope.adi" -ReplicationScope $scope -MasterServers $SusDNS
+        Add-DnsServerPrimaryZone -ComputerName $domain-Name "$LabName$i.primaryzone.$scope.adi" -ReplicationScope $scope
+        Add-DnsServerStubZone -ComputerName $domain -Name "$LabName$i.stubzone.$scope.adi" -ReplicationScope $scope -MasterServers $SusDNS
     }
 
     $i++
