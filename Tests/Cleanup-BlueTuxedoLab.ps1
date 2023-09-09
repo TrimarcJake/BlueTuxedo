@@ -28,7 +28,14 @@ foreach ($domain in $Domains) {
         Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List 'isatap','wpad'
     }
 
+    # Get All ADI DNS Server Addresses in Domain
+    $IPAddresses = (Resolve-DnsName -Type NS -Name $domain).IP4Address
+
     # Remove suspicious Forwarders
+    [array]$Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
+    if ($Forwarders -contains $SusDNS) {
+        Remove-DnsServerForwarder -COmputerName $ipaddress -IPAddress $SusDNS -Force 
+    }
 
     # Remove suspicious Conditional Forwarder Zones
 
