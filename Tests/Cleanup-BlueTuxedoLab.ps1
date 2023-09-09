@@ -31,12 +31,17 @@ foreach ($domain in $Domains) {
     # Get All ADI DNS Server Addresses in Domain
     $IPAddresses = (Resolve-DnsName -Type NS -Name $domain).IP4Address
 
-    # Remove suspicious Forwarders
-    [array]$Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
-    if ($Forwarders -contains $SusDNS) {
-        Remove-DnsServerForwarder -COmputerName $ipaddress -IPAddress $SusDNS -Force 
+    foreach ($ipaddress in $IPAddresses) {
+         # Remove suspicious Forwarders
+        [array]$Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
+        if ($Forwarders -contains $SusDNS) {
+            Remove-DnsServerForwarder -COmputerName $ipaddress -IPAddress $SusDNS -Force 
+        }
+        
+        # Remove Suspicious Zones
+        Get-DnsServerZone -ComputerName $ipaddress | Where-Object ZoneName -match "$LabName[0-9]" | Remove-DnsServerZone -ComputerName $ipaddress -Force 
     }
 
-    # Remove suspicious Conditional Forwarder Zones
+    
 
 }

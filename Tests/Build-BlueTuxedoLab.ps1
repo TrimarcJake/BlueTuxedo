@@ -58,15 +58,15 @@ foreach ($domain in $Domains) {
         }
 
         # Add non-ADI Bad Conditional Forwarder
-        Add-DnsServerConditionalForwarderZone -Name "conditionalforwarder.$LabName.nonadi" -ComputerName $ipaddress -MasterServers $SusDNS
+        Add-DnsServerConditionalForwarderZone -Name "$LabName$i.conditionalforwarder.$j.nonadi" -ComputerName $ipaddress -MasterServers $SusDNS
         
         # Add suspicious Secondary Zone
         # Add-DnsServerSecondaryZone -ComputerName $domain -Name "secondaryzone$i$j.$LabName.adi" -MasterServers $SusDNS
 
         # Set Socket Pool Size To Default
-        $CurrentSettings = Get-DnsServerSetting -ComputerName $ipaddress -All
-        $CurrentSettings.SocketPoolSize = 2500
-        Set-DnsServerSetting -ComputerName $ipaddress -InputObject $CurrentSettings
+        # $CurrentSettings = Get-DnsServerSetting -ComputerName $ipaddress -All
+        # $CurrentSettings.SocketPoolSize = 2500
+        # Set-DnsServerSetting -ComputerName $ipaddress -InputObject $CurrentSettings
 
         $j++
     }
@@ -75,7 +75,7 @@ foreach ($domain in $Domains) {
     $Scopes = 'Forest', 'Domain', 'Legacy'
     foreach ($scope in $Scopes) {
         Add-DnsServerConditionalForwarderZone -ComputerName $domain -Name "$LabName$i.conditionalforwarder.$scope.adi" -ReplicationScope $scope -MasterServers $SusDNS
-        Add-DnsServerPrimaryZone -ComputerName $domain-Name "$LabName$i.primaryzone.$scope.adi" -ReplicationScope $scope
+        Add-DnsServerPrimaryZone -ComputerName $domain -Name "$LabName$i.primaryzone.$scope.adi" -ReplicationScope $scope
         Add-DnsServerStubZone -ComputerName $domain -Name "$LabName$i.stubzone.$scope.adi" -ReplicationScope $scope -MasterServers $SusDNS
     }
 
