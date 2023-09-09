@@ -67,7 +67,8 @@ foreach ($domain in $Domains) {
         # $CurrentSettings = Get-DnsServerSetting -ComputerName $ipaddress -All
         # $CurrentSettings.SocketPoolSize = 2500
         # Set-DnsServerSetting -ComputerName $ipaddress -InputObject $CurrentSettings
-
+        
+        Start-Sleep -Seconds 5
         $j++
     }
 
@@ -79,5 +80,6 @@ foreach ($domain in $Domains) {
         Add-DnsServerStubZone -ComputerName $domain -Name "$LabName$i.stubzone.$scope.adi" -ReplicationScope $scope -MasterServers $SusDNS
     }
 
+    Start-Sleep -Seconds 5
     $i++
 }
