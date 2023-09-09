@@ -39,5 +39,15 @@ foreach($domain in $Domains) {
         }
     }
 
+    # Get All ADI DNS Server Addresses in Domain
+    $IPAddresses = (Resolve-DnsName -Type NS -Name $domain).IP4Address
+
+    # Replace default GQBL entries with a GUID (can't have a blank GQBL?)
+    foreach ($ipaddress in $IPAddresses) {
+        Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List (New-Guid)
+    }
+
+
+
     $i++
 }
