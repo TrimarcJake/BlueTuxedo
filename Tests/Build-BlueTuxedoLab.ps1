@@ -39,15 +39,22 @@ foreach($domain in $Domains) {
         }
     }
 
+    # Add ADI Bad Conditional Forwarder (currently not working)
+    # Add-DnsServerConditionalForwarderZone -Name 'bluetuxedo.adi' -ReplicationScope 'Forest' -MasterServers '0.0.0.0'
+
     # Get All ADI DNS Server Addresses in Domain
     $IPAddresses = (Resolve-DnsName -Type NS -Name $domain).IP4Address
 
-    # Replace default GQBL entries with a GUID (can't have a blank GQBL?)
+    $j = 0
     foreach ($ipaddress in $IPAddresses) {
+        # Replace default GQBL entries with a GUID (can't have a blank GQBL?)
         Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List (New-Guid)
+
+        # Add non-ADI Bad Conditional Forwarder (currently not working)
+        # Add-DnsServerConditionalForwarderZone -Name 'bluetuxedo.nonadi' -ComputerName $ipaddress -MasterServers '0.0.0.0'
+
+        $j++
     }
-
-
 
     $i++
 }
