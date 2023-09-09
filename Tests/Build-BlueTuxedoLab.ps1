@@ -48,11 +48,13 @@ foreach($domain in $Domains) {
         Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List (New-Guid)
 
         # Create a suspicious Forwarder
-        $Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress
-        $Forwarders += '86.75.30.9'
+        $Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
+        if ($Forwarders -notcontains '86.75.30.9') {
+            $Forwarders += '86.75.30.9'
+        }
         Set-DnsServerForwarder -ComputerName $ipaddress -IPAddress $Forwarders
 
-        # Add non-ADI Bad Conditional Forwarder (currently not working)
+        # Add non-ADI Bad Conditional Forwarder
         Add-DnsServerConditionalForwarderZone -Name 'bluetuxedo.nonadi' -ComputerName $ipaddress -MasterServers '86.75.30.9'
 
         # Set Socket Pool Size To Default
@@ -63,7 +65,7 @@ foreach($domain in $Domains) {
         $j++
     }
 
-    # Add ADI Bad Conditional Forwarder (currently not working)
+    # Add ADI Bad Conditional Forwarder
     Add-DnsServerConditionalForwarderZone -ComputerName $domain -Name 'bluetuxedo.adi' -ReplicationScope 'Forest' -MasterServers '86.75.30.9'
 
     $i++
