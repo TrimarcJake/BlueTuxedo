@@ -64,7 +64,7 @@ foreach($domain in $Domains) {
     }
 
     # Add ADI Bad Conditional Forwarder (currently not working)
-    Add-DnsServerConditionalForwarderZone -Name 'bluetuxedo.adi' -ReplicationScope 'Forest' -MasterServers '86.75.30.9'
+    Add-DnsServerConditionalForwarderZone -ComputerName $domain -Name 'bluetuxedo.adi' -ReplicationScope 'Forest' -MasterServers '86.75.30.9'
 
     $i++
 }

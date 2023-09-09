@@ -24,4 +24,9 @@ foreach ($domain in $Domains) {
     foreach ($ipaddress in $IPAddresses) {
         Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List 'isatap','wpad'
     }
+
+    # Remove suspicious Forwarders
+
+    # Remove suspicious Conditional Forwarder Zones
+
 }
