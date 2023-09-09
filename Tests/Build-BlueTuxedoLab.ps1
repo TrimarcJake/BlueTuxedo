@@ -1,5 +1,8 @@
 #requires -Modules ActiveDirectory
 
+$LabName = 'BlueTuxedo'
+$SusDNS = '86.75.30.9'
+
 # Get Root
 $RootDSE = (Get-ADRootDSE).defaultNamingContext
 
@@ -8,31 +11,31 @@ $Domains = (Get-ADForest).Domains
 
 # Create Stuff in Each Domain
 $i = 0
-foreach($domain in $Domains) {    
+foreach ($domain in $Domains) {    
     # Get Domain's DN
     $DomainRoot = (Get-ADDomain $domain).distinguishedName
 
     # Create New OU For Lab Objects
-    New-ADOrganizationalUnit -Name 'BlueTuxedo' -Path $DomainRoot -Server $domain -ProtectedFromAccidentalDeletion $False -ErrorAction Ignore
+    New-ADOrganizationalUnit -Name $LabName -Path $DomainRoot -Server $domain -ProtectedFromAccidentalDeletion $False -ErrorAction Ignore
 
     # Create Computer Object
-    New-ADComputer -Name "BlueTuxedoDSPN$i" -SAMAccountName "BlueTuxedoDSPN$i" -Path "OU=BlueTuxedo,$DomainRoot" -Server $domain -ErrorAction Ignore
+    New-ADComputer -Name "$LabName-DSPN$i" -SAMAccountName "$LabName-DSPN$i" -Path "OU=$LabName,$DomainRoot" -Server $domain -ErrorAction Ignore
 
     # Assign Custom SPNs to Computer Object
-    setspn -s "BlueTuxedo/BlueTuxedoDSPN$i" "$domain\BlueTuxedoDSPN$i"
-    setspn -s "BlueTuxedo/BlueTuxedoDSPN$i.$domain" "$domain\BlueTuxedoDSPN$i"
+    setspn -s "$LabName/$LabName-DSPN$i" "$domain\$LabName-DSPN$i"
+    setspn -s "$LabName/$LabName-DSPN$i.$domain" "$domain\$LabName-DSPN$i"
 
     # Create New User
-    New-ADUser -Name "BlueTuxedoDnsAdmins$i" -SamAccountName "BlueTuxedoDnsAdmins$i" -Path "OU=BlueTuxedo,$DomainRoot" -Server $domain -ErrorAction Ignore
+    New-ADUser -Name "$LabName-DnsAdmins$i" -SamAccountName "$LabName-DnsAdmins$i" -Path "OU=$LabName,$DomainRoot" -Server $domain -ErrorAction Ignore
 
     # Add New User to DnsAdmins
-    Add-ADGroupMember -Identity 'DnsAdmins' -Members "BlueTuxedoDnsAdmins$i" -Server $domain -ErrorAction Ignore
+    Add-ADGroupMember -Identity 'DnsAdmins' -Members "$LabName-DnsAdmins$i" -Server $domain -ErrorAction Ignore
     
     # Check for wildcard and wpad records. If found, delete.
-    $Records = '*','wpad'
-    foreach($record in $Records) {
-        $RRTypes = 'A','AAAA','TXT'
-        foreach($rrtype in $RRTypes) {
+    $Records = '*', 'wpad'
+    foreach ($record in $Records) {
+        $RRTypes = 'A', 'AAAA', 'TXT'
+        foreach ($rrtype in $RRTypes) {
             if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name $record -ErrorAction Ignore) {
                 Remove-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name $record
             }
@@ -49,13 +52,13 @@ foreach($domain in $Domains) {
 
         # Create a suspicious Forwarder
         $Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
-        if ($Forwarders -notcontains '86.75.30.9') {
-            $Forwarders += '86.75.30.9'
+        if ($Forwarders -notcontains $SusDNS) {
+            $Forwarders += $SusDNS
         }
         Set-DnsServerForwarder -ComputerName $ipaddress -IPAddress $Forwarders
 
         # Add non-ADI Bad Conditional Forwarder
-        Add-DnsServerConditionalForwarderZone -Name 'bluetuxedo.nonadi' -ComputerName $ipaddress -MasterServers '86.75.30.9'
+        Add-DnsServerConditionalForwarderZone -Name 'conditionalforwarder.$LabName.nonadi' -ComputerName $ipaddress -MasterServers $SusDNS
 
         # Set Socket Pool Size To Default
         $CurrentSettings = Get-DnsServerSetting -ComputerName $ipaddress -All
@@ -65,8 +68,14 @@ foreach($domain in $Domains) {
         $j++
     }
 
-    # Add ADI Bad Conditional Forwarder
-    Add-DnsServerConditionalForwarderZone -ComputerName $domain -Name 'bluetuxedo.adi' -ReplicationScope 'Forest' -MasterServers '86.75.30.9'
+    # Add Suspicious ADI Zones, Forwarder Zones, etc.
+    $Scopes = 'Forest', 'Domain', 'Legacy'
+    foreeach ($scope in $Scopes) {
+        Add-DnsServerConditionalForwarderZone -ComputerName $domain -Name "$Scope.conditionalforwarder.$LabName.adi" -ReplicationScope $scope -MasterServers $SusDNS
+        Add-DnsServerPrimaryZone -Name "$Scope.primaryzone.$LabName.adi" -ReplicationScope $scope
+        Add-DnsServerSecondaryZone -Name "$Scope.secondaryzone.$LabName.adi" -ReplicationScope $scope -MasterServers $SusDNS
+        Add-DnsServerStubZone -Name "$Scope.stubzone.$LabName.adi" -ReplicationScope $scope -MasterServers $SusDNS
+    }
 
     $i++
 }
