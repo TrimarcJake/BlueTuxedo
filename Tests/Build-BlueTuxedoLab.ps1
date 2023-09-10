@@ -15,7 +15,7 @@ foreach ($domain in $Domains) {
     # Get Domain's DN
     $DomainRoot = (Get-ADDomain $domain).distinguishedName
 
-    # Create New OU For Lab Objects
+    # Create a New OU For Lab Objects
     New-ADOrganizationalUnit -Name $LabName -Path $DomainRoot -Server $domain -ProtectedFromAccidentalDeletion $False -ErrorAction Ignore
 
     # Create Computer Object
@@ -25,7 +25,7 @@ foreach ($domain in $Domains) {
     setspn -s "$LabName/$LabName-DSPN$i" "$domain\$LabName-DSPN$i"
     setspn -s "$LabName/$LabName-DSPN$i.$domain" "$domain\$LabName-DSPN$i"
 
-    # Create New User
+    # Create a New User
     New-ADUser -Name "$LabName-DnsA$i" -SamAccountName "$LabName-DnsA$i" -Path "OU=$LabName,$DomainRoot" -Server $domain -ErrorAction Ignore
 
     # Add New User to DnsAdmins
@@ -42,7 +42,7 @@ foreach ($domain in $Domains) {
         }
     }
 
-    # Get All ADI DNS Server Addresses in Domain
+    # Get all ADI DNS Server Addresses in Domain
     $IPAddresses = (Resolve-DnsName -Type NS -Name $domain).IP4Address
 
     $j = 0
@@ -50,16 +50,18 @@ foreach ($domain in $Domains) {
         # Replace default GQBL entries with a GUID (can't have a blank GQBL?)
         Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List (New-Guid)
 
-        # Add a suspicious Forwarder
+        # Add a Suspicious Forwarder
         [array]$Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
         if ($Forwarders -notcontains $SusDNS) {
             $Forwarders += $SusDNS
             Set-DnsServerForwarder -ComputerName $ipaddress -IPAddress $Forwarders
         }
 
-        # Add non-ADI Bad Conditional Forwarder
-        Add-DnsServerConditionalForwarderZone -Name "$LabName$i.conditionalforwarder.$j.nonadi" -ComputerName $ipaddress -MasterServers $SusDNS
-        
+        # Add Suspicious non-ADI Zones
+        Add-DnsServerConditionalForwarderZone -ComputerName $ipaddress -Name "$LabName$i.conditionalforwarder.$j.nonadi" -MasterServers $SusDNS
+        Add-DnsServerPrimaryZone -ComputerName $domain -Name "$LabName$i.primaryzone.$j.nonadi"
+        Add-DnsServerStubZone -ComputerName $domain -Name "$LabName$i.stubzone.$j.nonadi" -MasterServers $SusDNS
+    
         # Add suspicious Secondary Zone
         # Add-DnsServerSecondaryZone -ComputerName $domain -Name "secondaryzone$i$j.$LabName.adi" -MasterServers $SusDNS
 
@@ -72,7 +74,7 @@ foreach ($domain in $Domains) {
         $j++
     }
 
-    # Add Suspicious ADI Zones, Forwarder Zones, etc.
+    # Add Suspicious ADI Zones
     $Scopes = 'Forest', 'Domain', 'Legacy'
     foreach ($scope in $Scopes) {
         Add-DnsServerConditionalForwarderZone -ComputerName $domain -Name "$LabName$i.conditionalforwarder.$scope.adi" -ReplicationScope $scope -MasterServers $SusDNS
