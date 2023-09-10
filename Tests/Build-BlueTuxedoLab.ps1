@@ -37,6 +37,7 @@ foreach ($domain in $Domains) {
         $RRTypes = 'A', 'AAAA', 'TXT'
         foreach ($rrtype in $RRTypes) {
             if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name $record -ErrorAction Ignore) {
+                Start-Sleep -Seconds 5
                 Remove-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name $record
             }
         }
@@ -54,12 +55,13 @@ foreach ($domain in $Domains) {
         [array]$Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
         if ($Forwarders -notcontains $SusDNS) {
             $Forwarders += $SusDNS
+            Start-Sleep -Seconds 5
             Set-DnsServerForwarder -ComputerName $ipaddress -IPAddress $Forwarders
         }
 
         # Add Suspicious non-ADI Zones
         Add-DnsServerConditionalForwarderZone -ComputerName $ipaddress -Name "$LabName$i.conditionalforwarder.$j.nonadi" -MasterServers $SusDNS
-        Add-DnsServerPrimaryZone -ComputerName $domain -Name "$LabName$i.primaryzone.$j.nonadi"
+        # Add-DnsServerPrimaryZone -ComputerName $domain -Name "$LabName$i.primaryzone.$j.nonadi"
         Add-DnsServerStubZone -ComputerName $domain -Name "$LabName$i.stubzone.$j.nonadi" -MasterServers $SusDNS
     
         # Add suspicious Secondary Zone
