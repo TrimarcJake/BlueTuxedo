@@ -32,7 +32,7 @@ foreach ($domain in $Domains) {
     $IPAddresses = (Resolve-DnsName -Type NS -Name $domain).IP4Address
 
     foreach ($ipaddress in $IPAddresses) {
-         # Remove suspicious Forwarders
+         # Remove Suspicious Forwarders
         [array]$Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
         if ($Forwarders -contains $SusDNS) {
             Remove-DnsServerForwarder -COmputerName $ipaddress -IPAddress $SusDNS -Force 
