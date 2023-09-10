@@ -18,7 +18,7 @@ foreach ($domain in $Domains) {
     }
 
     # Remove $LabName OU and all Lab Objects
-    Remove-ADObject -Identity "OU=$LabName,$DomainRoot" -Recursive -Server $domain -Confirm:$false
+    Remove-ADObject -Identity "OU=$LabName,$DomainRoot" -Recursive -Server $domain -Confirm:$false -ErrorAction Ignore
 
     # Get All ADI DNS Server Addresses in Domain
     $IPAddresses = (Resolve-DnsName -Type NS -Name $domain).IP4Address
@@ -39,7 +39,13 @@ foreach ($domain in $Domains) {
         }
         
         # Remove Suspicious Zones
-        Get-DnsServerZone -ComputerName $ipaddress | Where-Object ZoneName -match "$LabName[0-9]" | Remove-DnsServerZone -ComputerName $ipaddress -Force 
+        Get-DnsServerZone -ComputerName $ipaddress | Where-Object ZoneName -match "^$LabName[0-9]" | Remove-DnsServerZone -ComputerName $ipaddress -Force
+
+        # Remove Suspicious Zone Scopes
+        Get-DnsServerZoneScope -ComputerName $ipaddress -ZoneName $domain | Where-Object ZoneScope -match "^$LabName[0-9]" | Remove-DnsServerZoneScope -ComputerName $ipaddress -Force
+
+        # Remove Query Resolution Policies
+        Get-DnsServerQueryResolutionPolicy -ComputerName $ipaddress | Where-Object Name -match "^$LabName[0-9]" | Remove-DnsServerQueryResolutionPolicy -ComputerName $ipaddress -Force
     }
 
     

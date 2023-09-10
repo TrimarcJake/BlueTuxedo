@@ -48,9 +48,6 @@ foreach ($domain in $Domains) {
 
     $j = 0
     foreach ($ipaddress in $IPAddresses) {
-        # Replace default GQBL entries with a GUID (can't have a blank GQBL?)
-        Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List (New-Guid)
-
         # Add a Suspicious Forwarder
         [array]$Forwarders = (Get-DnsServerForwarder -ComputerName $ipaddress).IPAddress.IPAddressToString
         if ($Forwarders -notcontains $SusDNS) {
@@ -58,11 +55,22 @@ foreach ($domain in $Domains) {
             Start-Sleep -Seconds 5
             Set-DnsServerForwarder -ComputerName $ipaddress -IPAddress $Forwarders
         }
+        
+        Start-Sleep -Seconds 5
+        
+        # Replace default GQBL entries with a GUID (can't have a blank GQBL?)
+        Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List (New-Guid)
+
+        Start-Sleep -Seconds 5
 
         # Add Suspicious non-ADI Zones
         Add-DnsServerConditionalForwarderZone -ComputerName $ipaddress -Name "$LabName$i.conditionalforwarder.$j.nonadi" -MasterServers $SusDNS
         # Add-DnsServerPrimaryZone -ComputerName $domain -Name "$LabName$i.primaryzone.$j.nonadi"
         Add-DnsServerStubZone -ComputerName $domain -Name "$LabName$i.stubzone.$j.nonadi" -MasterServers $SusDNS
+
+        # Add Suspicious Zone Scopes + Policies (non-ADI by default)
+        $QueryResolutionPolicyName = $LabName + "_QueryResolutionPolicy"
+        Add-DnsServerQueryResolutionPolicy -ComputerName $ipaddress -Name "$LabName$i.conditionalforwarder.$j.nonadi_QueryResolutionPolicy" -Action IGNORE -FQDN "EQ,*.$LabName$i.conditionalforwarder.$j.nonadi"
     
         # Add suspicious Secondary Zone
         # Add-DnsServerSecondaryZone -ComputerName $domain -Name "secondaryzone$i$j.$LabName.adi" -MasterServers $SusDNS
@@ -82,6 +90,7 @@ foreach ($domain in $Domains) {
         Add-DnsServerConditionalForwarderZone -ComputerName $domain -Name "$LabName$i.conditionalforwarder.$scope.adi" -ReplicationScope $scope -MasterServers $SusDNS
         Add-DnsServerPrimaryZone -ComputerName $domain -Name "$LabName$i.primaryzone.$scope.adi" -ReplicationScope $scope
         Add-DnsServerStubZone -ComputerName $domain -Name "$LabName$i.stubzone.$scope.adi" -ReplicationScope $scope -MasterServers $SusDNS
+        Add-DnsServerZoneScope -ComputerName $domain -ZoneName $domain -Name "$LabName$i.primaryzone.$scope.adi_ZoneScope"
     }
 
     Start-Sleep -Seconds 5
