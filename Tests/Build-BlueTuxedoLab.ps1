@@ -59,9 +59,9 @@ foreach ($domain in $Domains) {
         Start-Sleep -Seconds 5
         
         # Replace default GQBL entries with a GUID (can't have a blank GQBL?)
-        Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List (New-Guid)
+        Set-DnsServerGlobalQueryBlockList -ComputerName $ipaddress -List (New-Guid) -PassThru -Verbose
 
-        Start-Sleep -Seconds 5
+        Start-Sleep -Seconds 10
 
         # Add Suspicious non-ADI Zones
         Add-DnsServerConditionalForwarderZone -ComputerName $ipaddress -Name "$LabName$i.conditionalforwarder.$j.nonadi" -MasterServers $SusDNS
