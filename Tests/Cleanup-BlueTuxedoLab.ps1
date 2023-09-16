@@ -48,6 +48,6 @@ foreach ($domain in $Domains) {
         Get-DnsServerQueryResolutionPolicy -ComputerName $ipaddress | Where-Object Name -match "^$LabName[0-9]" | Remove-DnsServerQueryResolutionPolicy -ComputerName $ipaddress -Force
     }
 
-    
-
+    # Emtpy AD Recyle Bin    
+    Get-ADObject -Filter { isDeleted -eq $True } -IncludeDeletedObjects | Where-Object sAMAccountName -match "^$LabName[0-9]" | Remove-ADObject
 }
