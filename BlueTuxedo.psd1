@@ -1,5 +1,4 @@
-
-@{
+﻿@{
     AliasesToExport      = @('*')
     Author               = 'Jake Hildreth and Jim Sykora'
     CmdletsToExport      = @()
@@ -12,10 +11,10 @@
     PowerShellVersion    = '5.1'
     PrivateData          = @{
         PSData = @{
-            ExternalModuleDependencies = @('ActiveDirectory', 'ServerManager', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.LocalAccounts', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Management', 'CimCmdlets', 'Dism')
+            ExternalModuleDependencies = @('ActiveDirectory', 'DnsServer', 'DnsClient', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.LocalAccounts', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Management')
             Tags                       = @('Windows', 'BlueTuxedo', 'DNS', 'AD', 'ActiveDirectory', 'DomainNameSystem', 'ADIDNS')
         }
     }
-    RequiredModules      = @('ActiveDirectory', 'ServerManager', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.LocalAccounts', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Management', 'CimCmdlets', 'Dism')
+    RequiredModules      = @('ActiveDirectory', 'DnsServer', 'DnsClient', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.LocalAccounts', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Management')
     RootModule           = 'BlueTuxedo.psm1'
 }

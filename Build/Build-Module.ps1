@@ -35,17 +35,16 @@ Build-Module -ModuleName 'BlueTuxedo' {
     # Add external module dependencies, using loop for simplicity
     # those modules are not available in PowerShellGallery so user has to have them installed
     $ExternalModules = @(
-        # Required RSAT AD module
+        # Required RSAT AD and DNS module
         'ActiveDirectory'
-        'ServerManager'
+        'DnsServer'
+        'DnsClient'
         # those modules are builtin in PowerShell so no need to install them
         # could as well be ignored with New-ConfigurationModuleSkip
         'Microsoft.PowerShell.Utility'
         'Microsoft.PowerShell.LocalAccounts',
         'Microsoft.PowerShell.Utility'
         'Microsoft.PowerShell.Management'
-        'CimCmdlets'
-        'Dism'
     )
     foreach ($Module in $ExternalModules) {
         New-ConfigurationModule -Type ExternalModule -Name $Module

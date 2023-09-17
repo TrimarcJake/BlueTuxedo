@@ -1,8 +1,7 @@
 function Invoke-BlueTuxedo {
-    param(
-        $Target
-    )
-
-    # A comment
-    Get-Target $Target
+    # param(
+    #     $Forest
+    # )
+    $Domains = (Get-ADForest).Domains
+    Get-DanglingSPN $Domains
 }

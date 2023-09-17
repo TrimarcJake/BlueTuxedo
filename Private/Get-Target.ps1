@@ -13,7 +13,7 @@
         if ($Credential){
             $Targets = (Get-ADForest -Credential $Credential).Name
         } else {
-            $Targets = (Get-ADForest).Name
+            $Targets = (Get-ADForest).$Domains
         }
     }
     return $Targets
