@@ -1,9 +1,6 @@
 $LabName = 'BlueTuxedo'
 $SusDNS = '86.75.30.9'
 
-# Get Root
-$RootDSE = (Get-ADRootDSE).defaultNamingContext
-
 # Get Domains in Forest
 $Domains = (Get-ADForest).Domains
 
