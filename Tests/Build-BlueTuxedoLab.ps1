@@ -3,9 +3,6 @@
 $LabName = 'BlueTuxedo'
 $SusDNS = '86.75.30.9'
 
-# Get Root
-$RootDSE = (Get-ADRootDSE).defaultNamingContext
-
 # Get Domains in Forest
 $Domains = (Get-ADForest).Domains
 
@@ -69,7 +66,6 @@ foreach ($domain in $Domains) {
         Add-DnsServerStubZone -ComputerName $domain -Name "$LabName$i.stubzone.$j.nonadi" -MasterServers $SusDNS
 
         # Add Suspicious Zone Scopes + Policies (non-ADI by default)
-        $QueryResolutionPolicyName = $LabName + "_QueryResolutionPolicy"
         Add-DnsServerQueryResolutionPolicy -ComputerName $ipaddress -Name "$LabName$i.conditionalforwarder.$j.nonadi_QueryResolutionPolicy" -Action IGNORE -FQDN "EQ,*.$LabName$i.conditionalforwarder.$j.nonadi"
     
         # Add suspicious Secondary Zone
