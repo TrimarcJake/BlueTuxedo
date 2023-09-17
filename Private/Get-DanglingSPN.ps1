@@ -33,9 +33,7 @@ foreach ($domain in $Domains) {
                     }
 
                     if ( $dnsResourceRecordExist -or $hostnameResolves ) {
-                        "SPN hostname $spnHost is valid"
                     } else {
-                        "Dangling SPN $spnHost exists on $($principal.Name)"
                         $danglingSPN = [PSCustomObject]@{
                             Name  = $principal.Name
                             'Distinguished Name' = $principal.distinguishedName
