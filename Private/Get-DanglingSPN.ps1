@@ -1,7 +1,7 @@
 function Get-DanglingSPN {
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory=$true)]
         [array]
         $Domains
     )
