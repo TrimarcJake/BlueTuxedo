@@ -13,8 +13,6 @@ function Get-DanglingSPN {
         $PrincipalWithSPN = Get-ADObject -Filter { ServicePrincipalName -ne "$null" -and ServicePrincipalName -ne 'kadmin/changepw' } -Properties * -Server $domain
 
         foreach ($principal in $PrincipalWithSPN) {
-            $spnHostList = @()
-
             # Get SPN hostname and check if DNS record exists
             foreach ($spn in $principal.ServicePrincipalName) {
 
