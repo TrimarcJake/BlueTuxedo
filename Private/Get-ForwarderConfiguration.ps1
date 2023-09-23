@@ -11,8 +11,8 @@ function Get-ForwarderConfiguration {
         $DNSServers = Resolve-DnsName -Type NS -Name $domain | Where-Object QueryType -eq 'A'
         foreach ($dnsServer in $DNSServers) {
             [array]$Forwarders = Get-DnsServerForwarder -ComputerName $dnsServer.IP4Address
-            foreach ($forwarder in $Forwarders) {
-                if ($ForwarderList.'Server IP' -notcontains $dnsServer.IPAddress.IPAddressToString) {
+            if ($ForwarderList.'Server IP' -notcontains $dnsServer.IP4Address) {
+                foreach ($forwarder in $Forwarders) {
                     $AddToList = [PSCustomObject]@{
                         'Server Name'   = $dnsServer.Name
                         'Server IP'     = $dnsServer.IP4Address
