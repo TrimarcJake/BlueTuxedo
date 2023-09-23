@@ -10,4 +10,4 @@
 [ ] Zone & Zone Scope Auditing
 [x] Forwarder Configuration
 [x] Socket Pool Configuration
-[ ] Query Resolution Policies
+[x] Query Resolution Policies
