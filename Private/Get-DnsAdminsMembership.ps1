@@ -9,7 +9,7 @@ function Get-DnsAdminsMembership {
     $ForestDnsAdminsMembership = @()
 
     foreach ($domain in $Domains) {
-        $domainDnsAdminsMembership = Get-ADGroupMember $dnsAdmins -Recursive -Server $domain
+        $domainDnsAdminsMembership = Get-ADGroupMember 'DnsAdmins' -Recursive -Server $domain
         # TODO Capture nested members with non-standard PGID
         foreach ($member in $domainDnsAdminsMembership) {
             $principal = [PSCustomObject]@{
