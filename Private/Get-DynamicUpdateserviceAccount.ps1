@@ -1,7 +1,7 @@
 function Get-DynamicUpdateServiceAccount {
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory=$true)]
         [array]
         $Domains
     )

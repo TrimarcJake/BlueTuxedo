@@ -1,7 +1,7 @@
 function Get-ConditionalForwarder {
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory=$true)]
         [array]
         $Domains
     )

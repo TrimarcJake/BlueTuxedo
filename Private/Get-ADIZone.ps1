@@ -1,7 +1,7 @@
 function Get-ADIZone {
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory=$true)]
         [array]
         $Domains
     )

@@ -1,7 +1,7 @@
 function Get-QueryResolutionPolicy {
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory=$true)]
         [array]
         $Domains
     )

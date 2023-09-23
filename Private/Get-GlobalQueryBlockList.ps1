@@ -1,7 +1,7 @@
 function Get-GlobalQueryBlockList {
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory=$true)]
         [array]
         $Domains
     )

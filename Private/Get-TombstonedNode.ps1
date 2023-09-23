@@ -1,7 +1,7 @@
 function Get-TombstonedNode {
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory=$true)]
         [array]
         $Domains
     )
