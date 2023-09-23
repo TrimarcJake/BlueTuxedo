@@ -11,7 +11,6 @@ function Get-GlobalQueryBlockList {
         $DNSServers = Resolve-DnsName -Type NS -Name $domain | Where-Object QueryType -eq 'A'
         foreach ($dnsServer in $DNSServers) {
             [array]$GlobalQueryBlockList = Get-DnsServerGlobalQueryBlockList -ComputerName $dnsServer.IP4Address
-            Write-Host "GQBL: $($GlobalQueryBlockList.List)";pause
             if ($GlobalQueryBlockListList.'Server IP' -notcontains $dnsServer.IP4Address) {
                 $AddToList = [PSCustomObject]@{
                     'Server Name'   = $dnsServer.Name
