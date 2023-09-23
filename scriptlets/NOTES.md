@@ -8,7 +8,8 @@ Get:
 [ ] Weird DACLs
 [ ] Tombstoned DNS Records
 [ ] Conditional Forwarder Auditing
-[ ] Zone Auditing
+[x] ADI Zone Auditing
+[x] Non-ADI Zone Auditing
 [ ] Zone Scope Auditing
 [x] Forwarder Configuration
 [x] Socket Pool Configuration
