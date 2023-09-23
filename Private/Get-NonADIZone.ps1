@@ -17,7 +17,6 @@ function Get-NonADIZone {
             }
             
             foreach ($zone in $Zones) {
-                Write-Host $Zone
                 $AddToList = [PSCustomObject]@{
                     'Server Name' = $dnsServer.Name
                     'Server IP'   = $dnsServer.IP4Address
