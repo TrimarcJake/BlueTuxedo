@@ -17,7 +17,6 @@ function Get-ADIZone {
             }
             
             foreach ($zone in $Zones) {
-                Write-Host $Zone
                 $AddToList = [PSCustomObject]@{
                     'Domain' = $domain
                     'Zone Name'   = $zone.ZoneName
