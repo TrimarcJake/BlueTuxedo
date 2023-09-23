@@ -1,8 +1,8 @@
 Get:
 [x] Dangling SPNs
 [x] DnsAdmins Membership
-[ ] Wildcard Record
-[ ] WPAD Record
+[x] Wildcard Record
+[x] WPAD Record
 [x] Global Query Block List (GQBL)
 [ ] DHCP Dynamic Update service account
 [ ] Weird DACLs
