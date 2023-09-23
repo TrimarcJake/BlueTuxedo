@@ -6,7 +6,7 @@ Get:
 [x] Global Query Block List (GQBL)
 [x] DHCP Dynamic Update service account
 [ ] Weird DACLs
-[ ] Tombstoned DNS Records
+[x] Tombstoned DNS Records
 [x] Conditional Forwarder Auditing
 [x] ADI Zone Auditing
 [x] Non-ADI Zone Auditing
