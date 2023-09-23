@@ -19,8 +19,7 @@ function Get-ADIZone {
             foreach ($zone in $Zones) {
                 Write-Host $Zone
                 $AddToList = [PSCustomObject]@{
-                    'Server Name' = $dnsServer.Name
-                    'Server IP'   = $dnsServer.IP4Address
+                    'Domain' = $domain
                     'Zone Name'   = $zone.ZoneName
                     'Zone Type'   = $zone.ZoneType
                     'Is Reverse?' = $zone.IsReverseLookupZone
