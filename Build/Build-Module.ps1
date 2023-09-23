@@ -37,6 +37,7 @@ Build-Module -ModuleName 'BlueTuxedo' {
     $ExternalModules = @(
         # Required RSAT AD and DNS module
         'ActiveDirectory'
+        'DhcpServer'
         'DnsServer'
         'DnsClient'
         # those modules are builtin in PowerShell so no need to install them
