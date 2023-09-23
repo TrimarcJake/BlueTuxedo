@@ -4,7 +4,7 @@ Get:
 [x] Wildcard Record
 [x] WPAD Record
 [x] Global Query Block List (GQBL)
-[ ] DHCP Dynamic Update service account
+[x] DHCP Dynamic Update service account
 [ ] Weird DACLs
 [ ] Tombstoned DNS Records
 [x] Conditional Forwarder Auditing
