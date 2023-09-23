@@ -13,7 +13,7 @@ function Get-NonADIZone {
             $Zones = Get-DnsServerZone -ComputerName $dnsServer.IP4Address | Where-Object { 
                 ($_.IsAutoCreated -eq $false) -and 
                 ($_.ZoneType -ne 'Forwarder') -and
-                ($_.IsDsIntegrated -eq $true)
+                ($_.IsDsIntegrated -eq $false)
             }
             
             foreach ($zone in $Zones) {
