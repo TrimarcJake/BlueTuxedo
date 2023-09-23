@@ -14,7 +14,7 @@ function Get-TombstonedNode {
             $Nodes = Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $zone.ZoneName
             foreach ($node in $Nodes) {
                 if ($node.DistinguishedName -like "*$domainDN") {
-                    $nodeDetails = Get-ADObject -Identity $node.DistinguishedName -Properties Name, dNSTombstoned, DistinguishedName -Server $domain
+                    $nodeDetails = Get-ADObject -Identity $node.DistinguishedName -Properties dNSTombstoned -Server $domain
                 }
                 if ($nodeDetails.dNSTombstoned) {
                     $AddToList = [PSCustomObject]@{
