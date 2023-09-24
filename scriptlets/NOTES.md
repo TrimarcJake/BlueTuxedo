@@ -18,15 +18,15 @@ Get:
 Test:
 [ ] ADI Zone Auditing
 [ ] Conditional Forwarder Auditing
-[x] Dangling SPNs
+[ ] Dangling SPNs
 [x] DHCP Dynamic Update service account
-[x] DnsAdmins Membership
-[x] Forwarder Configuration
+[ ] DnsAdmins Membership
+[ ] Forwarder Configuration
 [ ] Global Query Block List (GQBL)
 [ ] Non-ADI Zone Auditing
 [ ] Query Resolution Policies
 [x] Socket Pool Configuration
-[x] Tombstoned DNS Records
+[ ] Tombstoned DNS Records
 [ ] Weird DACLs
 [ ] Wildcard Record
 [ ] WPAD Record
