@@ -29,7 +29,6 @@ function Test-SecurityDescriptorOwner {
                 $SafeSIDs += "|$dynamicupdateserviceAccountSID"
         }
     }
-    $SafeSIDS
 
     foreach ($securitydescriptor in $SecurityDescriptors) {
         $owner = $securitydescriptor.Owner
