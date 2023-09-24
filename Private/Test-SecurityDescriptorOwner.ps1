@@ -4,6 +4,8 @@ function Test-SecurityDescriptorOwner {
         [Parameter()]
         [array]$SecurityDescriptors,
         [Parameter()]
+        [array]$DynamicUpdateServiceAccounts,
+        [Parameter()]
         [array]$Domains
     )
 
@@ -18,7 +20,7 @@ function Test-SecurityDescriptorOwner {
     foreach ($sid in $DomainAdminsSIDs) {
         $SafeSIDs += "|$sid"
     }
-    $DynamicUpdateServiceAccounts = Get-DynamicUpdateServiceAccount -Domains $Domains
+
     foreach ($dynamicupdateserviceaccount in $DynamicUpdateServiceAccounts) {
         if ( ($dynamicupdateserviceaccount.'Service Account Name' -ne 'Not Configured') -and
             ($dynamicupdateserviceaccount.'Service Account Domain' -ne 'N/A') ) {
