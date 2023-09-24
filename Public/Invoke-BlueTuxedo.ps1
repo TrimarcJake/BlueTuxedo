@@ -1,11 +1,12 @@
 function Invoke-BlueTuxedo {
-    # param(
-    #     $Forest
-    # )
-    $Domains = (Get-ADForest).Domains
+    [CmdletBinding()]
+    param (
+        [string]$Forest = (Get-ADForest).Name,
+        [string]$InputPath
+    )
+    Get-Target -Forest $Forest -InputPath $InputPath
     Get-ADIZone -Domains $Domains
     Get-ConditionalForwarder -Domains $Domains
-    # Get-DACL -Domains $Domains
     Get-DanglingSPN -Domains $Domains
     Get-DnsAdminsMembership -Domains $Domains
     Get-DynamicUpdateServiceAccount -Domains $Domains
@@ -13,6 +14,7 @@ function Invoke-BlueTuxedo {
     Get-GlobalQueryBlockList -Domains $Domains
     Get-NonADIZone -Domains $Domains
     Get-QueryResolutionPolicy -Domains $Domains
+    Get-SecurityDescriptor -Domains $Domains
     Get-SocketPoolSize -Domains $Domains
     Get-TombstonedNode -Domains $Domains
     Get-WildcardRecord -Domains $Domains
