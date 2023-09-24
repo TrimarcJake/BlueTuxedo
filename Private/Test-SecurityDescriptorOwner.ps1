@@ -1,0 +1,46 @@
+function Test-SecurityDescriptorOwner {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [array]$SecurityDescriptors,
+        [Parameter()]
+        [array]$Domains
+    )
+
+    $FailedSecurityDescriptorOwner = @()
+    $SafeSIDs = 'S-1-5-18'
+    $RootDomain = (Get-ADForest $Domains[0]).RootDomain
+    $EnterpriseAdminsSID = "$((Get-ADDomain $rootDomain).domainSID.Value)-519"
+    $SafeSIDs += "|$EnterpriseAdminsSID"
+    $DomainAdminsSIDs = foreach ($domain in $Domains) {
+        "$((Get-ADDomain $domain).domainSID.Value)-512"
+    }
+    foreach ($sid in $DomainAdminsSIDs) {
+        $SafeSIDs += "|$sid"
+    }
+    $DynamicUpdateServiceAccounts = Get-DynamicUpdateServiceAccount -Domains $Domains
+    foreach ($dynamicupdateserviceaccount in $DynamicUpdateServiceAccounts) {
+        if ( ($dynamicupdateserviceaccount.'Service Account Name' -ne 'Not Configured') -and
+            ($dynamicupdateserviceaccount.'Service Account Domain' -ne 'N/A') ) {
+                $identityreference = "$($dynamicupdateserviceaccount.'Service Account Domain')\$($dynamicupdateserviceaccount.'Service Account Name')"
+                $dynamicupdateserviceaccountSID = ConvertFrom-IdentityReference -Object $identityreference
+                $SafeSIDs += "|$dynamicupdateserviceAccountSID"
+        }
+    }
+    $SafeSIDS
+
+    foreach ($securitydescriptor in $SecurityDescriptors) {
+        $owner = $securitydescriptor.Owner
+        $ownerDomain = $securitydescriptor.Owner.split('\')[0]
+        $ownerName = $securitydescriptor.Owner.split('\')[1]
+        if ($ownerName.EndsWith('$')) {
+            $ownerName = $ownerName.TrimEnd('$')
+        }
+        $ownerSID = ConvertFrom-IdentityReference -Object $owner
+        if ( ($ownerSID -notmatch $SafeSIDs) -and ($securitydescriptor.DistinguishedName -notmatch $ownerName) ) {
+            $FailedSecurityDescriptorOwner += $securitydescriptor | Select-Object Name, Owner, DistinguishedName
+        }
+    }
+
+    $FailedSecurityDescriptorOwner
+}
