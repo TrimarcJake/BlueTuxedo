@@ -28,8 +28,8 @@ Test:
 [x] Socket Pool Configuration
 [x] Tombstoned DNS Records - Unnecessary
 [ ] Weird DACLs
-[ ] Wildcard Record - Check if correct type for forest
-[ ] WPAD Record - Check if correct type for forest
+[x] Wildcard Record - Check if correct type for forest
+[x] WPAD Record - Check if correct type for forest
 [ ] Zone Scope Auditing
 
 Write
