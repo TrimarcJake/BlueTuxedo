@@ -19,7 +19,7 @@ Test:
 [ ] ADI Zone Auditing
 [ ] Conditional Forwarder Auditing
 [x] Dangling SPNs
-[ ] DHCP Dynamic Update service account
+[x] DHCP Dynamic Update service account
 [x] DnsAdmins Membership
 [x] Forwarder Configuration
 [ ] Global Query Block List (GQBL)
