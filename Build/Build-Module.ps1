@@ -40,6 +40,7 @@ Build-Module -ModuleName 'BlueTuxedo' {
         'DhcpServer'
         'DnsServer'
         'DnsClient'
+        'Microsoft.PowerShell.Security'
         # those modules are builtin in PowerShell so no need to install them
         # could as well be ignored with New-ConfigurationModuleSkip
         'Microsoft.PowerShell.Utility'
