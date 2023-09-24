@@ -8,9 +8,9 @@ Get:
 [x] Global Query Block List (GQBL)
 [x] Non-ADI Zone Auditing
 [x] Query Resolution Policies
+[x] Security Descriptors
 [x] Socket Pool Configuration
 [x] Tombstoned DNS Records
-[x] Weird DACLs
 [x] Wildcard Record
 [x] WPAD Record
 [x] Zone Scope Auditing
@@ -21,13 +21,14 @@ Test:
 [x] Dangling SPNs - Unnecessary
 [x] DHCP Dynamic Update service account
 [x] DnsAdmins Membership - Unnecessary
-[ ] Forwarder Configuration - Resolve names, check if "trusted"
+[x] Forwarder Configuration
 [x] Global Query Block List (GQBL)
 [ ] Non-ADI Zone Auditing
 [ ] Query Resolution Policies
+[ ] Security Descriptor (ACEs)
+[ ] Security Descriptor (Ownership)
 [x] Socket Pool Configuration
 [x] Tombstoned DNS Records - Unnecessary
-[ ] Weird DACLs
 [x] Wildcard Record - Check if correct type for forest
 [x] WPAD Record - Check if correct type for forest
 [ ] Zone Scope Auditing
