@@ -11,23 +11,21 @@ function Get-SecurityDescriptor {
     foreach ($domain in $Domains) {
         $DomainDN = (Get-ADDomain $domain).DistinguishedName
         $DomainNetBIOSName = (Get-ADDomain $domain).NetBIOSName
+        $Locations = @()
         if ($ForestDN -eq $DomainDN) {
             $Locations = 'DC=ForestDnsZones','DC=DomainDnsZones','CN=MicrosoftDNS,CN=System'
-            New-PSDrive -Name $DomainNetBIOSName -PSProvider ActiveDirectory -Server $domain -root "//RootDSE/"
-            foreach ($location in $Locations) {
-                $Objects = Get-ADObject -Filter * -SearchBase "$location,$DomainDN" -Server $domain
-                foreach ($object in $Objects) {
-                    $ObjectACEList += Get-ACL "AD:$($object.DistinguishedName)"
-                }
-            }
         } else {
-            New-PSDrive -Name $DomainNetBIOSName -PSProvider ActiveDirectory -Server $domain -root "//RootDSE/"
-            $Objects = Get-ADObject -Filter * -SearchBase "DC=DomainDnsZones,$DomainDN" -Server $domain
+            $Locations = 'DC=DomainDnsZones'
+        }
+        New-PSDrive -Name $DomainNetBIOSName -PSProvider ActiveDirectory -Server $domain -root "//RootDSE/"
+        $Objects = @()
+        foreach ($location in $Locations) {
+            $Objects = Get-ADObject -Filter * -SearchBase "$location,$DomainDN" -Server $domain
             foreach ($object in $Objects) {
-                $ObjectACEList += Get-ACL "AD:$($object.DistinguishedName)"
+                $ObjectACEList += Get-ACL "$($DomainNetBIOSName):$($object.DistinguishedName)"
             }
         }
     }
 
-    # $ObjectACEList
+    $ObjectACEList
 }
