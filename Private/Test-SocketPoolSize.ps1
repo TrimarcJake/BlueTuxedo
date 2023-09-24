@@ -7,7 +7,7 @@ function Test-SocketPoolSize {
 
     $FailedSocketPoolSize = @()
     foreach ($socketpoolsize in $SocketPoolSizes) {
-        if ($socketpoolsize.'Socket Pool Size' -lt 100000) {
+        if ($socketpoolsize.'Socket Pool Size' -lt 10000) {
             $FailedSocketPoolSize += $socketpoolsize
         }
     }
