@@ -26,7 +26,7 @@ Test:
 [ ] Non-ADI Zone Auditing
 [ ] Query Resolution Policies
 [ ] Security Descriptor (ACEs)
-[ ] Security Descriptor (Ownership)
+[x] Security Descriptor (Ownership)
 [x] Socket Pool Configuration
 [x] Tombstoned DNS Records - Unnecessary
 [x] Wildcard Record - Check if correct type for forest
