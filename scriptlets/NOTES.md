@@ -20,9 +20,9 @@ Test:
 [ ] Conditional Forwarder Auditing
 [ ] Dangling SPNs
 [x] DHCP Dynamic Update service account
-[ ] DnsAdmins Membership
+[x] DnsAdmins Membership - Unnecessary.
 [ ] Forwarder Configuration
-[ ] Global Query Block List (GQBL)
+[x] Global Query Block List (GQBL)
 [ ] Non-ADI Zone Auditing
 [ ] Query Resolution Policies
 [x] Socket Pool Configuration
