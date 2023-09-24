@@ -1,32 +1,33 @@
 Get:
+[x] ADI Zone Auditing
+[x] Conditional Forwarder Auditing
 [x] Dangling SPNs
+[x] DHCP Dynamic Update service account
 [x] DnsAdmins Membership
+[x] Forwarder Configuration
+[x] Global Query Block List (GQBL)
+[x] Non-ADI Zone Auditing
+[x] Query Resolution Policies
+[x] Socket Pool Configuration
+[x] Tombstoned DNS Records
+[x] Weird DACLs
 [x] Wildcard Record
 [x] WPAD Record
-[x] Global Query Block List (GQBL)
-[x] DHCP Dynamic Update service account
-[x] Weird DACLs
-[x] Tombstoned DNS Records
-[x] Conditional Forwarder Auditing
-[x] ADI Zone Auditing
-[x] Non-ADI Zone Auditing
 [x] Zone Scope Auditing
-[x] Forwarder Configuration
-[x] Socket Pool Configuration
-[x] Query Resolution Policies
 
 Analyze:
+[ ] ADI Zone Auditing
+[ ] Conditional Forwarder Auditing
 [ ] Dangling SPNs
+[ ] DHCP Dynamic Update service account
 [ ] DnsAdmins Membership
+[ ] Forwarder Configuration
+[ ] Global Query Block List (GQBL)
+[ ] Non-ADI Zone Auditing
+[ ] Query Resolution Policies
+[ ] Socket Pool Configuration
+[ ] Tombstoned DNS Records
+[ ] Weird DACLs
 [ ] Wildcard Record
 [ ] WPAD Record
-[ ] Global Query Block List (GQBL)
-[ ] DHCP Dynamic Update service account
-[ ] Weird DACLs
-[ ] Tombstoned DNS Records
-[ ] Conditional Forwarder Auditing
-[ ] Zone Auditing
 [ ] Zone Scope Auditing
-[ ] Forwarder Configuration
-[ ] Socket Pool Configuration
-[ ] Query Resolution Policies
