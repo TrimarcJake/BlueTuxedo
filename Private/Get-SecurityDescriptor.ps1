@@ -6,7 +6,7 @@ function Get-SecurityDescriptor {
         $Domains
     )
 
-    $ObjectACEList = @()
+    $ObjectACLList = @()
     $ForestDN = (Get-ADRootDSE).rootDomainNamingContext
     foreach ($domain in $Domains) {
         $DomainDN = (Get-ADDomain $domain).DistinguishedName
@@ -17,15 +17,19 @@ function Get-SecurityDescriptor {
         } else {
             $Locations = 'DC=DomainDnsZones'
         }
-        New-PSDrive -Name $DomainNetBIOSName -PSProvider ActiveDirectory -Server $domain -root "//RootDSE/"
+        New-PSDrive -Name $DomainNetBIOSName -PSProvider ActiveDirectory -Server $domain -root "//RootDSE/" | Out-Null
         $Objects = @()
         foreach ($location in $Locations) {
             $Objects = Get-ADObject -Filter * -SearchBase "$location,$DomainDN" -Server $domain
             foreach ($object in $Objects) {
-                $ObjectACEList += Get-ACL "$($DomainNetBIOSName):$($object.DistinguishedName)"
+                $AddToList = Get-ACL "$($DomainNetBIOSName):$($object.DistinguishedName)"
+                $AddToList | Add-Member NoteProperty -Name Name -Value $object.Name
+                $AddToList | Add-Member NoteProperty -Name DistinguishedName -Value $object.DistinguishedName
+                
+                $ObjectACLList += $AddToList
             }
         }
     }
 
-    $ObjectACEList
+    $ObjectACLList
 }
