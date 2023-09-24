@@ -5,7 +5,7 @@ function Test-ForwarderConfiguration {
         [array]$ForwarderConfigurations
     )
 
-    $FailedForwarderConfiguration = @()
+    $AuditedForwarderConfiguration = @()
     $ForwarderHashtable = @{
         'AdGuard Primary'                               = '94.140.14.14'
         'AdGuard Secondary'                             = '94.140.15.15'  
@@ -54,9 +54,9 @@ function Test-ForwarderConfiguration {
                 'Service'        = $wellKnownName
             }
 
-            $FailedForwarderConfiguration += $AddToList
+            $AuditedForwarderConfiguration += $AddToList
         }
     }
 
-    $FailedForwarderConfiguration
+    $AuditedForwarderConfiguration
 }
