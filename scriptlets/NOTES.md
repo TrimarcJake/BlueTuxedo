@@ -5,7 +5,7 @@ Get:
 [x] WPAD Record
 [x] Global Query Block List (GQBL)
 [x] DHCP Dynamic Update service account
-[ ] Weird DACLs
+[x] Weird DACLs
 [x] Tombstoned DNS Records
 [x] Conditional Forwarder Auditing
 [x] ADI Zone Auditing
