@@ -1,20 +1,14 @@
 ﻿function Get-Target {
     param (
-        [string]$Forest,
-        [string]$InputPath,
-        [System.Management.Automation.PSCredential]$Credential
+        [string]$Forest = (Get-ADForest).Name,
+        [string]$InputPath
     )
 
-    if ($Forest) {
-        $Targets = $Forest
-    } elseif ($InputPath) {
+    if ($InputPath) {
         $Targets = Get-Content $InputPath
     } else {
-        if ($Credential){
-            $Targets = (Get-ADForest -Credential $Credential).Name
-        } else {
-            $Targets = (Get-ADForest).$Domains
-        }
+        $Targets = (Get-ADForest $Forest).Domains
     }
-    return $Targets
+    
+    $Targets
 }
