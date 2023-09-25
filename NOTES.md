@@ -1,5 +1,5 @@
 Get:
-- [x] ADI Zone Auditing
+- [x] ADI Zones
 - [x] Conditional Forwarder Auditing
 - [x] Dangling SPNs
 - [x] DHCP Dynamic Update service account
@@ -16,7 +16,8 @@ Get:
 - [x] Zone Scope Auditing
 
 Test:
-- [ ] ADI Zone Auditing
+- [ ] ADI Zones (Legacy)
+- [ ] ADI Zones (non-Legacy)
 - [ ] Conditional Forwarder Auditing
 - [x] Dangling SPNs - Unnecessary
 - [x] DHCP Dynamic Update service account
@@ -34,7 +35,8 @@ Test:
 - [ ] Zone Scope Auditing
 
 Write
-- [ ] ADI Zone Auditing
+- [ ] ADI Zones (Legacy)
+- [ ] ADI Zones (non-Legacy)
 - [ ] Conditional Forwarder Auditing
 - [ ] Dangling SPNs
 - [ ] DHCP Dynamic Update service account
@@ -51,7 +53,8 @@ Write
 - [ ] Zone Scope Auditing
 
 Repair
-- [ ] ADI Zone Auditing
+- [ ] ADI Zones (Legacy)
+- [ ] ADI Zones (non-Legacy)
 - [ ] Conditional Forwarder Auditing
 - [ ] Dangling SPNs
 - [ ] DHCP Dynamic Update service account
