@@ -16,23 +16,22 @@ Get:
 - [x] Zone Scope Auditing
 
 Test:
-- [ ] ADI Zones (Legacy)
-- [ ] ADI Zones (non-Legacy)
-- [ ] Conditional Forwarder Auditing
+- [ ] ADI Zones (Legacy vs. non-Legacy)
+- [ ] Conditional Forwarder Auditing - Unnecessary
 - [x] Dangling SPNs - Unnecessary
 - [x] DHCP Dynamic Update service account
 - [x] DnsAdmins Membership - Unnecessary
 - [x] Forwarder Configuration
 - [x] Global Query Block List (GQBL)
-- [ ] Non-ADI Zone Auditing
-- [ ] Query Resolution Policies
+- [ ] Non-ADI Zone Auditing - Unnecessary
+- [ ] Query Resolution Policies - Unnecessary
 - [ ] Security Descriptor (ACEs)
 - [x] Security Descriptor (Ownership)
 - [x] Socket Pool Configuration
 - [x] Tombstoned DNS Records - Unnecessary
 - [x] Wildcard Record - Check if correct type for forest
 - [x] WPAD Record - Check if correct type for forest
-- [ ] Zone Scope Auditing
+- [ ] Zone Scope Auditing - Check for empty Zone Scope Container
 
 Write
 - [ ] ADI Zones (Legacy)
