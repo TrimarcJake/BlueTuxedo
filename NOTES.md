@@ -16,7 +16,7 @@ Get:
 - [x] Zone Scope Auditing
 
 Test:
-- [ ] ADI Zones (Legacy vs. non-Legacy)
+- [x] ADI Zones (Legacy vs. non-Legacy)
 - [ ] Conditional Forwarder Auditing - Unnecessary
 - [x] Dangling SPNs - Unnecessary
 - [x] DHCP Dynamic Update service account
