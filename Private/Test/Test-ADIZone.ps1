@@ -9,9 +9,8 @@ function Test-ADIZone {
 
     foreach ($adizone in $ADIZones) {
         [string]$domainDN = (Get-ADDomain $adizone.Domain).DistinguishedName
-        $legacyADIZoneDN = "DC=$($adizone.'Zone Name'),CN=MicrosoftDNS,CN=System,$domainDN"
         try {
-            $zoneDN = Get-ADobject -Identity $legacyADIZoneDN -Server $adizone.Domain -Properties DistinguishedName -ErrorAction SilentlyContinue 
+            $zoneDN = Get-ADobject -Identity "DC=$($adizone.'Zone Name'),CN=MicrosoftDNS,CN=System,$domainDN" -Server $adizone.Domain -Properties DistinguishedName -ErrorAction SilentlyContinue 
             $isLegacy = $true
         } catch {
             $isLegacy = $false
