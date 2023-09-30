@@ -17,14 +17,14 @@ Get:
 
 Test:
 - [x] ADI Zones (Legacy vs. non-Legacy)
-- [ ] Conditional Forwarder Auditing - Unnecessary
+- [x] Conditional Forwarder Auditing - Unnecessary
 - [x] Dangling SPNs - Unnecessary
 - [x] DHCP Dynamic Update service account
 - [x] DnsAdmins Membership - Unnecessary
 - [x] Forwarder Configuration
 - [x] Global Query Block List (GQBL)
-- [ ] Non-ADI Zone Auditing - Unnecessary
-- [ ] Query Resolution Policies - Unnecessary
+- [x] Non-ADI Zone Auditing - Unnecessary
+- [x] Query Resolution Policies - Unnecessary
 - [ ] Security Descriptor (ACEs)
 - [x] Security Descriptor (Ownership)
 - [x] Socket Pool Configuration
