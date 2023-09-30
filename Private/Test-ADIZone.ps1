@@ -12,15 +12,20 @@ function Test-ADIZone {
         $legacyADIZoneDN = "DC=$($adizone.'Zone Name'),CN=MicrosoftDNS,CN=System,$domainDN"
         try {
             $zoneDN = Get-ADobject -Identity $legacyADIZoneDN -Server $adizone.Domain -Properties DistinguishedName -ErrorAction SilentlyContinue 
-            $AddToList = [PSCustomObject]@{
-                'Domain' = $adizone.Domain
-                'Zone Name'   = $adizone.'Zone Name'
-                'Zone Type'   = $adizone.'Zone Type'
-                'Zone DN'     = $zoneDN
-            }
-            $FailedADIZoneList += $AddToList
+            $isLegacy = $true
         } catch {
+            $isLegacy = $false
         }
+        $AddToList = [PSCustomObject]@{
+            'Domain'     = $adizone.Domain
+            'Zone Name'  = $adizone.'Zone Name'
+            'Zone Type'  = $adizone.'Zone Type'
+            'Is Reverse?' = $adizone.'Is Reverse?'
+            'Is Legacy?' = $isLegacy
+            'Zone DN'    = $zoneDN
+        }
+
+        $FailedADIZoneList += $AddToList
     }
 
     $FailedADIZoneList
