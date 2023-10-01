@@ -13,7 +13,8 @@ Get:
 - [x] Tombstoned DNS Records
 - [x] Wildcard Record
 - [x] WPAD Record
-- [x] Zone Scope Auditing
+- [x] Zone Scopes
+- [x] Zone Scope Containers
 
 Test:
 - [x] ADI Zones (Legacy vs. non-Legacy)
@@ -31,7 +32,8 @@ Test:
 - [x] Tombstoned DNS Records - Unnecessary
 - [x] Wildcard Record - Check if correct type for forest
 - [x] WPAD Record - Check if correct type for forest
-- [ ] Zone Scopes- Check for empty Zone Scope Container
+- [x] Zone Scopes -Unnecessary
+- [ ] Zone Scope Containers
 
 Write
 - [ ] ADI Zones (Legacy)
