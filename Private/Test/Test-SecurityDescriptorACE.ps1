@@ -17,22 +17,34 @@ function Test-SecurityDescriptorACE {
     # Need to loop through domains
     $KeyAdminsSID = "$((Get-ADDomain $rootDomain).domainSID.Value)-526"
     $EnterpriseKeyAdminsSID = "$((Get-ADDomain $rootDomain).domainSID.Value)-527"
-    $DomainAdminsSIDs = foreach ($domain in $Domains) {
-        "$((Get-ADDomain $domain).domainSID.Value)-512"
-    }
-    foreach ($sid in $DomainAdminsSIDs) {
-        $SafeSIDs += "|$sid"
-    }
+    $SafeGroupSIDs = @()
     foreach ($domain in $Domains) {
-        $DomaincontrollersSID = "$((Get-ADDomain $domain).domainSID.Value)-516"
-        $SafeSIDs += "|$DomainControllersSID"
-        $users += (Get-ADGroupMember $sid -Server $domain -Recursive).SID.Value
-        foreach ($user in $users) {
-            $SafeSIDs += "|$user"
+        $DomainSID = (Get-ADDomain $domain).DomainSID.Value
+        $SafeGroupRIDs = @('-512')
+        foreach ($rid in $SafeGroupRIDs ) {
+            $SafeGroupSID = $DomainSID + $rid
+            $SafeSIDs += "|$SafeGroupSID"
         }
     }
-    
-    $SafeSIDs;pause
+    # $DomainAdminsSIDs = foreach ($domain in $Domains) {
+    #     "$((Get-ADDomain $domain).domainSID.Value)-512"
+    # }
+    # foreach ($sid in $DomainAdminsSIDs) {
+    #     $SafeSIDs += "|$sid"
+    # }
+    foreach ($domain in $Domains) {
+        $DomainSID = (Get-ADDomain $domain).DomainSID.Value
+        $SafeGroupRIDs = @('-516')
+        foreach ($rid in $SafeGroupRIDs ) {
+            $DomainControllersSID = $DomainSID + $rid
+            $SafeSIDs += "|$DomainControllersSID"
+            $members = @()
+            $members += (Get-ADGroupMember $DomainControllersSID -Server $domain -Recursive).SID.Value
+            foreach ($member in $members) {
+                $SafeSIDs += "|$member"
+            }
+        }
+    }
     $DangerousRights = 'GenericAll|WriteDacl|WriteOwner|WriteProperty'
 
     foreach ($dynamicupdateserviceaccount in $DynamicUpdateServiceAccounts) {
