@@ -33,7 +33,7 @@ Test:
 - [x] Wildcard Record - Check if correct type for forest
 - [x] WPAD Record - Check if correct type for forest
 - [x] Zone Scopes -Unnecessary
-- [ ] Zone Scope Containers
+- [x] Zone Scope Containers
 
 Write
 - [ ] ADI Zones (Legacy)
