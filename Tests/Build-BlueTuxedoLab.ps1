@@ -66,6 +66,7 @@ foreach ($domain in $Domains) {
         Add-DnsServerStubZone -ComputerName $domain -Name "$LabName$i.stubzone.$j.nonadi" -MasterServers $SusDNS
 
         # Add Suspicious Zone Scopes + Policies (non-ADI by default)
+        # Add-DnsServerZoneScope -ComputerName $ipaddress -ZoneName "$LabName$i.conditionalforwarder.$j.nonadi" -Name "$LabName$i.conditionalforwarder.$j.nonadi_ZoneScope" -LoadExisting -PassThru 
         Add-DnsServerQueryResolutionPolicy -ComputerName $ipaddress -Name "$LabName$i.conditionalforwarder.$j.nonadi_QueryResolutionPolicy" -Action IGNORE -FQDN "EQ,*.$LabName$i.conditionalforwarder.$j.nonadi"
     
         # Add suspicious Secondary Zone
