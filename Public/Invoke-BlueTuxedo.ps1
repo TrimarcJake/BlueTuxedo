@@ -4,7 +4,8 @@ function Invoke-BlueTuxedo {
         [string]$Forest = (Get-ADForest).Name,
         [string]$InputPath
     )
-    Get-Target -Forest $Forest -InputPath $InputPath
+    
+    $Domains = Get-Target -Forest $Forest -InputPath $InputPath
     Get-ADIZone -Domains $Domains
     Get-ConditionalForwarder -Domains $Domains
     Get-DanglingSPN -Domains $Domains
