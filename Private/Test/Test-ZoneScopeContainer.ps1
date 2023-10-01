@@ -9,7 +9,6 @@ function Test-ZoneScopeContainer {
 
     foreach ($zoneScopeContainer in $ZoneScopeContainers) {
         $isEmpty = $true
-        $Output = (Get-ADObject -Filter * -SearchBase $zoneScopeContainer.'Zone Scope Container DN' -Server $zoneScopeContainer.Domain).Count
         if ( (Get-ADObject -Filter * -SearchBase $zoneScopeContainer.'Zone Scope Container DN' -Server $zoneScopeContainer.Domain).Count -gt 0) {
             $isEmpty = $false
         }
