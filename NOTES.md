@@ -31,7 +31,7 @@ Test:
 - [x] Tombstoned DNS Records - Unnecessary
 - [x] Wildcard Record - Check if correct type for forest
 - [x] WPAD Record - Check if correct type for forest
-- [ ] Zone Scope Auditing - Check for empty Zone Scope Container
+- [ ] Zone Scopes- Check for empty Zone Scope Container
 
 Write
 - [ ] ADI Zones (Legacy)
