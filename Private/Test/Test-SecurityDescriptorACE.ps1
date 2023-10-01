@@ -14,12 +14,25 @@ function Test-SecurityDescriptorACE {
     $RootDomain = (Get-ADForest $Domains[0]).RootDomain
     $EnterpriseAdminsSID = "$((Get-ADDomain $rootDomain).domainSID.Value)-519"
     $SafeSIDs += "|$EnterpriseAdminsSID"
+    # Need to loop through domains
+    $KeyAdminsSID = "$((Get-ADDomain $rootDomain).domainSID.Value)-526"
+    $EnterpriseKeyAdminsSID = "$((Get-ADDomain $rootDomain).domainSID.Value)-527"
     $DomainAdminsSIDs = foreach ($domain in $Domains) {
         "$((Get-ADDomain $domain).domainSID.Value)-512"
     }
     foreach ($sid in $DomainAdminsSIDs) {
         $SafeSIDs += "|$sid"
     }
+    foreach ($domain in $Domains) {
+        $DomaincontrollersSID = "$((Get-ADDomain $domain).domainSID.Value)-516"
+        $SafeSIDs += "|$DomainControllersSID"
+        $users += (Get-ADGroupMember $sid -Server $domain -Recursive).SID.Value
+        foreach ($user in $users) {
+            $SafeSIDs += "|$user"
+        }
+    }
+    
+    $SafeSIDs;pause
     $DangerousRights = 'GenericAll|WriteDacl|WriteOwner|WriteProperty'
 
     foreach ($dynamicupdateserviceaccount in $DynamicUpdateServiceAccounts) {
@@ -33,8 +46,14 @@ function Test-SecurityDescriptorACE {
 
     foreach ($securitydescriptor in $SecurityDescriptors) {
         foreach ($ace in $securitydescriptor.Access) {
-            $aceSID = ConvertFrom-IdentityReference -Object $ace.IdentityReference
-            if ( ($aceSID -notmatch $SafeSIDs) -and ($ace.ActiveDirectoryRights -match $DangerousRights) ) {
+            $aceName = $securitydescriptor.Owner.split('\')[1]
+            if ($aceName.EndsWith('$')) {
+                $aceName = $aceName.TrimEnd('$')
+            }
+            $aceSID = ConvertFrom-IdentityReference -Object $ace.IdentityReference 
+            if ( ($aceSID -notmatch $SafeSIDs) -and ($ace.ActiveDirectoryRights -match $DangerousRights) -and 
+                ($securitydescriptor.DistinguishedName -notmatch $aceName) -and
+                ( ($aceSID -notmatch "$EnterpriseKeyAdminsSID|$KeyAdminsSID") -and ($ace.'Object Type' -ne '5b47d60f-6090-40b2-9f37-2a4de88f3063') ) ) {
                 $AddToList = [PSCustomObject]@{
                     Name                      = $securitydescriptor.Name
                     'Identity Reference'      = $ace.IdentityReference
