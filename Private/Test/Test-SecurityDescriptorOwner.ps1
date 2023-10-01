@@ -32,7 +32,6 @@ function Test-SecurityDescriptorOwner {
 
     foreach ($securitydescriptor in $SecurityDescriptors) {
         $owner = $securitydescriptor.Owner
-        $ownerDomain = $securitydescriptor.Owner.split('\')[0]
         $ownerName = $securitydescriptor.Owner.split('\')[1]
         if ($ownerName.EndsWith('$')) {
             $ownerName = $ownerName.TrimEnd('$')
