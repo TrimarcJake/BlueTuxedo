@@ -26,7 +26,7 @@ Test:
 - [x] Global Query Block List (GQBL)
 - [x] Non-ADI Zone Auditing - Unnecessary
 - [x] Query Resolution Policies - Unnecessary
-- [ ] Security Descriptor (ACEs)
+- [x] Security Descriptor (ACEs)
 - [x] Security Descriptor (Ownership)
 - [x] Socket Pool Configuration
 - [x] Tombstoned DNS Records - Unnecessary
