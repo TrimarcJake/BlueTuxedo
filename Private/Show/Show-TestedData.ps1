@@ -9,6 +9,7 @@ function Show-TestedData {
             'NonADIZones',
             'QueryResolutionPolicys',
             'TombstonedNodes',
+            'ZoneScopes',
             'TestedADIZones',
             'TestedDynamicUpdateServiceAccounts',
             'TestedForwarderConfigurations',
@@ -31,6 +32,7 @@ function Show-TestedData {
         'NonADIZones',
         'QueryResolutionPolicys',
         'TombstonedNodes',
+        'ZoneScopes',
         'TestedADIZones',
         'TestedDynamicUpdateServiceAccounts',
         'TestedForwarderConfigurations',
@@ -43,17 +45,17 @@ function Show-TestedData {
 
     $TitleHashtable = @{
         'Section' = 'Friendly Name'
-        'ConditionalForwarders' = 'Conditional Forwarders' 
-        'DanglingSPNs' = 'Dangling SPNs' 
+        'ConditionalForwarders' = 'Al Conditional Forwarders' 
+        'DanglingSPNs' = 'All Dangling SPNs' 
         'DnsAdminsMemberships' = 'DnsAdmins Membership (per-domain)' 
-        'NonADIZones' = 'Non-ADI Zones' 
-        'QueryResolutionPolicys' = 'Query Resolution Policies' 
-        'TombstonedNodes' = 'Tombstoned Nodes'
+        'NonADIZones' = 'All Non-ADI Zones' 
+        'QueryResolutionPolicys' = 'All Query Resolution Policies' 
+        'TombstonedNodes' = 'All Tombstoned Nodes'
         'ZoneScopes' = 'Tested Zone Scopes'
         'TestedADIZones' = 'Legacy ADI Zones' 
         'TestedDynamicUpdateServiceAccounts' = 'DNS Servers not configured to use Dynamic Update Service Accounts' 
-        'TestedForwarderConfigurations' = 'Forwarder Configurations' 
-        'TestedGlobalQueryBlockLists' = 'Global Query Block Lists' 
+        'TestedForwarderConfigurations' = 'All Configured Forwarders' 
+        'TestedGlobalQueryBlockLists' = 'All Global Query Block Lists' 
         'TestedSecurityDescriptorACEs' = 'Possibly Dangerous ACEs on DNS Objects' 
         'TestedSecurityDescriptorOwners' = 'Possibly Dangerous Owners of DNS Objects' 
         'TestedSocketPoolSizes' = 'Socket Pool Sizes Less Than Maximum' 
