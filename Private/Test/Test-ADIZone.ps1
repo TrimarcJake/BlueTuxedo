@@ -5,6 +5,10 @@ function Test-ADIZone {
         [array]$ADIZones
     )
 
+    if ($null -eq $ADIZones) {
+        $ADIZones = Get-ADIZone
+    }
+
     $FailedADIZoneList = @()
 
     foreach ($adizone in $ADIZones) {

@@ -1,10 +1,13 @@
 function Get-WildcardRecord {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [array]
-        $Domains
+        [Parameter()]
+        [array]$Domains
     )
+
+    if ($null -eq $Domains) {
+        $Domains = Get-Target
+    }
 
     $WildcardRecordList = @()
     foreach ($domain in $Domains) {

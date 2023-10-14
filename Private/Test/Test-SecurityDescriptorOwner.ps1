@@ -9,6 +9,18 @@ function Test-SecurityDescriptorOwner {
         [array]$Domains
     )
 
+    if ($null -eq $SecurityDescriptors) {
+        $SecurityDescriptors = Get-SecurityDescriptor
+    }
+
+    if ($null -eq $DynamicUpdateServiceAccounts) {
+        $DynamicUpdateServiceAccounts = Get-DynamicUpdateServiceAccount
+    }
+
+    if ($null -eq $Domains) {
+        $Domains = Get-Target
+    }
+
     $FailedSecurityDescriptorOwner = @()
     $SafeSIDs = 'S-1-5-18'
     $RootDomain = (Get-ADForest $Domains[0]).RootDomain

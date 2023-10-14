@@ -9,6 +9,18 @@ function Test-SecurityDescriptorACE {
         [array]$Domains
     )
 
+    if ($null -eq $SecurityDescriptors) {
+        $SecurityDescriptors = Get-SecurityDescriptor
+    }
+
+    if ($null -eq $DynamicUpdateServiceAccounts) {
+        $DynamicUpdateServiceAccounts = Get-DynamicUpdateServiceAccount
+    }
+
+    if ($null -eq $Domains) {
+        $Domains = Get-Target
+    }
+
     $FailedSecurityDescriptorACE = @()
     $SafeSIDs = 'S-1-5-9|S-1-5-10|S-1-5-18|S-1-5-32-544'
     $RootDomain = (Get-ADForest $Domains[0]).RootDomain
@@ -17,7 +29,6 @@ function Test-SecurityDescriptorACE {
     # Need to loop through domains
     $KeyAdminsSID = "$((Get-ADDomain $rootDomain).domainSID.Value)-526"
     $EnterpriseKeyAdminsSID = "$((Get-ADDomain $rootDomain).domainSID.Value)-527"
-    $SafeGroupSIDs = @()
     foreach ($domain in $Domains) {
         $DomainSID = (Get-ADDomain $domain).DomainSID.Value
         $SafeGroupRIDs = @('-512')

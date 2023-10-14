@@ -1,10 +1,13 @@
 function Get-QueryResolutionPolicy {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [array]
-        $Domains
+        [Parameter()]
+        [array]$Domains
     )
+
+    if ($null -eq $Domains) {
+        $Domains = Get-Target
+    }
 
     $QueryResolutionPolicyList = @()
     foreach ($domain in $Domains) {

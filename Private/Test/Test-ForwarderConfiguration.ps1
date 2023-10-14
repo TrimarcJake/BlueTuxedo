@@ -5,6 +5,10 @@ function Test-ForwarderConfiguration {
         [array]$ForwarderConfigurations
     )
 
+    if ($null -eq $ForwarderConfigurations) {
+        $ForwarderConfigurations = Get-ForwarderConfiguration
+    }
+
     $AuditedForwarderConfiguration = @()
     $ForwarderHashtable = @{
         'AdGuard Primary'                               = '94.140.14.14'

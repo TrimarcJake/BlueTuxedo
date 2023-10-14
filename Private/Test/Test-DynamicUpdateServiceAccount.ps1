@@ -5,6 +5,10 @@ function Test-DynamicUpdateServiceAccount {
         [array]$DynamicUpdateServiceAccounts
     )
 
+    if ($null -eq $DynamicUpdateServiceAccounts) {
+        $DynamicUpdateServiceAccounts = Get-DynamicUpdateServiceAccount
+    }
+
     $FailedDynamicUpdateServiceAccount = @()
     foreach ($dynamicupdateserviceaccount in $DynamicUpdateServiceAccounts) {
         if ( ($dynamicupdateserviceaccount.'Service Account Name' -eq 'Not Configured') -and 

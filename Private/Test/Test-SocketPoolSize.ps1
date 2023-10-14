@@ -5,6 +5,10 @@ function Test-SocketPoolSize {
         [array]$SocketPoolSizes
     )
 
+    if ($null -eq $SocketPoolSizes) {
+        $SocketPoolSizes = Get-SocketPoolSize
+    }
+
     $FailedSocketPoolSize = @()
     foreach ($socketpoolsize in $SocketPoolSizes) {
         if ($socketpoolsize.'Socket Pool Size' -lt 10000) {

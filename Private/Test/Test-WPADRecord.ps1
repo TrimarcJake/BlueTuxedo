@@ -5,6 +5,10 @@ function Test-WPADRecord {
         [array]$WPADRecords
     )
 
+    if ($null -eq $WPADRecords) {
+        $WPADRecords = Get-WPADRecord
+    }
+
     if ($WPADRecords -eq 1) {
         $correctType = 'A'
     } else {

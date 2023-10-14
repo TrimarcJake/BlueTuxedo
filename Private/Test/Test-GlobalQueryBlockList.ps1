@@ -5,6 +5,10 @@ function Test-GlobalQueryBlockList {
         [array]$GlobalQueryBlockLists
     )
 
+    if ($null -eq $GlobalQueryBlockLists) {
+        $GlobalQueryBlockLists = Get-GlobalQueryBlockList
+    }
+
     $FailedGlobalQueryBlockList = @()
     foreach ($globalqueryblocklist in $GlobalQueryBlockLists) {
         $wpadExists = $true

@@ -1,9 +1,13 @@
 function Get-ZoneScopeContainer {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter()]
         [array]$ADIZones
     )
+
+    if ($null -eq $ADIZones) {
+        $ADIZones = Get-ADIZone
+    }
 
     $ZoneScopeContainerList = @()
     foreach ($adizone in $ADIZones) {

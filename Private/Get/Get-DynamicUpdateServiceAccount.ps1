@@ -1,10 +1,13 @@
 function Get-DynamicUpdateServiceAccount {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [array]
-        $Domains
+        [Parameter()]
+        [array]$Domains
     )
+
+    if ($null -eq $Domains) {
+        $Domains = Get-Target
+    }
 
     $DynamicUpdateServiceAccountList = @()
     foreach ($domain in $Domains) {

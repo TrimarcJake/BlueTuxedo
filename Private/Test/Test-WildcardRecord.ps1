@@ -5,6 +5,10 @@ function Test-WildcardRecord {
         [array]$WildcardRecords
     )
 
+    if ($null -eq $WildcardRecords) {
+        $WildcardRecords = Get-WildcardRecord
+    }
+
     if ($WildcardRecords -eq 1) {
         $correctType = 'A'
     } else {

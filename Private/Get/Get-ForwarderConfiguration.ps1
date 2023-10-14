@@ -1,10 +1,13 @@
 function Get-ForwarderConfiguration {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [array]
-        $Domains
+        [Parameter()]
+        [array]$Domains
     )
+
+    if ($null -eq $Domains) {
+        $Domains = Get-Target
+    }
 
     $ForwarderList = @()
     foreach ($domain in $Domains) {

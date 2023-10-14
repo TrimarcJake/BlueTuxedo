@@ -1,10 +1,13 @@
 function Get-ADIZone {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [array]
-        $Domains
+        [Parameter()]
+        [array]$Domains
     )
+
+    if ($null -eq $Domains) {
+        $Domains = Get-Target
+    }
 
     $ZoneList = @()
     foreach ($domain in $Domains) {

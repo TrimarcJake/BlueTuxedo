@@ -1,10 +1,13 @@
 function Get-SecurityDescriptor {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [array]
-        $Domains
+        [Parameter()]
+        [array]$Domains
     )
+
+    if ($null -eq $Domains) {
+        $Domains = Get-Target
+    }
 
     $ObjectACLList = @()
     $ForestDN = (Get-ADRootDSE).rootDomainNamingContext

@@ -1,10 +1,13 @@
 function Get-SocketPoolSize {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [array]
-        $Domains
+        [Parameter()]
+        [array]$Domains
     )
+
+    if ($null -eq $Domains) {
+        $Domains = Get-Target
+    }
 
     $SocketPoolSizeList = @()
     foreach ($domain in $Domains) {

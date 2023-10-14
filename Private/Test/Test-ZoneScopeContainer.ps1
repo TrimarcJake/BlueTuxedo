@@ -5,10 +5,13 @@ function Test-ZoneScopeContainer {
         [array]$ZoneScopeContainers
     )
 
+    if ($null -eq $ZoneScopeContainers) {
+        $ZoneScopeContainers = Get-ZoneScopeContainer
+    }
+
     $FailedZoneScopeContainerList = @()
 
     foreach ($zoneScopeContainer in $ZoneScopeContainers) {
-        $isEmpty = $true
         if ( (Get-ADObject -Filter * -SearchBase $zoneScopeContainer.'Zone Scope Container DN' -Server $zoneScopeContainer.Domain).Count -gt 0) {
             break
         } else {
