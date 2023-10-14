@@ -1,4 +1,4 @@
-function Get-ZoneScopeContainer {
+function Get-BTZoneScopeContainer {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-ZoneScopeContainer {
     )
 
     if ($null -eq $ADIZones) {
-        $ADIZones = Get-ADIZone
+        $ADIZones = Get-BTADIZone
     }
 
     $ZoneScopeContainerList = @()

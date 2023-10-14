@@ -1,4 +1,4 @@
-function Get-DanglingSPN {
+function Get-BTDanglingSPN {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-DanglingSPN {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $danglingSPNList = @()

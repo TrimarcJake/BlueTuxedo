@@ -1,4 +1,4 @@
-function Get-SecurityDescriptor {
+function Get-BTSecurityDescriptor {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-SecurityDescriptor {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $ObjectACLList = @()

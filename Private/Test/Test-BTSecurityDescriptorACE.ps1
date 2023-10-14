@@ -1,4 +1,4 @@
-function Test-SecurityDescriptorACE {
+function Test-BTSecurityDescriptorACE {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -10,15 +10,15 @@ function Test-SecurityDescriptorACE {
     )
 
     if ($null -eq $SecurityDescriptors) {
-        $SecurityDescriptors = Get-SecurityDescriptor
+        $SecurityDescriptors = Get-BTSecurityDescriptor
     }
 
     if ($null -eq $DynamicUpdateServiceAccounts) {
-        $DynamicUpdateServiceAccounts = Get-DynamicUpdateServiceAccount
+        $DynamicUpdateServiceAccounts = Get-BTDynamicUpdateServiceAccount
     }
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $FailedSecurityDescriptorACE = @()

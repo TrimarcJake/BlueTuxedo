@@ -1,4 +1,4 @@
-function Get-ADIZone {
+function Get-BTADIZone {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-ADIZone {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $ZoneList = @()

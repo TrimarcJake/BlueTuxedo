@@ -1,4 +1,4 @@
-﻿function Get-Target {
+﻿function Get-BTTarget {
     param (
         [string]$Forest = (Get-ADForest).Name,
         [string]$InputPath

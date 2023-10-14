@@ -1,4 +1,4 @@
-function Test-ForwarderConfiguration {
+function Test-BTForwarderConfiguration {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Test-ForwarderConfiguration {
     )
 
     if ($null -eq $ForwarderConfigurations) {
-        $ForwarderConfigurations = Get-ForwarderConfiguration
+        $ForwarderConfigurations = Get-BTForwarderConfiguration
     }
 
     $AuditedForwarderConfiguration = @()

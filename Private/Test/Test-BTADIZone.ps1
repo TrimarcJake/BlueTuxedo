@@ -1,4 +1,4 @@
-function Test-ADIZone {
+function Test-BTADIZone {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Test-ADIZone {
     )
 
     if ($null -eq $ADIZones) {
-        $ADIZones = Get-ADIZone
+        $ADIZones = Get-BTADIZone
     }
 
     $FailedADIZoneList = @()

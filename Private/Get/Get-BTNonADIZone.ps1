@@ -1,4 +1,4 @@
-function Get-ConditionalForwarder {
+function Get-BTNonADIZone {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-ConditionalForwarder {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $ZoneList = @()
@@ -15,14 +15,17 @@ function Get-ConditionalForwarder {
         foreach ($dnsServer in $DNSServers) {
             $Zones = Get-DnsServerZone -ComputerName $dnsServer.IP4Address | Where-Object { 
                 ($_.IsAutoCreated -eq $false) -and 
-                ($_.ZoneType -eq 'Forwarder') -and
-                ($_.IsDsIntegrated -eq $true)
+                ($_.ZoneType -ne 'Forwarder') -and
+                ($_.IsDsIntegrated -eq $false)
             }
             
             foreach ($zone in $Zones) {
                 $AddToList = [PSCustomObject]@{
-                    'Domain' = $domain
+                    'Server Name' = $dnsServer.Name
+                    'Server IP'   = $dnsServer.IP4Address
                     'Zone Name'   = $zone.ZoneName
+                    'Zone Type'   = $zone.ZoneType
+                    'Is Reverse?' = $zone.IsReverseLookupZone
                 }
                 
                 $ZoneList += $AddToList

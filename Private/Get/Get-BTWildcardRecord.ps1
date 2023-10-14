@@ -1,4 +1,4 @@
-function Get-WPADRecord {
+function Get-BTWildcardRecord {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,38 +6,38 @@ function Get-WPADRecord {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
-    $WPADRecordList = @()
+    $WildcardRecordList = @()
     foreach ($domain in $Domains) {
         $RRTypes = @('HInfo','Afsdb','Atma','Isdn','Key','Mb','Md','Mf','Mg','MInfo','Mr','Mx','NsNxt','Rp','Rt','Wks','X25','A',
         'AAAA','CName','Ptr','Srv','Txt','Wins','WinsR','Ns','Soa','NasP','NasPtr','DName','Gpos','Loc','DhcId','Naptr','RRSig',
         'DnsKey','DS','NSec','NSec3','NSec3Param','Tlsa')
-        $WPADExists = $false
+        $WildcardExists = $false
         foreach ($rrtype in $RRTypes) {
-            if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name 'wpad' -ErrorAction Ignore) {
-                $WPADExists = $true
+            if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name '*' -ErrorAction Ignore) {
+                $WildcardExists = $true
                 $ActualRRType = $rrtype
             }
         }
 
-        if ($WPADExists -eq $true) {
+        if ($WildcardExists -eq $true) {
             $AddToList = [PSCustomObject]@{
                 'Domain'           = $domain
-                'WPAD Exists?' = $true
-                'WPAD Type'    = $ActualRRType
+                'Wildcard Exists?' = $true
+                'Wildcard Type'    = $ActualRRType
             } 
         } else {
             $AddToList = [PSCustomObject]@{
                 'Domain'           = $domain
-                'WPAD Exists?' = $false
-                'WPAD Type'    = 'N/A'
+                'Wildcard Exists?' = $false
+                'Wildcard Type'    = 'N/A'
             }
         }
         
-        $WPADRecordList += $AddToList
+        $WildcardRecordList += $AddToList
     }
 
-    $WPADRecordList
+    $WildcardRecordList
 }

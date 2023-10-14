@@ -1,4 +1,4 @@
-function Test-WildcardRecord {
+function Test-BTWildcardRecord {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Test-WildcardRecord {
     )
 
     if ($null -eq $WildcardRecords) {
-        $WildcardRecords = Get-WildcardRecord
+        $WildcardRecords = Get-BTWildcardRecord
     }
 
     if ($WildcardRecords -eq 1) {

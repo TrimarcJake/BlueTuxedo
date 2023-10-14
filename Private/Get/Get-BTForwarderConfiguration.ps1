@@ -1,4 +1,4 @@
-function Get-ForwarderConfiguration {
+function Get-BTForwarderConfiguration {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-ForwarderConfiguration {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $ForwarderList = @()

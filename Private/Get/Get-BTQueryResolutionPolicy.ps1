@@ -1,4 +1,4 @@
-function Get-QueryResolutionPolicy {
+function Get-BTQueryResolutionPolicy {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-QueryResolutionPolicy {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $QueryResolutionPolicyList = @()

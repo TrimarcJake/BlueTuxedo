@@ -1,4 +1,4 @@
-function Get-TombstonedNode {
+function Get-BTTombstonedNode {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-TombstonedNode {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $TombstonedNodeList = @()

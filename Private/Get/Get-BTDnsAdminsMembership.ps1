@@ -1,4 +1,4 @@
-function Get-DnsAdminsMembership {
+function Get-BTDnsAdminsMembership {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-DnsAdminsMembership {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $ForestDnsAdminsMembership = @()

@@ -1,4 +1,4 @@
-function Get-SocketPoolSize {
+function Get-BTSocketPoolSize {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-SocketPoolSize {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $SocketPoolSizeList = @()

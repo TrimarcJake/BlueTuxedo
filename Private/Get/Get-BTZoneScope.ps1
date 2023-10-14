@@ -1,4 +1,4 @@
-function Get-ZoneScope {
+function Get-BTZoneScope {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-ZoneScope {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $ZoneScopeList = @()

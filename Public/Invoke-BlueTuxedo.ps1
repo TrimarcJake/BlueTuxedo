@@ -5,45 +5,45 @@ function Invoke-BlueTuxedo {
         [string]$InputPath
     )
     
-    $Domains = Get-Target -Forest $Forest -InputPath $InputPath
+    $Domains = Get-BTTarget -Forest $Forest -InputPath $InputPath
 
     # Get Data
-    $ADIZones = Get-ADIZone -Domains $Domains
-    $ConditionalForwarders = Get-ConditionalForwarder -Domains $Domains
-    $DanglingSPNs = Get-DanglingSPN -Domains $Domains
-    $DnsAdminsMemberships = Get-DnsAdminsMembership -Domains $Domains
-    $DynamicUpdateServiceAccounts = Get-DynamicUpdateServiceAccount -Domains $Domains
-    $ForwarderConfigurations = Get-ForwarderConfiguration -Domains $Domains
-    $GlobalQueryBlockLists = Get-GlobalQueryBlockList -Domains $Domains
-    $NonADIZones = Get-NonADIZone -Domains $Domains
-    $QueryResolutionPolicys = Get-QueryResolutionPolicy -Domains $Domains
-    $SecurityDescriptors = Get-SecurityDescriptor -Domains $Domains
-    $SocketPoolSizes = Get-SocketPoolSize -Domains $Domains
-    $TombstonedNodes = Get-TombstonedNode -Domains $Domains
-    $WildcardRecords = Get-WildcardRecord -Domains $Domains
-    $WPADRecords = Get-WPADRecord -Domains $Domains
-    $ZoneScopes = Get-ZoneScope -Domains $Domains
-    $ZoneScopeContainers = Get-ZoneScopeContainer -ADIZones $ADIZones
+    $ADIZones = Get-BTADIZone -Domains $Domains
+    $ConditionalForwarders = Get-BTConditionalForwarder -Domains $Domains
+    $DanglingSPNs = Get-BTDanglingSPN -Domains $Domains
+    $DnsAdminsMemberships = Get-BTDnsAdminsMembership -Domains $Domains
+    $DynamicUpdateServiceAccounts = Get-BTDynamicUpdateServiceAccount -Domains $Domains
+    $ForwarderConfigurations = Get-BTForwarderConfiguration -Domains $Domains
+    $GlobalQueryBlockLists = Get-BTGlobalQueryBlockList -Domains $Domains
+    $NonADIZones = Get-BTNonADIZone -Domains $Domains
+    $QueryResolutionPolicys = Get-BTQueryResolutionPolicy -Domains $Domains
+    $SecurityDescriptors = Get-BTSecurityDescriptor -Domains $Domains
+    $SocketPoolSizes = Get-BTSocketPoolSize -Domains $Domains
+    $TombstonedNodes = Get-BTTombstonedNode -Domains $Domains
+    $WildcardRecords = Get-BTWildcardRecord -Domains $Domains
+    $WPADRecords = Get-BTWPADRecord -Domains $Domains
+    $ZoneScopes = Get-BTZoneScope -Domains $Domains
+    $ZoneScopeContainers = Get-BTZoneScopeContainer -ADIZones $ADIZones
 
     # Test Data
-    $TestedADIZones = Test-ADIZone -ADIZones $ADIZones
-    $TestedDynamicUpdateServiceAccounts = Test-DynamicUpdateServiceAccount -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts
-    $TestedForwarderConfigurations = Test-ForwarderConfiguration -ForwarderConfigurations $ForwarderConfigurations
-    $TestedGlobalQueryBlockLists = Test-GlobalQueryBlockList -GlobalQueryBlockLists $GlobalQueryBlockLists
-    $TestedSecurityDescriptorACEs = Test-SecurityDescriptorACE -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
-    $TestedSecurityDescriptorOwners = Test-SecurityDescriptorOwner -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
-    $TestedSocketPoolSizes = Test-SocketPoolSize -SocketPoolSizes $SocketPoolSizes 
-    $TestedWildcardRecords = Test-WildcardRecord -WildcardRecords $WildcardRecords
-    $TestedWPADRecords = Test-WPADRecord -WPADRecords $WPADRecords
-    $TestedZoneScopeContainers = Test-ZoneScopeContainer -ZoneScopeContainers $ZoneScopeContainers
+    $TestedADIZones = Test-BTADIZone -ADIZones $ADIZones
+    $TestedDynamicUpdateServiceAccounts = Test-BTDynamicUpdateServiceAccount -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts
+    $TestedForwarderConfigurations = Test-BTForwarderConfiguration -ForwarderConfigurations $ForwarderConfigurations
+    $TestedGlobalQueryBlockLists = Test-BTGlobalQueryBlockList -GlobalQueryBlockLists $GlobalQueryBlockLists
+    $TestedSecurityDescriptorACEs = Test-BTSecurityDescriptorACE -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+    $TestedSecurityDescriptorOwners = Test-BTSecurityDescriptorOwner -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+    $TestedSocketPoolSizes = Test-BTSocketPoolSize -SocketPoolSizes $SocketPoolSizes 
+    $TestedWildcardRecords = Test-BTWildcardRecord -WildcardRecords $WildcardRecords
+    $TestedWPADRecords = Test-BTWPADRecord -WPADRecords $WPADRecords
+    $TestedZoneScopeContainers = Test-BTZoneScopeContainer -ZoneScopeContainers $ZoneScopeContainers
 
     # Generate Fixes
 
     # Display All Collected Data
-    Show-CollectedData -ShowSecurityDescriptors
+    Show-BTCollectedData -ShowSecurityDescriptors
     
     # Display All Tested Data
-    Show-TestedData -ShowSecurityDescriptors
+    Show-BTTestedData -ShowSecurityDescriptors
 
     # Display Fixes
 }

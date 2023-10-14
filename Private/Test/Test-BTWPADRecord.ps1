@@ -1,4 +1,4 @@
-function Test-WPADRecord {
+function Test-BTWPADRecord {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Test-WPADRecord {
     )
 
     if ($null -eq $WPADRecords) {
-        $WPADRecords = Get-WPADRecord
+        $WPADRecords = Get-BTWPADRecord
     }
 
     if ($WPADRecords -eq 1) {

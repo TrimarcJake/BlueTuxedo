@@ -1,4 +1,4 @@
-function Test-SocketPoolSize {
+function Test-BTSocketPoolSize {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Test-SocketPoolSize {
     )
 
     if ($null -eq $SocketPoolSizes) {
-        $SocketPoolSizes = Get-SocketPoolSize
+        $SocketPoolSizes = Get-BTSocketPoolSize
     }
 
     $FailedSocketPoolSize = @()

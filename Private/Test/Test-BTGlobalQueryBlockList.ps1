@@ -1,4 +1,4 @@
-function Test-GlobalQueryBlockList {
+function Test-BTGlobalQueryBlockList {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Test-GlobalQueryBlockList {
     )
 
     if ($null -eq $GlobalQueryBlockLists) {
-        $GlobalQueryBlockLists = Get-GlobalQueryBlockList
+        $GlobalQueryBlockLists = Get-BTGlobalQueryBlockList
     }
 
     $FailedGlobalQueryBlockList = @()

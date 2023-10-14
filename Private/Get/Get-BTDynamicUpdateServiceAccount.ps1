@@ -1,4 +1,4 @@
-function Get-DynamicUpdateServiceAccount {
+function Get-BTDynamicUpdateServiceAccount {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Get-DynamicUpdateServiceAccount {
     )
 
     if ($null -eq $Domains) {
-        $Domains = Get-Target
+        $Domains = Get-BTTarget
     }
 
     $DynamicUpdateServiceAccountList = @()

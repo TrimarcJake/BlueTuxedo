@@ -1,4 +1,4 @@
-function Show-TestedData {
+function Show-BTTestedData {
     [CmdletBinding()]
     param (
         [ValidateSet(

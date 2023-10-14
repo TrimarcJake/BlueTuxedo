@@ -1,4 +1,4 @@
-function Test-ZoneScopeContainer {
+function Test-BTZoneScopeContainer {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Test-ZoneScopeContainer {
     )
 
     if ($null -eq $ZoneScopeContainers) {
-        $ZoneScopeContainers = Get-ZoneScopeContainer
+        $ZoneScopeContainers = Get-BTZoneScopeContainer
     }
 
     $FailedZoneScopeContainerList = @()

@@ -1,4 +1,4 @@
-function Test-DynamicUpdateServiceAccount {
+function Test-BTDynamicUpdateServiceAccount {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,7 +6,7 @@ function Test-DynamicUpdateServiceAccount {
     )
 
     if ($null -eq $DynamicUpdateServiceAccounts) {
-        $DynamicUpdateServiceAccounts = Get-DynamicUpdateServiceAccount
+        $DynamicUpdateServiceAccounts = Get-BTDynamicUpdateServiceAccount
     }
 
     $FailedDynamicUpdateServiceAccount = @()

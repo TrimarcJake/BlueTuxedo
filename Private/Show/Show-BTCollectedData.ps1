@@ -1,4 +1,4 @@
-function Show-CollectedData {
+function Show-BTCollectedData {
     [CmdletBinding()]
     param (
         [ValidateSet(
