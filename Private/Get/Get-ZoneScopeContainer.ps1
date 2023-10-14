@@ -9,7 +9,7 @@ function Get-ZoneScopeContainer {
     foreach ($adizone in $ADIZones) {
         [string]$domainDN = (Get-ADDomain $adizone.Domain).DistinguishedName
         try {
-            $zoneScopeDN = Get-ADObject -Identity "CN=ZoneScopeContainer,DC=$($adizone.'Zone Name'),CN=MicrosoftDNS,DC=DomainDnsZones,$domainDN" -Server $adizone.Domain -Properties DistinguishedName -SilentlyContinue
+            $zoneScopeDN = Get-ADObject -Identity "CN=ZoneScopeContainer,DC=$($adizone.'Zone Name'),CN=MicrosoftDNS,DC=DomainDnsZones,$domainDN" -Server $adizone.Domain -Properties DistinguishedName -ErrorAction SilentlyContinue
             $AddToList = [PSCustomObject]@{
                 Domain                    = $adizone.Domain
                 'Zone Name'               = $adizone.'Zone Name'
