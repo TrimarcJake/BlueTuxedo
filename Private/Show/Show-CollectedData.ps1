@@ -1,9 +1,27 @@
 function Show-CollectedData {
     [CmdletBinding()]
     param (
-        [ValidateSet('All','ADIZones','ConditionalForwarders','DanglingSPNs','DnsAdminsMemberships','DynamicUpdateServiceAccounts','ForwarderConfigurations','GlobalQueryBlockLists','NonADIZones','QueryResolutionPolicys','SecurityDescriptors','SocketPoolSizes','TombstonedNodes','WildcardRecords','WPADRecords','ZoneScopes','ZoneScopeContainers')]
+        [ValidateSet(
+            'All',
+            'ADIZones',
+            'ConditionalForwarders',
+            'DanglingSPNs',
+            'DnsAdminsMemberships',
+            'DynamicUpdateServiceAccounts',
+            'ForwarderConfigurations',
+            'GlobalQueryBlockLists',
+            'NonADIZones',
+            'QueryResolutionPolicys',
+            'SecurityDescriptors',
+            'SocketPoolSizes',
+            'TombstonedNodes',
+            'WildcardRecords',
+            'WPADRecords',
+            'ZoneScopes',
+            'ZoneScopeContainers'
+        )]
         [string]$Section = 'All',
-        [bool]$ShowSecurityDescriptors = $false
+        [switch]$ShowSecurityDescriptors = $false
     )
 
     $Sections = @(
