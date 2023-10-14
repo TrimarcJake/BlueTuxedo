@@ -72,7 +72,7 @@ function Show-CollectedData {
             Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
             (Get-Variable $entry).Value | Format-List
             Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green
-            Read-Host "Press Enter to load the next section."
+            Read-Host "Press Enter to load the next section"
         }
     } else {
         $Title = $TitleHashtable[$Section]
