@@ -40,10 +40,10 @@ function Invoke-BlueTuxedo {
     # Generate Fixes
 
     # Display All Collected Data
-    Show-CollectedData
+    Show-CollectedData -ShowSecurityDescriptors
     
     # Display All Tested Data
-    Show-TestedData
+    Show-TestedData -ShowSecurityDescriptors
 
     # Display Fixes
 }
