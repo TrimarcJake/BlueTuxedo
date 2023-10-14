@@ -20,7 +20,8 @@ function Show-TestedData {
             'TestedWPADRecords',
             'TestedZoneScopeContainers'
         )]
-        [string]$Section = 'All'
+        [string]$Section = 'All',
+        [switch]$ShowSecurityDescriptors = $false
     )
 
     $Sections = @(
@@ -34,8 +35,6 @@ function Show-TestedData {
         'TestedDynamicUpdateServiceAccounts',
         'TestedForwarderConfigurations',
         'TestedGlobalQueryBlockLists',
-        'TestedSecurityDescriptorACEs',
-        'TestedSecurityDescriptorOwners',
         'TestedSocketPoolSizes',
         'TestedWildcardRecords',
         'TestedWPADRecords',
@@ -82,6 +81,10 @@ function Show-TestedData {
         'TestedWildcardRecords' = "If a Wildcard Record does not exist in a domain, an attacker can create one which points at a device they control.`nAny DNS requests that do not match an existing DNS entry will resolve to the IP of the attacker-controlled machine."
         'TestedWPADRecords' = "WPAD is used to allow clients to auto-discover web proxy servers in their environment.`nIf a WPAD Record does not exist in a domain, an attacker can create one which points at a device they control.`nThis configuration could redirect all web traffic to the attacker-controller machine"
         'TestedZoneScopeContainers' = "Zone Scope Containers hold Zone Scopes.`nIf a Zone Scope Container is empty, this may be an indicator of fuckery (IOF)."
+    }
+
+    if ($ShowSecurityDescriptors) {
+        $Sections += 'TestedSecurityDescriptorACEs','TestedSecurityDescriptorOwners'
     }
     
     if ($Section = 'All') {
