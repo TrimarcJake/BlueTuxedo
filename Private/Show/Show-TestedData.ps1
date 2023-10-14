@@ -91,16 +91,18 @@ function Show-TestedData {
         foreach ($entry in $Sections) {
             $Title = $TitleHashtable[$entry]
             $Description = $DescriptionHashtable[$entry]
-            Write-Host "========== $Title ==========" -ForegroundColor Green
+            Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
             Write-Host $Description
             (Get-Variable $entry).Value | Format-List
-            Pause
+            Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green
+            Read-Host "Press Enter to load the next section."
         }
     } else {
         $Title = $TitleHashtable[$Section]
         $Description = $DescriptionHashtable[$Section]
-        Write-Host "========== $Title ==========" -ForegroundColor Green
+        Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
         Write-Host $Description
         (Get-Variable $Section).Value
+        Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green
     }
 }
