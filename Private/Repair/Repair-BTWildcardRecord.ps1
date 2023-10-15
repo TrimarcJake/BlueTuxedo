@@ -13,19 +13,19 @@ function Repair-BTWildcardRecord {
     if ($Run) {
         foreach ($wildcardrecord in $WildcardRecords) {
             $type = "-$($wildcardrecord.'Correct Type')"
-            if ($wildcardrecord.'Wildcard Exists?' -ne 'N/A') {
-                Remove-DnsServerResourceRecord -ZoneName $wildcardrecord.Domain -ComputerName $wildcardrecord.Domain -Name '*'
+            if ($wildcardrecord.'Wildcard Exists?') {
+                Remove-DnsServerResourceRecord -ComputerName $wildcardrecord.Domain -ZoneName $wildcardrecord.Domain -RRType $wildcardrecord.'Current Wildcard Type' -Name '*'
             }
-            Add-DnsServerResourceRecord -ZoneName $wildcardrecord.Domain -ComputerName $wildcardrecord.Domain $type -Name '*' -IPv4Address '0.0.0.0'
+            Add-DnsServerResourceRecord -ComputerName $wildcardrecord.Domain -ZoneName $wildcardrecord.Domain $type -Name '*' -IPv4Address '0.0.0.0'
         }
     } else {
         foreach ($wildcardrecord in $WildcardRecords) {
             $type = "-$($wildcardrecord.'Correct Type')"
-            if ($wildcardrecord.'Wildcard Exists?' -ne 'N/A') {
+            if ($wildcardrecord.'Wildcard Exists?') {
                 Write-Host "Run the following code block to delete the Wildcard Record of incorrect type ($($wildcardrecord.'Current Wildcard Type')) and replace with a Wildcard Record of the correct type ($type) in the $($wildcardrecord.Domain) domain" -ForegroundColor Green
                 Write-Host @"
-Remove-DnsServerResourceRecord -ZoneName $($wildcardrecord.Domain) -ComputerName $($wildcardrecord.Domain) -Name '*'
-Add-DnsServerResourceRecord -ZoneName $($wildcardrecord.Domain) -ComputerName $($wildcardrecord.Domain) $type -Name '*' -IPv4Address '0.0.0.0'
+Remove-DnsServerResourceRecord -ComputerName $($wildcardrecord.Domain) -ZoneName $($wildcardrecord.Domain) -RRType $($wildcardrecord.'Current Wildcard Type') -Name '*'
+Add-DnsServerResourceRecord -ComputerName $($wildcardrecord.Domain) -ZoneName $($wildcardrecord.Domain) $type -Name '*' -IPv4Address '0.0.0.0'
               
 "@
             } else {
