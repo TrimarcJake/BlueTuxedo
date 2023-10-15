@@ -73,9 +73,9 @@ foreach ($domain in $Domains) {
         # Add-DnsServerSecondaryZone -ComputerName $domain -Name "secondaryzone$i$j.$LabName.adi" -MasterServers $SusDNS
 
         # Set Socket Pool Size To Default
-        # $CurrentSettings = Get-DnsServerSetting -ComputerName $ipaddress -All
-        # $CurrentSettings.SocketPoolSize = 2500
-        # Set-DnsServerSetting -ComputerName $ipaddress -InputObject $CurrentSettings
+        $CurrentSettings = Get-DnsServerSetting -ComputerName $ipaddress -All
+        $CurrentSettings.SocketPoolSize = 2500
+        Set-DnsServerSetting -ComputerName $ipaddress -InputObject $CurrentSettings
         
         Start-Sleep -Seconds 5
         $j++
