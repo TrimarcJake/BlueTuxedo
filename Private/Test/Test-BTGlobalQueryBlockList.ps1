@@ -20,12 +20,15 @@ function Test-BTGlobalQueryBlockList {
             $isatapExists = $false
         }
 
-        $AddToList = [PSCustomObject]@{
-            'Server Name'    = $globalqueryblocklist.'Server Name'
-            'Server IP'      = $globalqueryblocklist.'Server IP'
-            'WPAD Exists'   = $wpadExists
-            'ISATAP Exists' = $isatapExists
-        }
+        if ( ($globalqueryblocklist.'Enabled?' -eq $false) -or ($wpadExists = $false) -or ($isatapExists -eq $false) ) {
+            $AddToList = [PSCustomObject]@{
+                'Server Name'   = $globalqueryblocklist.'Server Name'
+                'Server IP'     = $globalqueryblocklist.'Server IP'
+                'Enabled?'      = $globalqueryblocklist.'Enabled?'
+                'WPAD Exists'   = $wpadExists
+                'ISATAP Exists' = $isatapExists
+            }
+    }
 
         $FailedGlobalQueryBlockList += $AddToList
     }

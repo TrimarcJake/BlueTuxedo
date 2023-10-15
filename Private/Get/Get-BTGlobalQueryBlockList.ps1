@@ -18,7 +18,8 @@ function Get-BTGlobalQueryBlockList {
                 $AddToList = [PSCustomObject]@{
                     'Server Name'   = $dnsServer.Name
                     'Server IP'     = $dnsServer.IP4Address
-                    GQBL    = $GlobalQueryBlockList.List
+                    'Enabled?'      = $GlobalQueryBlockList.Enable
+                    GQBL            = $GlobalQueryBlockList.List
                 }
             }
 
