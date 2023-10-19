@@ -8,6 +8,8 @@ function Invoke-BlueTuxedo {
     $Domains = Get-BTTarget -Forest $Forest -InputPath $InputPath
 
     # Get Data
+    Write-Host 'Please hold. Collecting DNS data from the following domains:' -ForegroundColor Green
+    Write-Host $Domains -ForegroundColor Yellow
     $ADIZones = Get-BTADIZone -Domains $Domains
     $ConditionalForwarders = Get-BTConditionalForwarder -Domains $Domains
     $DanglingSPNs = Get-BTDanglingSPN -Domains $Domains
@@ -26,6 +28,7 @@ function Invoke-BlueTuxedo {
     $ZoneScopeContainers = Get-BTZoneScopeContainer -ADIZones $ADIZones
 
     # Test Data
+    Write-Host 'Currently testing collected DNS data to identify possible issues...' -ForegroundColor Green
     $TestedADIZones = Test-BTADIZone -ADIZones $ADIZones
     $TestedDynamicUpdateServiceAccounts = Test-BTDynamicUpdateServiceAccount -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts
     $TestedForwarderConfigurations = Test-BTForwarderConfiguration -ForwarderConfigurations $ForwarderConfigurations
@@ -37,13 +40,22 @@ function Invoke-BlueTuxedo {
     $TestedWPADRecords = Test-BTWPADRecord -WPADRecords $WPADRecords
     $TestedZoneScopeContainers = Test-BTZoneScopeContainer -ZoneScopeContainers $ZoneScopeContainers
 
-    # Generate Fixes
 
     # Display All Collected Data
-    Show-BTCollectedData -ShowSecurityDescriptors
+    $show = Read-Host "Show all collected DNS data? [Y]/n"
+    if (($show -eq 'y') -or ($show -eq '') -or ($null -eq $show) ) {
+        Show-BTCollectedData
+    }
     
     # Display All Tested Data
-    Show-BTTestedData -ShowSecurityDescriptors
+    $show = Read-Host "Show possible DNS issues in the environment? [Y]/n"
+    if (($show -eq 'y') -or ($show -eq '') -or ($null -eq $show) ) {
+        Show-BTTestedData
+    }
 
     # Display Fixes
+    $show = Read-Host "Show fixes for identified issues? [Y]/n"
+    if (($show -eq 'y') -or ($show -eq '') -or ($null -eq $show) ) {
+        Show-BTFixes
+    }
 }
