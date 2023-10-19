@@ -60,7 +60,7 @@ function Show-BTTestedData {
         'TestedSecurityDescriptorOwners' = 'Possibly Dangerous Owners of DNS Objects' 
         'TestedSocketPoolSizes' = 'Socket Pool Sizes Less Than Maximum' 
         'TestedWildcardRecords' = 'Missing or Invalid Wildcard Records' 
-        'TestedWPADRecords' = 'Missing WPAD Records'
+        'TestedWPADRecords' = 'Missing or Invalid WPAD Records'
         'TestedZoneScopeContainers' = 'Empty Zone Scope Containers' 
     }
 
@@ -93,18 +93,18 @@ function Show-BTTestedData {
         foreach ($entry in $Sections) {
             $Title = $TitleHashtable[$entry]
             $Description = $DescriptionHashtable[$entry]
-            Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
+            Write-Host "/--------------- $Title ---------------\" -ForegroundColor Red
             Write-Host $Description
             (Get-Variable $entry).Value | Format-List
-            Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green
+            Write-Host "\--------------- $Title ---------------/" -ForegroundColor Red
             Read-Host "Press Enter to load the next section"
         }
     } else {
         $Title = $TitleHashtable[$Section]
         $Description = $DescriptionHashtable[$Section]
-        Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
+        Write-Host "/--------------- $Title ---------------\" -ForegroundColor Red
         Write-Host $Description
         (Get-Variable $Section).Value
-        Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green
+        Write-Host "\--------------- $Title ---------------/" -ForegroundColor Red
     }
 }
