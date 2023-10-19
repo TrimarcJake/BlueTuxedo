@@ -4,6 +4,7 @@
     Write-Information 'PSPublishModule is not installed. Attempting installation.'
     try {
         Install-Module -Name Pester -AllowClobber -Scope CurrentUser -SkipPublisherCheck -Force
+        Install-Module -Name PSScriptAnalyzer -Scope CurrentUser -Force
         Install-Module -Name PSPublishModule -AllowClobber -Scope CurrentUser -Force
     }
     catch {
@@ -34,17 +35,18 @@ Build-Module -ModuleName 'BlueTuxedo' {
     # Add external module dependencies, using loop for simplicity
     # those modules are not available in PowerShellGallery so user has to have them installed
     $ExternalModules = @(
-        # Required RSAT AD module
+        # Required RSAT AD and DNS module
         'ActiveDirectory'
-        'ServerManager'
+        'DhcpServer'
+        'DnsServer'
+        'DnsClient'
+        'Microsoft.PowerShell.Security'
         # those modules are builtin in PowerShell so no need to install them
         # could as well be ignored with New-ConfigurationModuleSkip
         'Microsoft.PowerShell.Utility'
         'Microsoft.PowerShell.LocalAccounts',
         'Microsoft.PowerShell.Utility'
         'Microsoft.PowerShell.Management'
-        'CimCmdlets'
-        'Dism'
     )
     foreach ($Module in $ExternalModules) {
         New-ConfigurationModule -Type ExternalModule -Name $Module
