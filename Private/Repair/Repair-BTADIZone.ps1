@@ -7,18 +7,21 @@ function Repair-BTADIZone {
     )
 
     if ($null -eq $ADIZones) {
-        $ADIZones = Get-BTADIZone
+        $ADIZones = Test-BTADIZone
     }
 
     if ($Run) {
         foreach ($adizone in $ADIZones) {
-            dnscmd $adizone.Domain /ZoneChangeDirectoryPartition $adizone.'Zone Name' [INSERT FOREST/DOMAIN-REPLICATE ZONE]
+            # $DomainReplicatedZonePartition = "DomainDnsZones.$adizone.Domain"
+            $ForestReplicatedZonePartition = "ForestDnsZones.$(Get-ADForest $($adizone.Domain))"
+            dnscmd $adizone.Domain /ZoneChangeDirectoryPartition $adizone.'Zone Name' $ForestReplicatedZonePartition
         }
     } else {
         foreach ($adizone in $ADIZones) {
-            Write-Host "DESCRIPTION OF CODE BLOCK" -ForegroundColor Green
+            Write-Host "Run the following code block to convert the $($adizone.Domain) Zone from a Legacy (Windows 2000 compatible Zone) to a Forest-replicated Zone." -ForegroundColor Green
             Write-Host @"
-CODE BLOCK
+`$ForestReplicatedZonePartition = 'ForestDnsZones.$(Get-ADForest $($adizone.Domain))'
+dnscmd $($adizone.Domain) /ZoneChangeDirectoryPartition $($adizone.'Zone Name') `$ForestReplicatedZonePartition
 
 "@
         }
