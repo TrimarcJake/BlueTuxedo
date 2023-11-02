@@ -6,7 +6,9 @@ function Show-BTFixes {
             'SocketPoolSizes',
             'TombstonedNodes',
             'WildcardRecords',
-            'WPADRecords'
+            'WPADRecords',
+            'DanglingSPNs',
+            'ADIZones'
         )]
         [string]$Section = 'All',
         [switch]$ShowSecurityDescriptors = $false
@@ -16,7 +18,9 @@ function Show-BTFixes {
         'SocketPoolSizes',
         'TombstonedNodes',
         'WildcardRecords',
-        'WPADRecords'
+        'WPADRecords',
+        'DanglingSPNs',
+        'ADIZones'
     )
 
     $TitleHashtable = @{
@@ -25,6 +29,8 @@ function Show-BTFixes {
         'TombstonedNodes' = 'Delete All Tombstoned Nodes'
         'WildcardRecords' = 'Fix Wildcard Record Configuration by Domain'
         'WPADRecords' = 'Fix WPAD Record Configuration by Domain'
+        'DanglingSPNs' = 'Delete Danging SPNs'
+        'ADIZones' = 'Convert Legacy Zones to ForestDNS Zones'
     }
 
     if ($ShowSecurityDescriptors) {
