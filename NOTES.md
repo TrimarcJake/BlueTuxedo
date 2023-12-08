@@ -18,6 +18,7 @@ Get:
 
 Test:
 - [x] ADI Zones (Legacy vs. non-Legacy)
+- [ ] ADI Zones (Secure vs. non-Secure)
 - [x] Conditional Forwarder Auditing - Unnecessary
 - [x] Dangling SPNs - Unnecessary
 - [x] DHCP Dynamic Update service account
@@ -32,7 +33,7 @@ Test:
 - [x] Tombstoned DNS Records - Unnecessary
 - [x] Wildcard Record - Check if correct type for forest
 - [x] WPAD Record - Check if correct type for forest
-- [x] Zone Scopes -Unnecessary
+- [x] Zone Scopes - Unnecessary
 - [x] Zone Scope Containers
 
 Write
