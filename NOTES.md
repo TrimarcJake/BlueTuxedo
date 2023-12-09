@@ -57,19 +57,19 @@ Write
 - [ ] Zone Scope Auditing
 
 Repair
-- [ ] ADI Zones (Legacy)
+- [x] ADI Zones (Legacy)
 - [ ] ADI Zones (non-Legacy)
 - [ ] Conditional Forwarder Auditing
-- [ ] Dangling SPNs
+- [x] Dangling SPNs
 - [ ] DHCP Dynamic Update service account
 - [ ] DnsAdmins Membership
 - [ ] Forwarder Configuration
 - [ ] Global Query Block List (GQBL)
 - [ ] Non-ADI Zone Auditing
 - [ ] Query Resolution Policies
-- [ ] Socket Pool Configuration
-- [ ] Tombstoned DNS Records
+- [x] Socket Pool Configuration
+- [x] Tombstoned DNS Records
 - [ ] Weird DACLs
-- [ ] Wildcard Record
-- [ ] WPAD Record
+- [x] Wildcard Record
+- [x] WPAD Record
 - [ ] Zone Scope Auditing
