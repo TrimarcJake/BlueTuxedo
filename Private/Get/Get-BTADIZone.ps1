@@ -19,10 +19,11 @@ function Get-BTADIZone {
         
         foreach ($zone in $Zones) {
             $AddToList = [PSCustomObject]@{
-                'Domain' = $domain
-                'Zone Name'   = $zone.ZoneName
-                'Zone Type'   = $zone.ZoneType
-                'Is Reverse?' = $zone.IsReverseLookupZone
+                'Domain'         = $domain
+                'Zone Name'      = $zone.ZoneName
+                'Zone Type'      = $zone.ZoneType
+                'Is Reverse?'    = $zone.IsReverseLookupZone
+                'Dynamic Update' = $zone.DynamicUpdate
             }
             
             $ZoneList += $AddToList
