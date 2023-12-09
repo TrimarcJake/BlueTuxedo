@@ -42,8 +42,9 @@ function Get-BTDanglingSPN {
                         } else {
                             $danglingSPN = [PSCustomObject]@{
                                 Name  = $principal.Name
-                                'Distinguished Name' = $principal.distinguishedName
+                                'Identity Reference' = ConvertTo-IdentityReference -SID $principal.objectSID
                                 'Dangling SPN' = $spn
+                                'Distinguished Name' = $principal.distinguishedName
                             }
 
                             if ( ($danglingSPNList.'Dangling SPN' -notcontains $danglingSPN.'Dangling SPN') ) {

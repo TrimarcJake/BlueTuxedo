@@ -7,6 +7,8 @@ function Invoke-BlueTuxedo {
     
     $Domains = Get-BTTarget -Forest $Forest -InputPath $InputPath
 
+    Show-BTLogo -Version '2023.11'
+
     # Get Data
     Write-Host 'Please hold. Collecting DNS data from the following domains:' -ForegroundColor Green
     Write-Host $Domains -ForegroundColor Yellow

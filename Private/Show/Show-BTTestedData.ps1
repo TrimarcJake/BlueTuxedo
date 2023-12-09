@@ -45,7 +45,7 @@ function Show-BTTestedData {
 
     $TitleHashtable = @{
         'Section' = 'Friendly Name'
-        'ConditionalForwarders' = 'Al Conditional Forwarders' 
+        'ConditionalForwarders' = 'All Conditional Forwarders' 
         'DanglingSPNs' = 'All Dangling SPNs' 
         'DnsAdminsMemberships' = 'DnsAdmins Membership (per-domain)' 
         'NonADIZones' = 'All Non-ADI Zones' 
