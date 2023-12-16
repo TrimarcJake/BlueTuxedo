@@ -7,6 +7,7 @@ function Show-BTCollectedData {
             'ConditionalForwarders',
             'DanglingSPNs',
             'DnsAdminsMemberships',
+            'DnsUpdateProxyMemberships',
             'DynamicUpdateServiceAccounts',
             'ForwarderConfigurations',
             'GlobalQueryBlockLists',
@@ -29,6 +30,7 @@ function Show-BTCollectedData {
         'ConditionalForwarders',
         'DanglingSPNs',
         'DnsAdminsMemberships',
+        'DnsUpdateProxyMemberships',
         'DynamicUpdateServiceAccounts',
         'ForwarderConfigurations',
         'GlobalQueryBlockLists',
@@ -48,6 +50,7 @@ function Show-BTCollectedData {
         'ConditionalForwarders' = 'All Conditional Forwarders'
         'DanglingSPNs' = 'All Dangling SPNs'
         'DnsAdminsMemberships' = 'DnsAdmins Memberships'
+        'DnsUpdateProxyMemberships' = 'DnsUpdateProxy Memberships'
         'DynamicUpdateServiceAccounts' = 'Dynamic Update Service Account Configuration by DNS Server'
         'ForwarderConfigurations' = 'Forwarder Configurations by DNS Server'
         'GlobalQueryBlockLists' = 'All Global Query Block Lists'

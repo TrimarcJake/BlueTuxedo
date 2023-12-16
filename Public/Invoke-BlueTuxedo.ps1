@@ -16,6 +16,7 @@ function Invoke-BlueTuxedo {
     $ConditionalForwarders = Get-BTConditionalForwarder -Domains $Domains
     $DanglingSPNs = Get-BTDanglingSPN -Domains $Domains
     $DnsAdminsMemberships = Get-BTDnsAdminsMembership -Domains $Domains
+    $DnsUpdateProxyMemberships = Get-BTDnsUpdateProxyMembership -Domains $Domains
     $DynamicUpdateServiceAccounts = Get-BTDynamicUpdateServiceAccount -Domains $Domains
     $ForwarderConfigurations = Get-BTForwarderConfiguration -Domains $Domains
     $GlobalQueryBlockLists = Get-BTGlobalQueryBlockList -Domains $Domains

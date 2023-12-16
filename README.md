@@ -22,6 +22,7 @@ Running `Invoke-BlueTuxedo` with no paramters will [`Get`](#get-stuff) stuff, [`
 - Dangling SPNs [^1]
 - DHCP Dynamic Update service account configuration
 - DnsAdmins Membership
+- DnsUpdateProxy Membership
 - Forwarder Configuration
 - Global Query Block List (GQBL)
 - Non-ADI Zone Auditing
@@ -40,6 +41,7 @@ Running `Invoke-BlueTuxedo` with no paramters will [`Get`](#get-stuff) stuff, [`
 | ADI Zones | Is Legacy Zone? |
 | DHCP Dynamic Update service account | Exists? |
 | DnsAdmins Membership | Is non-zero? |
+| DnsUpdateProxy Membership | Is non-zero? |
 | Forwarder Configuration | Exist? |
 | Global Query Block List (GQBL) | Contains `wpad`/`isatap` |
 | Non-ADI Zones | Exist? |
@@ -63,4 +65,4 @@ Running `Invoke-BlueTuxedo` with no paramters will [`Get`](#get-stuff) stuff, [`
 | Wildcard Record | Create Proper Wildcard Record |
 | WPAD Record | Create Proper WPAD Record |
 
-[^1]: A "Dangling SPN" is an SPN where the host portion of the SPN does not resolve to an IP address.
+[^1]: A "Dangling SPN" is a Service Principal Name (SPN) in which the host portion of the SPN does not resolve to an IP address.
