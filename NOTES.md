@@ -4,7 +4,7 @@ Get:
 - [x] Dangling SPNs
 - [x] DHCP Dynamic Update service account
 - [x] DnsAdmins Membership
-- [ ] DnsUpdateProxy Membership
+- [x] DnsUpdateProxy Membership
 - [x] Forwarder Configuration
 - [x] Global Query Block List (GQBL)
 - [ ] Name Protection Configuration on DHCP servers
