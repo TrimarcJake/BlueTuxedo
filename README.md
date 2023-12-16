@@ -13,7 +13,7 @@ cd BlueTuxedo
 Import-Module .\BlueTuxedo.psd1
 Invoke-BlueTuxedo
 ```
-Running `Invoke-BlueTuxedo` with no paramters will [`Get`](get-stuff) stuff, `Test` it, then offer code for how to `Repair` identified issues (where possible).
+Running `Invoke-BlueTuxedo` with no paramters will [`Get`](#get-stuff) stuff, `Test` it, then offer code for how to `Repair` identified issues (where possible).
 
 ### `Get` Stuff
 
