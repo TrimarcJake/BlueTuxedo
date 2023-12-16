@@ -1,12 +1,10 @@
 # BlueTuxedo
-A tiny tool built to find and fix common misconfigurations in Active Directory-Integrated DNS.
+A tiny tool built to find and fix common misconfigurations in Active Directory-Integrated DNS (and a little DHCP as a treat).
 
 ## How can BlueTuxedo help you?
 [Read the slides from WWHF.](https://github.com/TrimarcJake/BlueTuxedo/blob/main/ADI%20DNS%20-%20No%20demo.pptx)
 
 [Watch the presentation from BSidesCharm.](https://www.hub.trimarcsecurity.com/post/ad-dns-a-match-made-in-heck)
-
-
 
 ## Quick Start:
 ``` powershell
@@ -17,7 +15,7 @@ Invoke-BlueTuxedo
 ```
 Running `Invoke-BlueTuxedo` with no paramters will `Get` stuff, `Test` it, then offer code for how to `Repair` identified issues (where possible).
 
-##### Get Stuff
+##### `Get` Stuff
 
 - ADI Zones
 - Conditional Forwarder
@@ -36,7 +34,7 @@ Running `Invoke-BlueTuxedo` with no paramters will `Get` stuff, `Test` it, then 
 - Zone Scopes
 - Zone Scope Containers
 
-##### Test Stuff
+##### `Test` Stuff
 | Item | Test Condition |
 |---------|---------------|
 | ADI Zones | Is Legacy Zone? |
@@ -55,7 +53,7 @@ Running `Invoke-BlueTuxedo` with no paramters will `Get` stuff, `Test` it, then 
 | Zone Scopes | Exist? |
 | Zone Scope Containers | Exists? + Empty? |
 
-##### Repair Stuff
+##### `Repair` Stuff
 | Item | Fix |
 |-|-|
 | ADI Zones | Convert Legacy (Windows 2000 Compatible) Zones to Modern |
