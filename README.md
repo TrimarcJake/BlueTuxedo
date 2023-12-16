@@ -13,9 +13,9 @@ cd BlueTuxedo
 Import-Module .\BlueTuxedo.psd1
 Invoke-BlueTuxedo
 ```
-Running `Invoke-BlueTuxedo` with no paramters will `Get` stuff, `Test` it, then offer code for how to `Repair` identified issues (where possible).
+Running `Invoke-BlueTuxedo` with no paramters will [`Get`](get-stuff) stuff, `Test` it, then offer code for how to `Repair` identified issues (where possible).
 
-##### `Get` Stuff
+### `Get` Stuff
 
 - ADI Zones
 - Conditional Forwarder
@@ -34,7 +34,7 @@ Running `Invoke-BlueTuxedo` with no paramters will `Get` stuff, `Test` it, then 
 - Zone Scopes
 - Zone Scope Containers
 
-##### `Test` Stuff
+### `Test` Stuff
 | Item | Test Condition |
 |---------|---------------|
 | ADI Zones | Is Legacy Zone? |
@@ -53,7 +53,7 @@ Running `Invoke-BlueTuxedo` with no paramters will `Get` stuff, `Test` it, then 
 | Zone Scopes | Exist? |
 | Zone Scope Containers | Exists? + Empty? |
 
-##### `Repair` Stuff
+### `Repair` Stuff
 | Item | Fix |
 |-|-|
 | ADI Zones | Convert Legacy (Windows 2000 Compatible) Zones to Modern |
