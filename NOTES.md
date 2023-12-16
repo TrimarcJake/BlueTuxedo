@@ -38,24 +38,6 @@ Test:
 - [x] Zone Scopes - Unnecessary
 - [x] Zone Scope Containers
 
-Write
-- [ ] ADI Zones (Legacy)
-- [ ] ADI Zones (non-Legacy)
-- [ ] Conditional Forwarder Auditing
-- [ ] Dangling SPNs
-- [ ] DHCP Dynamic Update service account
-- [ ] DnsAdmins Membership
-- [ ] Forwarder Configuration
-- [ ] Global Query Block List (GQBL)
-- [ ] Non-ADI Zone Auditing
-- [ ] Query Resolution Policies
-- [ ] Socket Pool Configuration
-- [ ] Tombstoned DNS Records
-- [ ] Weird DACLs
-- [ ] Wildcard Record
-- [ ] WPAD Record
-- [ ] Zone Scope Auditing
-
 Repair
 - [x] ADI Zones (Legacy)
 - [ ] ADI Zones (non-Legacy)
