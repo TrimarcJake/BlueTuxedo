@@ -39,9 +39,8 @@ Test:
 - [x] Zone Scope Containers
 
 Repair
-- [x] ADI Zones (Legacy)
-- [ ] ADI Zones (non-Legacy)
-- [ ] Conditional Forwarder Auditing
+- [x] ADI Zones (Legacy => Non-Legacy)
+- [ ] ADI Zones (Non-Secure => Secure)
 - [x] Dangling SPNs
 - [ ] DHCP Dynamic Update service account
 - [ ] DnsAdmins Membership
