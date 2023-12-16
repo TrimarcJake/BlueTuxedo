@@ -56,11 +56,13 @@ Running `Invoke-BlueTuxedo` with no paramters will `Get` stuff, `Test` it, then 
 | Zone Scope Containers | Exists? + Empty? |
 
 ##### Repair Stuff
-- ADI Zones (Legacy)
-- Dangling SPNs
-- Socket Pool Configuration
-- Tombstoned DNS Records
-- Wildcard Record
-- WPAD Record
+| Item | Fix |
+|-|-|
+| ADI Zones | Convert Legacy (Windows 2000 Compatible) Zones to Modern |
+| Dangling SPNs | Delete SPN from Account |
+| Socket Pool Configuration | Set Socket Pool Configuration to Maximum |
+| Tombstoned DNS Records | Delete Tombstoned DNS Record |
+| Wildcard Record | Create Proper Wildcard Record |
+| WPAD Record | Create Proper WPAD Record |
 
 [^1]: A "Dangling SPN" is an SPN where the host portion of the SPN does not resolve to an IP address.
