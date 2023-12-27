@@ -39,7 +39,9 @@ Running `Invoke-BlueTuxedo` with no paramters will [`Get`](#get-stuff) stuff, [`
 | Item | Test Condition |
 |---------|---------------|
 | ADI Zones | Is Legacy Zone? |
-| DHCP Dynamic Update service account | Exists? |
+| ADI Zones | Are Secure Updates enabled? |
+| DHCP Dynamic Update service account | Exists on each DHCP server? |
+| Dangling SPNs | Exist? |
 | DnsAdmins Membership | Is non-zero? |
 | DnsUpdateProxy Membership | Is non-zero? |
 | Forwarder Configuration | Exist? |
@@ -50,10 +52,10 @@ Running `Invoke-BlueTuxedo` with no paramters will [`Get`](#get-stuff) stuff, [`
 | Security Descriptor (Ownership) | Standard/Expected? |
 | Socket Pool Configuration | Is maximum? |
 | Tombstoned DNS Records | Exist? |
-| Wildcard Record | Exists? + Correct type? |
-| WPAD Record | Exists? + Correct type? |
+| Wildcard Record | Exists & correct type? |
+| WPAD Record | Exists & correct type? |
 | Zone Scopes | Exist? |
-| Zone Scope Containers | Exists? + Empty? |
+| Zone Scope Containers | Exists & empty? |
 
 ### `Repair` Stuff
 | Item | Fix |
