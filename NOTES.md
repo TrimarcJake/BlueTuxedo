@@ -7,7 +7,7 @@ Get:
 - [x] DnsUpdateProxy Membership
 - [x] Forwarder Configuration
 - [x] Global Query Block List (GQBL)
-- [ ] Name Protection Configuration on DHCP servers
+- [x] Name Protection Configuration on DHCP servers
 - [x] Non-ADI Zone Auditing
 - [x] Query Resolution Policies
 - [x] Security Descriptors
@@ -26,8 +26,10 @@ Test:
 - [x] DHCP Dynamic Update service account
 - [x] DnsAdmins Membership - Unnecessary
 - [x] DnsUpdateProxy Membership - Unnecessary
+- [ ] Duplicate Zone Names
 - [x] Forwarder Configuration
 - [x] Global Query Block List (GQBL)
+- [ ] Name Protection Configuration on DHCP servers
 - [x] Non-ADI Zone Auditing - Unnecessary
 - [x] Query Resolution Policies - Unnecessary
 - [x] Security Descriptor (ACEs)
@@ -56,3 +58,6 @@ Repair
 - [x] Wildcard Record
 - [x] WPAD Record
 - [ ] Zone Scope Auditing
+
+Planned Improvements
+- [ ] DHCP (Name Protection/Service Account) checks in any forest
