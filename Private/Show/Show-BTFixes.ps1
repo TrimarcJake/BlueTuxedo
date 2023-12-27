@@ -10,7 +10,7 @@ function Show-BTFixes {
             'WildcardRecords',
             'WPADRecords',
             'DanglingSPNs',
-            'ADIZones'
+            'ADILegacyZones'
         )]
         [string]$Section = 'All'
     )
@@ -21,7 +21,7 @@ function Show-BTFixes {
         'WildcardRecords',
         'WPADRecords',
         'DanglingSPNs',
-        'ADIZones'
+        'ADILegacyZones'
     )
 
     $TitleHashtable = @{
@@ -30,8 +30,8 @@ function Show-BTFixes {
         'TombstonedNodes' = 'Delete All Tombstoned Nodes'
         'WildcardRecords' = 'Fix Wildcard Record Configuration by Domain'
         'WPADRecords' = 'Fix WPAD Record Configuration by Domain'
-        'DanglingSPNs' = 'Delete Danging SPNs'
-        'ADIZones' = 'Convert Legacy Zones to ForestDNS Zones'
+        'DanglingSPNs' = 'Delete Dangling SPNs'
+        'ADILegacyZones' = 'Convert Legacy Zones to ForestDNS Zones'
     }
 
     if ($ShowSecurityDescriptors) {

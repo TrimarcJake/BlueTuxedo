@@ -36,6 +36,7 @@ function Invoke-BlueTuxedo {
     if ($Demo) { Clear-Host }
     Write-Host 'Currently testing collected DNS data to identify possible issues...' -ForegroundColor Green
     $TestedADILegacyZones = Test-BTADILegacyZone -ADIZones $ADIZones
+    $TestedADIInsecureUpdateZones = Test-BTADIInsecureUpdateZone -ADIZones $ADIZones
     $TestedDynamicUpdateServiceAccounts = Test-BTDynamicUpdateServiceAccount -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts
     $TestedForwarderConfigurations = Test-BTForwarderConfiguration -ForwarderConfigurations $ForwarderConfigurations
     $TestedGlobalQueryBlockLists = Test-BTGlobalQueryBlockList -GlobalQueryBlockLists $GlobalQueryBlockLists
@@ -77,7 +78,7 @@ function Invoke-BlueTuxedo {
         if ($Demo) {
             Show-BTFixes -Demo
         } elseif ($ShowSecurityDescriptors) {
-            Show-BTFixesDemo -ShowSecurityDescriptors
+            Show-BTFixes -ShowSecurityDescriptors
         } elseif ($Demo -and $ShowSecurityDescriptors) {
             Show-BTFixes -ShowSecurityDescriptors -Demo
         }

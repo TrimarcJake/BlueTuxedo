@@ -1,4 +1,4 @@
-function Repair-BTADIZoneLegacy {
+function Repair-BTADILegacyZone {
     [CmdletBinding()]
     param (
         [Parameter()]
