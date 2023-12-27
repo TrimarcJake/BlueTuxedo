@@ -4,7 +4,7 @@ Get:
 - [x] Dangling SPNs
 - [x] DHCP Dynamic Update service account
 - [x] DnsAdmins Membership
-- [ ] DnsUpdateProxy Membership
+- [x] DnsUpdateProxy Membership
 - [x] Forwarder Configuration
 - [x] Global Query Block List (GQBL)
 - [ ] Name Protection Configuration on DHCP servers
@@ -38,28 +38,9 @@ Test:
 - [x] Zone Scopes - Unnecessary
 - [x] Zone Scope Containers
 
-Write
-- [ ] ADI Zones (Legacy)
-- [ ] ADI Zones (non-Legacy)
-- [ ] Conditional Forwarder Auditing
-- [ ] Dangling SPNs
-- [ ] DHCP Dynamic Update service account
-- [ ] DnsAdmins Membership
-- [ ] Forwarder Configuration
-- [ ] Global Query Block List (GQBL)
-- [ ] Non-ADI Zone Auditing
-- [ ] Query Resolution Policies
-- [ ] Socket Pool Configuration
-- [ ] Tombstoned DNS Records
-- [ ] Weird DACLs
-- [ ] Wildcard Record
-- [ ] WPAD Record
-- [ ] Zone Scope Auditing
-
 Repair
-- [x] ADI Zones (Legacy)
-- [ ] ADI Zones (non-Legacy)
-- [ ] Conditional Forwarder Auditing
+- [x] ADI Zones (Legacy => Non-Legacy)
+- [ ] ADI Zones (Non-Secure => Secure)
 - [x] Dangling SPNs
 - [ ] DHCP Dynamic Update service account
 - [ ] DnsAdmins Membership

@@ -6,6 +6,7 @@ function Show-BTTestedData {
             'ConditionalForwarders',
             'DanglingSPNs',
             'DnsAdminsMemberships',
+            'DnsUpdateProxyMemberships',
             'NonADIZones',
             'QueryResolutionPolicys',
             'TombstonedNodes',
@@ -29,6 +30,7 @@ function Show-BTTestedData {
         'ConditionalForwarders',
         'DanglingSPNs',
         'DnsAdminsMemberships',
+        'DnsUpdateProxyMemberships',
         'NonADIZones',
         'QueryResolutionPolicys',
         'TombstonedNodes',
@@ -48,6 +50,7 @@ function Show-BTTestedData {
         'ConditionalForwarders' = 'All Conditional Forwarders' 
         'DanglingSPNs' = 'All Dangling SPNs' 
         'DnsAdminsMemberships' = 'DnsAdmins Membership (per-domain)' 
+        'DnsUpdateProxyMemberships' = 'DnsUpdateProxy Membership (per-domain)'
         'NonADIZones' = 'All Non-ADI Zones' 
         'QueryResolutionPolicys' = 'All Query Resolution Policies' 
         'TombstonedNodes' = 'All Tombstoned Nodes'
@@ -69,6 +72,7 @@ function Show-BTTestedData {
         'ConditionalForwarders' = "Check this list of conditional forwarders.`nAre they still in use?"
         'DanglingSPNs' = "Dangling SPNs are Service Principal Names where the 'Host' portion of the SPN does not resolve to an IP address.`nDangling SPNs can be used by an attacker to coerce Kerberos authentication."
         'DnsAdminsMemberships' = "The DnsAdmins group remains incredibly powereful.`nKeep this group empty if possible.`nIf not possible, ensure the members are protected like Tier 0 assets."
+        'DnsUpdateProxyMemberships' = "Members of DnsUpdateProxy group can update ADI DNS records regardless of existing ownership.`nWhile doing so, they grant Authenticated Users the right to modify the DNS record.`nThis group should be kept empty if possible."
         'NonADIZones' = "Non-ADI Zones have their information stored on each DNS server/DC instead of in AD.`nNon-ADI Zones create inconsistency across resolvers."
         'QueryResolutionPolicys' = "Query Resolution Policies are configured per-server and do not appear in the DNS snap-in.`nAudit these entries to ensure they are apppropriate."
         'TombstonedNodes' = "Tombstoned Nodes can be updated by any security principal in the forest.`nRemove these nodes."
