@@ -20,7 +20,7 @@ Get:
 
 Test:
 - [x] ADI Zones (Legacy vs. non-Legacy)
-- [ ] ADI Zones (Secure vs. non-Secure)
+- [x] ADI Zones (Secure vs. non-Secure)
 - [x] Conditional Forwarder Auditing - Unnecessary
 - [x] Dangling SPNs - Unnecessary
 - [x] DHCP Dynamic Update service account

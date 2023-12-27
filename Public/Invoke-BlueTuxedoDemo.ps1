@@ -32,7 +32,7 @@ function Invoke-BlueTuxedoDemo {
     # Test Data
     Clear-Host
     Write-Host 'Currently testing collected DNS data to identify possible issues...' -ForegroundColor Green
-    $TestedADIZones = Test-BTADIZone -ADIZones $ADIZones
+    $TestedADIZones = Test-BTADILegacyZone -ADIZones $ADIZones
     $TestedDynamicUpdateServiceAccounts = Test-BTDynamicUpdateServiceAccount -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts
     $TestedForwarderConfigurations = Test-BTForwarderConfiguration -ForwarderConfigurations $ForwarderConfigurations
     $TestedGlobalQueryBlockLists = Test-BTGlobalQueryBlockList -GlobalQueryBlockLists $GlobalQueryBlockLists

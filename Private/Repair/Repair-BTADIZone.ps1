@@ -1,4 +1,4 @@
-function Repair-BTADIZone {
+function Repair-BTADIZoneLegacy {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -7,7 +7,7 @@ function Repair-BTADIZone {
     )
 
     if ($null -eq $ADIZones) {
-        $ADIZones = Test-BTADIZone
+        $ADIZones = Test-BTADILegacyZone
     }
 
     if ($Run) {
