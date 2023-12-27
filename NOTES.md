@@ -25,6 +25,7 @@ Test:
 - [x] Dangling SPNs - Unnecessary
 - [x] DHCP Dynamic Update service account
 - [x] DnsAdmins Membership - Unnecessary
+- [x] DnsUpdateProxy Membership - Unnecessary
 - [x] Forwarder Configuration
 - [x] Global Query Block List (GQBL)
 - [x] Non-ADI Zone Auditing - Unnecessary
@@ -41,9 +42,10 @@ Test:
 Repair
 - [x] ADI Zones (Legacy => Non-Legacy)
 - [ ] ADI Zones (Non-Secure => Secure)
-- [x] Dangling SPNs
+- [x] Dangling SPNs (Delete)
 - [ ] DHCP Dynamic Update service account
 - [ ] DnsAdmins Membership
+- [ ] DnsUpdateProxy Membership
 - [ ] Forwarder Configuration
 - [ ] Global Query Block List (GQBL)
 - [ ] Non-ADI Zone Auditing

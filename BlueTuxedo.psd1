@@ -1,4 +1,4 @@
-@{
+﻿@{
     AliasesToExport      = @('*')
     Author               = 'Jake Hildreth and Jim Sykora'
     CmdletsToExport      = @()
@@ -11,8 +11,8 @@
     PowerShellVersion    = '5.1'
     PrivateData          = @{
         PSData = @{
-            Tags                       = @('Windows', 'BlueTuxedo', 'DNS', 'AD', 'ActiveDirectory', 'DomainNameSystem', 'ADIDNS')
             ExternalModuleDependencies = @('ActiveDirectory', 'DhcpServer', 'DnsServer', 'DnsClient', 'Microsoft.PowerShell.Security', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.LocalAccounts', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Management')
+            Tags                       = @('Windows', 'BlueTuxedo', 'DNS', 'AD', 'ActiveDirectory', 'DomainNameSystem', 'ADIDNS')
         }
     }
     RequiredModules      = @('ActiveDirectory', 'DhcpServer', 'DnsServer', 'DnsClient', 'Microsoft.PowerShell.Security', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.LocalAccounts', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Management')
