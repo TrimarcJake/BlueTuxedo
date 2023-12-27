@@ -1,6 +1,8 @@
 function Show-BTTestedData {
     [CmdletBinding()]
     param (
+        [switch]$ShowSecurityDescriptors = $false,
+        [switch]$Demo,
         [ValidateSet(
             'All',
             'ConditionalForwarders',
@@ -22,8 +24,7 @@ function Show-BTTestedData {
             'TestedWPADRecords',
             'TestedZoneScopeContainers'
         )]
-        [string]$Section = 'All',
-        [switch]$ShowSecurityDescriptors = $false
+        [string]$Section = 'All'
     )
 
     $Sections = @(
@@ -97,6 +98,7 @@ function Show-BTTestedData {
         foreach ($entry in $Sections) {
             $Title = $TitleHashtable[$entry]
             $Description = $DescriptionHashtable[$entry]
+            if ($Demo) { Clear-Host }
             Write-Host "/--------------- $Title ---------------\" -ForegroundColor Red
             Write-Host $Description
             (Get-Variable $entry).Value | Format-List
@@ -106,6 +108,7 @@ function Show-BTTestedData {
     } else {
         $Title = $TitleHashtable[$Section]
         $Description = $DescriptionHashtable[$Section]
+        if ($Demo) { Clear-Host }
         Write-Host "/--------------- $Title ---------------\" -ForegroundColor Red
         Write-Host $Description
         (Get-Variable $Section).Value

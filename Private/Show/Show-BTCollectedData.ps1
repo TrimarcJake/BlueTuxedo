@@ -1,6 +1,8 @@
 function Show-BTCollectedData {
     [CmdletBinding()]
     param (
+        [switch]$ShowSecurityDescriptors = $false,
+        [switch]$Demo,
         [ValidateSet(
             'All',
             'ADIZones',
@@ -21,8 +23,7 @@ function Show-BTCollectedData {
             'ZoneScopes',
             'ZoneScopeContainers'
         )]
-        [string]$Section = 'All',
-        [switch]$ShowSecurityDescriptors = $false
+        [string]$Section = 'All'
     )
 
     $Sections = @(
@@ -72,6 +73,7 @@ function Show-BTCollectedData {
     if ($Section = 'All') {
         foreach ($entry in $Sections) {
             $Title = $TitleHashtable[$entry]
+            if ($Demo) { Clear-Host }
             Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
             (Get-Variable $entry).Value | Format-List
             Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green
@@ -79,6 +81,7 @@ function Show-BTCollectedData {
         }
     } else {
         $Title = $TitleHashtable[$Section]
+        if ($Demo) { Clear-Host }
         Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
         (Get-Variable $Section).Value
         Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green

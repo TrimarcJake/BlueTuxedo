@@ -1,6 +1,8 @@
 function Show-BTFixes {
     [CmdletBinding()]
     param (
+        [switch]$ShowSecurityDescriptors = $false,
+        [switch]$Demo,
         [ValidateSet(
             'All',
             'SocketPoolSizes',
@@ -10,8 +12,7 @@ function Show-BTFixes {
             'DanglingSPNs',
             'ADIZones'
         )]
-        [string]$Section = 'All',
-        [switch]$ShowSecurityDescriptors = $false
+        [string]$Section = 'All'
     )
 
     $Sections = @(
@@ -42,6 +43,7 @@ function Show-BTFixes {
             $Title = $TitleHashtable[$entry]
             $SectionScriptBlock = "Repair-BT$entry"
             $SectionScriptBlock = $SectionScriptBlock.TrimEnd('s')
+            if ($Demo) { Clear-Host }
             Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
             $ScriptBlock = [scriptblock]::Create($SectionScriptBlock)
             Invoke-Command -ScriptBlock $ScriptBlock
@@ -51,6 +53,7 @@ function Show-BTFixes {
     } else {
         $Title = $TitleHashtable[$Section]
         $SectionScriptBlock = "Repair-$Title"+"s" 
+        if ($Demo) { Clear-Host }
         Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
         $ScriptBlock = [scriptblock]::Create($SectionScriptBlock)
         Invoke-Command -ScriptBlock $ScriptBlock

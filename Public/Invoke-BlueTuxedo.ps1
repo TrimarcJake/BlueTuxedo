@@ -2,9 +2,11 @@ function Invoke-BlueTuxedo {
     [CmdletBinding()]
     param (
         [string]$Forest = (Get-ADForest).Name,
-        [string]$InputPath
+        [string]$InputPath,
+        [switch]$ShowSecurityDescriptors = $false,
+        [switch]$Demo = $false
     )
-    
+    if ($Demo) { Clear-Host }
     $Domains = Get-BTTarget -Forest $Forest -InputPath $InputPath
 
     Show-BTLogo -Version '2023.11'
@@ -31,6 +33,7 @@ function Invoke-BlueTuxedo {
     $ZoneScopeContainers = Get-BTZoneScopeContainer -ADIZones $ADIZones
 
     # Test Data
+    if ($Demo) { Clear-Host }
     Write-Host 'Currently testing collected DNS data to identify possible issues...' -ForegroundColor Green
     $TestedADILegacyZones = Test-BTADILegacyZone -ADIZones $ADIZones
     $TestedDynamicUpdateServiceAccounts = Test-BTDynamicUpdateServiceAccount -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts
@@ -47,18 +50,36 @@ function Invoke-BlueTuxedo {
     # Display All Collected Data
     $show = Read-Host "Show all collected DNS data? [Y]/n"
     if (($show -eq 'y') -or ($show -eq '') -or ($null -eq $show) ) {
-        Show-BTCollectedData
+        if ($Demo) {
+            Show-BTCollectedData -Demo
+        } elseif ($ShowSecurityDescriptors) {
+            Show-BTCollectedData -ShowSecurityDescriptors
+        } elseif ($Demo -and $ShowSecurityDescriptors) {
+            Show-BTCollectedData -ShowSecurityDescriptors -Demo 
+        }
     }
     
     # Display All Tested Data
     $show = Read-Host "Show possible DNS issues in the environment? [Y]/n"
     if (($show -eq 'y') -or ($show -eq '') -or ($null -eq $show) ) {
-        Show-BTTestedData
+        if ($Demo) {
+            Show-BTTestedData -Demo
+        } elseif ($ShowSecurityDescriptors) {
+            Show-BTTestedData -ShowSecurityDescriptors
+        } elseif ($Demo -and $ShowSecurityDescriptors) {
+            Show-BTTestedData -ShowSecurityDescriptors -Demo
+        }
     }
 
     # Display Fixes
     $show = Read-Host "Show fixes for identified issues? [Y]/n"
     if (($show -eq 'y') -or ($show -eq '') -or ($null -eq $show) ) {
-        Show-BTFixes
+        if ($Demo) {
+            Show-BTFixes -Demo
+        } elseif ($ShowSecurityDescriptors) {
+            Show-BTFixesDemo -ShowSecurityDescriptors
+        } elseif ($Demo -and $ShowSecurityDescriptors) {
+            Show-BTFixes -ShowSecurityDescriptors -Demo
+        }
     }
 }
