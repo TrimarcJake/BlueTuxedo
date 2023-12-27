@@ -11,7 +11,7 @@ function Get-BTNameProtectionConfiguration {
 
     $NameProtectionConfigurationList = @()
 
-    $DHCPServers = Get-DhcpServerInDC
+    dHCPServer
     foreach ($dhcpServer in $DHCPServers) {
         $NameProtectionv4Configuration = (Get-DhcpServerv4DnsSetting -ComputerName $dhcpServer.IPAddress).NameProtection
         $NameProtectionv6Configuration = (Get-DhcpServerv6DnsSetting -ComputerName $dhcpServer.IPAddress).NameProtection
