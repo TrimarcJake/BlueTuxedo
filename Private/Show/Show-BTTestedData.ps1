@@ -1,16 +1,20 @@
 function Show-BTTestedData {
     [CmdletBinding()]
     param (
+        [switch]$ShowSecurityDescriptors = $false,
+        [switch]$Demo,
         [ValidateSet(
             'All',
             'ConditionalForwarders',
             'DanglingSPNs',
             'DnsAdminsMemberships',
+            'DnsUpdateProxyMemberships',
             'NonADIZones',
             'QueryResolutionPolicys',
             'TombstonedNodes',
             'ZoneScopes',
-            'TestedADIZones',
+            'TestedADILegacyZones',
+            'TestedADIInsecureUpdateZones',
             'TestedDynamicUpdateServiceAccounts',
             'TestedForwarderConfigurations',
             'TestedGlobalQueryBlockLists',
@@ -21,19 +25,19 @@ function Show-BTTestedData {
             'TestedWPADRecords',
             'TestedZoneScopeContainers'
         )]
-        [string]$Section = 'All',
-        [switch]$ShowSecurityDescriptors = $false
+        [string]$Section = 'All'
     )
 
     $Sections = @(
         'ConditionalForwarders',
         'DanglingSPNs',
         'DnsAdminsMemberships',
+        'DnsUpdateProxyMemberships',
         'NonADIZones',
         'QueryResolutionPolicys',
         'TombstonedNodes',
-        'ZoneScopes',
-        'TestedADIZones',
+        'TestedADILegacyZones',
+        'TestedADIInsecureUpdateZones',
         'TestedDynamicUpdateServiceAccounts',
         'TestedForwarderConfigurations',
         'TestedGlobalQueryBlockLists',
@@ -48,12 +52,14 @@ function Show-BTTestedData {
         'ConditionalForwarders' = 'All Conditional Forwarders' 
         'DanglingSPNs' = 'All Dangling SPNs' 
         'DnsAdminsMemberships' = 'DnsAdmins Membership (per-domain)' 
+        'DnsUpdateProxyMemberships' = 'DnsUpdateProxy Membership (per-domain)'
         'NonADIZones' = 'All Non-ADI Zones' 
         'QueryResolutionPolicys' = 'All Query Resolution Policies' 
         'TombstonedNodes' = 'All Tombstoned Nodes'
         'ZoneScopes' = 'Tested Zone Scopes'
-        'TestedADIZones' = 'Legacy ADI Zones' 
-        'TestedDynamicUpdateServiceAccounts' = 'DNS Servers not configured to use Dynamic Update Service Accounts' 
+        'TestedADILegacyZones' = 'Legacy ADI Zones'
+        'TestedADIInsecureUpdateZones' = 'ADI Zones not configured for Secure Updates'
+        'TestedDynamicUpdateServiceAccounts' = 'DHCP Servers not configured to use Dynamic Update Service Accounts' 
         'TestedForwarderConfigurations' = 'All Configured Forwarders' 
         'TestedGlobalQueryBlockLists' = 'All Global Query Block Lists' 
         'TestedSecurityDescriptorACEs' = 'Possibly Dangerous ACEs on DNS Objects' 
@@ -69,11 +75,13 @@ function Show-BTTestedData {
         'ConditionalForwarders' = "Check this list of conditional forwarders.`nAre they still in use?"
         'DanglingSPNs' = "Dangling SPNs are Service Principal Names where the 'Host' portion of the SPN does not resolve to an IP address.`nDangling SPNs can be used by an attacker to coerce Kerberos authentication."
         'DnsAdminsMemberships' = "The DnsAdmins group remains incredibly powereful.`nKeep this group empty if possible.`nIf not possible, ensure the members are protected like Tier 0 assets."
+        'DnsUpdateProxyMemberships' = "Members of DnsUpdateProxy group can update ADI DNS records regardless of existing ownership.`nWhile doing so, they grant Authenticated Users the right to modify the DNS record.`nThis group should be kept empty if possible."
         'NonADIZones' = "Non-ADI Zones have their information stored on each DNS server/DC instead of in AD.`nNon-ADI Zones create inconsistency across resolvers."
         'QueryResolutionPolicys' = "Query Resolution Policies are configured per-server and do not appear in the DNS snap-in.`nAudit these entries to ensure they are apppropriate."
         'TombstonedNodes' = "Tombstoned Nodes can be updated by any security principal in the forest.`nRemove these nodes."
         'ZoneScopes' = "Zone Scopes can be used to create a fully ADI split-brain DNS.`nEnsure these scopes are appropriate for your environment"
-        'TestedADIZones' = "ADI Zones can be replicated in 3 ways: forest-replicated, domain-replicated, and Windows 2000-compatible mode (aka Legacy).`nLegacy Zones are not protected in the same manner as other zones and inherit ACEs from the domain root.`nThese zones should be converted to one of the other types."
+        'TestedADILegacyZones' = "ADI Zones can be replicated in 3 ways: forest-replicated, domain-replicated, and Windows 2000-compatible mode (aka Legacy).`nLegacy Zones are not protected in the same manner as other zones and inherit ACEs from the domain root.`nThese zones should be converted to one of the other types."
+        'TestedADIInsecureUpdateZones' = "[TODO]"
         'TestedDynamicUpdateServiceAccounts' = "Out-of-the-box, AD-joined computers that receive an IP address from a Windows DHCP server can create and update their own DNS nodes.`nA more secure method of creating these nodes is to configure a Dynamic Update Service Account on each DHCP server.`nWhen configured, Dynamic Update Service Accounts can be used to create DNS records on behalf of computers.`nThis makes auditing DACLs easier.`n`nThe following DNS servers do not use a Dynamic Update Service Account:"
         'TestedForwarderConfigurations' = "When a local DNS server cannot resolve a request, they send a request to a Forwarder.`nCheck the following list to ensure the Forwarders are approriate for your environment."
         'TestedGlobalQueryBlockLists' = "Despite the name, Global Query Block Lists are configured per-server.`nEach GQBL contains a list of names that the DNS server will not resolve.`nThis list should contain the 'wpad' and 'isatap' records at a minimum."
@@ -93,6 +101,7 @@ function Show-BTTestedData {
         foreach ($entry in $Sections) {
             $Title = $TitleHashtable[$entry]
             $Description = $DescriptionHashtable[$entry]
+            if ($Demo) { Clear-Host }
             Write-Host "/--------------- $Title ---------------\" -ForegroundColor Red
             Write-Host $Description
             (Get-Variable $entry).Value | Format-List
@@ -102,6 +111,7 @@ function Show-BTTestedData {
     } else {
         $Title = $TitleHashtable[$Section]
         $Description = $DescriptionHashtable[$Section]
+        if ($Demo) { Clear-Host }
         Write-Host "/--------------- $Title ---------------\" -ForegroundColor Red
         Write-Host $Description
         (Get-Variable $Section).Value

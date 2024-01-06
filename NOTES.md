@@ -4,10 +4,10 @@ Get:
 - [x] Dangling SPNs
 - [x] DHCP Dynamic Update service account
 - [x] DnsAdmins Membership
-- [ ] DnsUpdateProxy Membership
+- [x] DnsUpdateProxy Membership
 - [x] Forwarder Configuration
 - [x] Global Query Block List (GQBL)
-- [ ] Name Protection Configuration on DHCP servers
+- [x] Name Protection Configuration on DHCP servers
 - [x] Non-ADI Zone Auditing
 - [x] Query Resolution Policies
 - [x] Security Descriptors
@@ -20,13 +20,16 @@ Get:
 
 Test:
 - [x] ADI Zones (Legacy vs. non-Legacy)
-- [ ] ADI Zones (Secure vs. non-Secure)
+- [x] ADI Zones (Secure vs. non-Secure)
 - [x] Conditional Forwarder Auditing - Unnecessary
 - [x] Dangling SPNs - Unnecessary
 - [x] DHCP Dynamic Update service account
 - [x] DnsAdmins Membership - Unnecessary
+- [x] DnsUpdateProxy Membership - Unnecessary
+- [ ] Duplicate Zone Names
 - [x] Forwarder Configuration
 - [x] Global Query Block List (GQBL)
+- [ ] Name Protection Configuration on DHCP servers
 - [x] Non-ADI Zone Auditing - Unnecessary
 - [x] Query Resolution Policies - Unnecessary
 - [x] Security Descriptor (ACEs)
@@ -38,38 +41,23 @@ Test:
 - [x] Zone Scopes - Unnecessary
 - [x] Zone Scope Containers
 
-Write
-- [ ] ADI Zones (Legacy)
-- [ ] ADI Zones (non-Legacy)
-- [ ] Conditional Forwarder Auditing
-- [ ] Dangling SPNs
+Repair
+- [x] ADI Zones (Legacy => Non-Legacy)
+- [ ] ADI Zones (Non-Secure => Secure)
+- [x] Dangling SPNs (Delete)
 - [ ] DHCP Dynamic Update service account
 - [ ] DnsAdmins Membership
+- [ ] DnsUpdateProxy Membership
 - [ ] Forwarder Configuration
 - [ ] Global Query Block List (GQBL)
 - [ ] Non-ADI Zone Auditing
 - [ ] Query Resolution Policies
-- [ ] Socket Pool Configuration
-- [ ] Tombstoned DNS Records
+- [x] Socket Pool Configuration
+- [x] Tombstoned DNS Records
 - [ ] Weird DACLs
-- [ ] Wildcard Record
-- [ ] WPAD Record
+- [x] Wildcard Record
+- [x] WPAD Record
 - [ ] Zone Scope Auditing
 
-Repair
-- [ ] ADI Zones (Legacy)
-- [ ] ADI Zones (non-Legacy)
-- [ ] Conditional Forwarder Auditing
-- [ ] Dangling SPNs
-- [ ] DHCP Dynamic Update service account
-- [ ] DnsAdmins Membership
-- [ ] Forwarder Configuration
-- [ ] Global Query Block List (GQBL)
-- [ ] Non-ADI Zone Auditing
-- [ ] Query Resolution Policies
-- [ ] Socket Pool Configuration
-- [ ] Tombstoned DNS Records
-- [ ] Weird DACLs
-- [ ] Wildcard Record
-- [ ] WPAD Record
-- [ ] Zone Scope Auditing
+Planned Improvements
+- [ ] DHCP (Name Protection/Service Account) checks in any forest

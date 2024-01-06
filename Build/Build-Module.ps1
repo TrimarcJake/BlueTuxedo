@@ -18,11 +18,11 @@ Import-Module -Name PSPublishModule -Force
 Build-Module -ModuleName 'BlueTuxedo' {
     # Usual defaults as per standard module
     $Manifest = [ordered] @{
-        ModuleVersion        = '2023.10'
+        ModuleVersion        = '2024.1'
         CompatiblePSEditions = @('Desktop', 'Core')
         GUID                 = 'e98445b3-1d76-4a51-831d-ddfc7e0213fa'
         Author               = 'Jake Hildreth and Jim Sykora'
-        Copyright            = "(c) 2022 - $((Get-Date).Year). All rights reserved."
+        Copyright            = "(c) 2023 - $((Get-Date).Year). All rights reserved."
         Description          = 'A tiny tool to identify and remediate common misconfigurations in Active Directory-Integrated DNS.'
         PowerShellVersion    = '5.1'
         Tags                 = @('Windows', 'BlueTuxedo', 'DNS', 'AD', 'ActiveDirectory', 'DomainNameSystem','ADIDNS')

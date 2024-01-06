@@ -1,12 +1,15 @@
 function Show-BTCollectedData {
     [CmdletBinding()]
     param (
+        [switch]$ShowSecurityDescriptors = $false,
+        [switch]$Demo,
         [ValidateSet(
             'All',
             'ADIZones',
             'ConditionalForwarders',
             'DanglingSPNs',
             'DnsAdminsMemberships',
+            'DnsUpdateProxyMemberships',
             'DynamicUpdateServiceAccounts',
             'ForwarderConfigurations',
             'GlobalQueryBlockLists',
@@ -20,8 +23,7 @@ function Show-BTCollectedData {
             'ZoneScopes',
             'ZoneScopeContainers'
         )]
-        [string]$Section = 'All',
-        [switch]$ShowSecurityDescriptors = $false
+        [string]$Section = 'All'
     )
 
     $Sections = @(
@@ -29,6 +31,7 @@ function Show-BTCollectedData {
         'ConditionalForwarders',
         'DanglingSPNs',
         'DnsAdminsMemberships',
+        'DnsUpdateProxyMemberships',
         'DynamicUpdateServiceAccounts',
         'ForwarderConfigurations',
         'GlobalQueryBlockLists',
@@ -48,6 +51,7 @@ function Show-BTCollectedData {
         'ConditionalForwarders' = 'All Conditional Forwarders'
         'DanglingSPNs' = 'All Dangling SPNs'
         'DnsAdminsMemberships' = 'DnsAdmins Memberships'
+        'DnsUpdateProxyMemberships' = 'DnsUpdateProxy Memberships'
         'DynamicUpdateServiceAccounts' = 'Dynamic Update Service Account Configuration by DNS Server'
         'ForwarderConfigurations' = 'Forwarder Configurations by DNS Server'
         'GlobalQueryBlockLists' = 'All Global Query Block Lists'
@@ -69,6 +73,7 @@ function Show-BTCollectedData {
     if ($Section = 'All') {
         foreach ($entry in $Sections) {
             $Title = $TitleHashtable[$entry]
+            if ($Demo) { Clear-Host }
             Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
             (Get-Variable $entry).Value | Format-List
             Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green
@@ -76,6 +81,7 @@ function Show-BTCollectedData {
         }
     } else {
         $Title = $TitleHashtable[$Section]
+        if ($Demo) { Clear-Host }
         Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
         (Get-Variable $Section).Value
         Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green

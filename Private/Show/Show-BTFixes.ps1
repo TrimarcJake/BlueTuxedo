@@ -1,6 +1,8 @@
 function Show-BTFixes {
     [CmdletBinding()]
     param (
+        [switch]$ShowSecurityDescriptors = $false,
+        [switch]$Demo,
         [ValidateSet(
             'All',
             'SocketPoolSizes',
@@ -8,10 +10,9 @@ function Show-BTFixes {
             'WildcardRecords',
             'WPADRecords',
             'DanglingSPNs',
-            'ADIZones'
+            'ADILegacyZones'
         )]
-        [string]$Section = 'All',
-        [switch]$ShowSecurityDescriptors = $false
+        [string]$Section = 'All'
     )
 
     $Sections = @(
@@ -20,7 +21,7 @@ function Show-BTFixes {
         'WildcardRecords',
         'WPADRecords',
         'DanglingSPNs',
-        'ADIZones'
+        'ADILegacyZones'
     )
 
     $TitleHashtable = @{
@@ -29,8 +30,8 @@ function Show-BTFixes {
         'TombstonedNodes' = 'Delete All Tombstoned Nodes'
         'WildcardRecords' = 'Fix Wildcard Record Configuration by Domain'
         'WPADRecords' = 'Fix WPAD Record Configuration by Domain'
-        'DanglingSPNs' = 'Delete Danging SPNs'
-        'ADIZones' = 'Convert Legacy Zones to ForestDNS Zones'
+        'DanglingSPNs' = 'Delete Dangling SPNs'
+        'ADILegacyZones' = 'Convert Legacy Zones to ForestDNS Zones'
     }
 
     if ($ShowSecurityDescriptors) {
@@ -42,6 +43,7 @@ function Show-BTFixes {
             $Title = $TitleHashtable[$entry]
             $SectionScriptBlock = "Repair-BT$entry"
             $SectionScriptBlock = $SectionScriptBlock.TrimEnd('s')
+            if ($Demo) { Clear-Host }
             Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
             $ScriptBlock = [scriptblock]::Create($SectionScriptBlock)
             Invoke-Command -ScriptBlock $ScriptBlock
@@ -51,6 +53,7 @@ function Show-BTFixes {
     } else {
         $Title = $TitleHashtable[$Section]
         $SectionScriptBlock = "Repair-$Title"+"s" 
+        if ($Demo) { Clear-Host }
         Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
         $ScriptBlock = [scriptblock]::Create($SectionScriptBlock)
         Invoke-Command -ScriptBlock $ScriptBlock

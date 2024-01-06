@@ -1,4 +1,4 @@
-function Test-BTADIZone {
+function Test-BTADILegacyZone {
     [CmdletBinding()]
     param (
         [Parameter()]
