@@ -8,6 +8,11 @@ A tiny tool built to find and fix common misconfigurations in Active Directory-I
 
 ## Quick Start:
 ``` powershell
+# Install from PSGallery
+Install-Module -Name BlueTuxedo -Scope CurrentUser
+Invoke-BlueTuxedo
+
+# Clone from GitHub and Import
 git clone https://github.com/TrimarcJake/BlueTuxedo.git
 cd BlueTuxedo
 Import-Module .\BlueTuxedo.psd1
