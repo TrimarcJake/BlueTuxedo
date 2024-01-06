@@ -57,6 +57,8 @@ function Invoke-BlueTuxedo {
             Show-BTCollectedData -ShowSecurityDescriptors
         } elseif ($Demo -and $ShowSecurityDescriptors) {
             Show-BTCollectedData -ShowSecurityDescriptors -Demo 
+        } else {
+            Show-BTCollectedData
         }
     }
     
@@ -69,6 +71,8 @@ function Invoke-BlueTuxedo {
             Show-BTTestedData -ShowSecurityDescriptors
         } elseif ($Demo -and $ShowSecurityDescriptors) {
             Show-BTTestedData -ShowSecurityDescriptors -Demo
+        } else {
+            Show-BTTestedData
         }
     }
 
@@ -81,6 +85,8 @@ function Invoke-BlueTuxedo {
             Show-BTFixes -ShowSecurityDescriptors
         } elseif ($Demo -and $ShowSecurityDescriptors) {
             Show-BTFixes -ShowSecurityDescriptors -Demo
+        } else {
+            Show-BTFixes
         }
     }
 }
