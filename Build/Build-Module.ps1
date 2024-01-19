@@ -25,6 +25,7 @@ Build-Module -ModuleName 'BlueTuxedo' {
         Copyright            = "(c) 2023 - $((Get-Date).Year). All rights reserved."
         Description          = 'A tiny tool to identify and remediate common misconfigurations in Active Directory-Integrated DNS.'
         PowerShellVersion    = '5.1'
+        ProjectUri           = 'https://github.com/TrimarcJake/BlueTuxedo'
         Tags                 = @('Windows', 'BlueTuxedo', 'DNS', 'AD', 'ActiveDirectory', 'DomainNameSystem','ADIDNS')
     }
     New-ConfigurationManifest @Manifest
