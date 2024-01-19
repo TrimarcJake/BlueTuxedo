@@ -102,12 +102,9 @@ Build-Module -ModuleName 'BlueTuxedo' {
     New-ConfigurationBuild -Enable:$true -SignModule:$false -DeleteTargetModuleBeforeBuild -MergeModuleOnBuild -UseWildcardForFunctions
 
     $PreScriptMerge = {
-        param (
-            [int]$Mode
-        )
     }
 
-    $PostScriptMerge = { Invoke-BlueTuxedo -Mode $Mode }
+    $PostScriptMerge = { Invoke-BlueTuxedo }
 
     New-ConfigurationArtefact -Type Packed -Enable -Path "$PSScriptRoot\..\Artefacts\Packed" -ArtefactName '<ModuleName>.zip'
     New-ConfigurationArtefact -Type Script -Enable -Path "$PSScriptRoot\..\Artefacts\Script" -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName "Invoke-<ModuleName>.ps1"
