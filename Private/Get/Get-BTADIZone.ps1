@@ -9,25 +9,51 @@ function Get-BTADIZone {
         $Domains = Get-BTTarget
     }
 
+    $Zones = @()
     $ZoneList = @()
-    foreach ($domain in $Domains) {
-        $Zones = Get-DnsServerZone -ComputerName $domain | Where-Object { 
-            ($_.IsAutoCreated -eq $false) -and 
-            ($_.ZoneType -ne 'Forwarder') -and
-            ($_.IsDsIntegrated -eq $true)
+
+    $Root = Get-ADRootDSE
+    $RootNC = $Root.rootDomainNamingContext
+    $Zones = Get-ADObject -Filter {objectClass -eq 'dNSZone'} -SearchBase "CN=MicrosoftDNS,DC=ForestDnsZones,$RootNC"
+    
+    foreach ($zone in $Zones) {
+        $AddToList = [PSCustomObject]@{
+            'Domain'         = (Get-ADForest).RootDomain
+            'Zone Name'      = $zone.name
+            'Zone Type'      = 'Forest-replicated'
+            'Is Reverse?'    = ($zone.name -match '\.in-addr\.arpa$')
+            'Dynamic Update' = $zone.DynamicUpdate
         }
         
-        foreach ($zone in $Zones) {
-            $AddToList = [PSCustomObject]@{
-                'Domain'         = $domain
-                'Zone Name'      = $zone.ZoneName
-                'Zone Type'      = $zone.ZoneType
-                'Is Reverse?'    = $zone.IsReverseLookupZone
-                'Dynamic Update' = $zone.DynamicUpdate
+        $ZoneList += $AddToList
+    }
+
+    foreach ($domain in $Domains) {
+        $Zones = @()
+        $domainDN = (Get-ADDomain -Identity $domain).distinguishedName
+
+        foreach ($context in @('CN=System','DC=DomainDnsZones') ) {
+            $Zones = Get-ADObject -Filter {objectClass -eq 'dNSZone'} -SearchBase "CN=MicrosoftDNS,$context,$domainDN" -Server $domain
+            if ($context -eq 'CN=System') {
+                $ZoneType = 'Legacy'
+            }
+            else {
+                $ZoneType = 'Domain-replicated'
             }
             
-            $ZoneList += $AddToList
+            foreach ($zone in $Zones) {
+                $AddToList = [PSCustomObject]@{
+                    'Domain'         = $domain
+                    'Zone Name'      = $zone.name
+                    'Zone Type'      = $ZoneType
+                    'Is Reverse?'    = ($zone.name -match '\.in-addr\.arpa$')
+                    'Dynamic Update' = $zone.DynamicUpdate
+                }
+                
+                $ZoneList += $AddToList
+            }
         }
+        
     }
 
     $ZoneList

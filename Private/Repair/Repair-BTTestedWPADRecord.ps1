@@ -1,17 +1,17 @@
-function Repair-BTWPADRecord {
+function Repair-BTTestedWPADRecord {
     [CmdletBinding()]
     param (
         [Parameter()]
-        [array]$WPADRecords,
+        [array]$TestedWPADRecords,
         [switch]$Run = $false
     )
 
-    if ($null -eq $WPADRecords) {
-        $WPADRecords = Test-BTWPADRecord
+    if ($null -eq $TestedWPADRecords) {
+        $TestedWPADRecords = Test-BTTestedWPADRecord
     }
 
     if ($Run) {
-        foreach ($wpadrecord in $WPADRecords) {
+        foreach ($wpadrecord in $TestedWPADRecords) {
             $type = "-$($wpadrecord.'Correct Type')"
             if ($wpadrecord.'WPAD Exists?') {
                 Remove-DnsServerResourceRecord -ComputerName $wpadrecord.Domain -ZoneName $wpadrecord.Domain -RRType $wpadrecord.'Current WPAD Type' -Name 'WPAD'
@@ -25,7 +25,7 @@ function Repair-BTWPADRecord {
             Invoke-Command -ScriptBlock $ScriptBlock
         }
     } else {
-        foreach ($wpadrecord in $WPADRecords) {
+        foreach ($wpadrecord in $TestedWPADRecords) {
             $type = "-$($wpadrecord.'Correct Type')"
             if ($wpadrecord.'WPAD Exists?') {
                 Write-Host "Run the following code block to delete the WPAD Record of incorrect type ($($wpadrecord.'Current WPAD Type')) and replace with a WPAD Record of the correct type ($type) in the $($wpadrecord.Domain) domain" -ForegroundColor Green

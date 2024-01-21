@@ -25,7 +25,26 @@ function Show-BTTestedData {
             'TestedWPADRecords',
             'TestedZoneScopeContainers'
         )]
-        [string]$Section = 'All'
+        [string]$Section = 'All',
+        $ConditionalForwarders,
+        $DanglingSPNs,
+        $DnsAdminsMemberships,
+        $DnsUpdateProxyMemberships,
+        $NonADIZones,
+        $QueryResolutionPolicys,
+        $TombstonedNodes,
+        $ZoneScopes,
+        $TestedADILegacyZones,
+        $TestedADIInsecureUpdateZones,
+        $TestedDynamicUpdateServiceAccounts,
+        $TestedForwarderConfigurations,
+        $TestedGlobalQueryBlockLists,
+        $TestedSecurityDescriptorACEs,
+        $TestedSecurityDescriptorOwners,
+        $TestedSocketPoolSizes,
+        $TestedWildcardRecords,
+        $TestedWPADRecords,
+        $TestedZoneScopeContainers
     )
 
     $Sections = @(
@@ -36,6 +55,7 @@ function Show-BTTestedData {
         'NonADIZones',
         'QueryResolutionPolicys',
         'TombstonedNodes',
+        'ZoneScopes',
         'TestedADILegacyZones',
         'TestedADIInsecureUpdateZones',
         'TestedDynamicUpdateServiceAccounts',
@@ -101,12 +121,14 @@ function Show-BTTestedData {
         foreach ($entry in $Sections) {
             $Title = $TitleHashtable[$entry]
             $Description = $DescriptionHashtable[$entry]
-            if ($Demo) { Clear-Host }
-            Write-Host "/--------------- $Title ---------------\" -ForegroundColor Red
-            Write-Host $Description
-            (Get-Variable $entry).Value | Format-List
-            Write-Host "\--------------- $Title ---------------/" -ForegroundColor Red
-            Read-Host "Press Enter to load the next section"
+            if ($null -ne (Get-Variable $entry).Value) {
+                if ($Demo) { Clear-Host }
+                Write-Host "/--------------- $Title ---------------\" -ForegroundColor Red
+                Write-Host $Description
+                (Get-Variable $entry).Value | Format-List
+                Write-Host "\--------------- $Title ---------------/" -ForegroundColor Red
+                Read-Host "Press Enter to load the next section"
+            }
         }
     } else {
         $Title = $TitleHashtable[$Section]
@@ -114,7 +136,12 @@ function Show-BTTestedData {
         if ($Demo) { Clear-Host }
         Write-Host "/--------------- $Title ---------------\" -ForegroundColor Red
         Write-Host $Description
-        (Get-Variable $Section).Value
+        if ($null -eq (Get-Variable $Section).Value) {
+            Write-Host "No data collected for $Title" -ForegroundColor Yellow
+        }
+        else {
+            (Get-Variable $Section).Value
+        }
         Write-Host "\--------------- $Title ---------------/" -ForegroundColor Red
     }
 }
