@@ -7,7 +7,7 @@ function Repair-BTTestedWPADRecord {
     )
 
     if ($null -eq $TestedWPADRecords) {
-        $TestedWPADRecords = Test-BTTestedWPADRecord
+        $TestedWPADRecords = Test-BTWPADRecord
     }
 
     if ($Run) {

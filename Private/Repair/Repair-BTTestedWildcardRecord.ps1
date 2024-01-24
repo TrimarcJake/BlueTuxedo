@@ -7,7 +7,7 @@ function Repair-BTTestedWildcardRecord {
     )
 
     if ($null -eq $TestedWildcardRecords) {
-        $TestedWildcardRecords = Test-BTTestedWildcardRecord
+        $TestedWildcardRecords = Test-BTWildcardRecord
     }
 
     if ($Run) {
