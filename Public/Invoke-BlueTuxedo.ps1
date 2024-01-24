@@ -9,7 +9,11 @@ function Invoke-BlueTuxedo {
     if ($Demo) { Clear-Host }
     $Domains = Get-BTTarget -Forest $Forest -InputPath $InputPath
 
-    Show-BTLogo -Version '2024.1'
+    $VersionYearMonthDay = Get-Date -Format 'yyyy.M.d'
+    $VersionGitBranch = (git branch --show-current)
+    $VersionGitRev = (git rev-list --count $VersionGitBranch)
+
+    Show-BTLogo -Version "$VersionYearMonthDay.$VersionGitRev.$VersionGitBranch"
 
     # Get Data
     Write-Host 'Please hold. Collecting DNS data from the following domains:' -ForegroundColor Green

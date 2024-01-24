@@ -61,10 +61,6 @@ function Show-BTFixes {
         foreach ($entry in $Sections) {
             $Title = $TitleHashtable[$entry]
             if ($null -ne (Get-Variable $entry).Value) {
-                $SectionScriptBlock = "Repair-BT$entry"
-                $SectionScriptBlock = $SectionScriptBlock.TrimEnd('s') + " -$entry `$$entry"
-
-                Write-Host "entry: $entry`nScriptBlock: $SectionScriptBlock"; Pause
                 if ($Demo) { Clear-Host }
                 Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
                 $ScriptBlock = [scriptblock]::Create($SectionScriptBlock)
