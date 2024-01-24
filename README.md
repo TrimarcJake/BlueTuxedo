@@ -17,6 +17,13 @@ git clone https://github.com/TrimarcJake/BlueTuxedo.git
 cd BlueTuxedo
 Import-Module .\BlueTuxedo.psd1
 Invoke-BlueTuxedo
+
+$ Use the testing branch - probably broken, but 🤷‍♀️
+git clone https://github.com/TrimarcJake/BlueTuxedo.git
+cd BlueTuxedo
+git checkout testing
+Import-Module .\BlueTuxedo.psd1
+Invoke-BlueTuxedo
 ```
 Running `Invoke-BlueTuxedo` with no paramters will [`Get`](#get-stuff) stuff, [`Test`](#test-stuff) it, then offer code for how to [`Repair`](#repair-stuff) identified issues (where possible).
 
