@@ -18,7 +18,7 @@ cd BlueTuxedo
 Import-Module .\BlueTuxedo.psd1 -Force
 Invoke-BlueTuxedo
 
-$ Use the testing branch - probably broken, but 🤷‍♀️
+# Use the testing branch - probably broken, but 🤷‍♀️
 git clone https://github.com/TrimarcJake/BlueTuxedo.git
 cd BlueTuxedo
 git checkout testing
