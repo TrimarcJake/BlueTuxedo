@@ -14,23 +14,42 @@ function Invoke-BlueTuxedo {
     # Get Data
     Write-Host 'Please hold. Collecting DNS data from the following domains:' -ForegroundColor Green
     Write-Host $Domains -ForegroundColor Yellow
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] ADI Zones"
     $ADIZones = Get-BTADIZone -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Conditional Forwarders"
     $ConditionalForwarders = Get-BTConditionalForwarder -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Dangling SPNs"
     $DanglingSPNs = Get-BTDanglingSPN -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] DNS Admins Memberships"
     $DnsAdminsMemberships = Get-BTDnsAdminsMembership -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] DNS Update Proxy Memberships"
     $DnsUpdateProxyMemberships = Get-BTDnsUpdateProxyMembership -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Dynamic Update Service Accounts"
     $DynamicUpdateServiceAccounts = Get-BTDynamicUpdateServiceAccount -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Forwarder Configuration"
     $ForwarderConfigurations = Get-BTForwarderConfiguration -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Global Query Blocklists"
     $GlobalQueryBlockLists = Get-BTGlobalQueryBlockList -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Non ADI Zones"
     $NonADIZones = Get-BTNonADIZone -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Query Resolution Policies"
     $QueryResolutionPolicys = Get-BTQueryResolutionPolicy -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptors"
     $SecurityDescriptors = Get-BTSecurityDescriptor -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Socket Pool Sizes"
     $SocketPoolSizes = Get-BTSocketPoolSize -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Tombstoned Nodes"
     $TombstonedNodes = Get-BTTombstonedNode -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Wildcard Records"
     $WildcardRecords = Get-BTWildcardRecord -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] WPAD Records"
     $WPADRecords = Get-BTWPADRecord -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Zone Scopes"
     $ZoneScopes = Get-BTZoneScope -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Zone Scope Containers"
     $ZoneScopeContainers = Get-BTZoneScopeContainer -ADIZones $ADIZones
+    Write-Host 'Finished collecting DNS data from the following domains:' -ForegroundColor Green
+    Write-Host $Domains -ForegroundColor Yellow
 
     # Test Data
     if ($Demo) { Clear-Host }
