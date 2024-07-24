@@ -44,8 +44,7 @@ Build-Module -ModuleName 'BlueTuxedo' {
         # those modules are builtin in PowerShell so no need to install them
         # could as well be ignored with New-ConfigurationModuleSkip
         'Microsoft.PowerShell.Utility'
-        'Microsoft.PowerShell.LocalAccounts',
-        'Microsoft.PowerShell.Utility'
+        'Microsoft.PowerShell.LocalAccounts'
         'Microsoft.PowerShell.Management'
     )
     foreach ($Module in $ExternalModules) {
