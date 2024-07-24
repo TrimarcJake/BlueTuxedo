@@ -7,7 +7,7 @@ function Repair-BTDanglingSPN {
     )
 
     if ($null -eq $DanglingSPNs) {
-        $DanglingSPNs = Get-BTDanglingSPN
+        #$DanglingSPNs = Get-BTDanglingSPN
     }
 
     if ($Run) {
