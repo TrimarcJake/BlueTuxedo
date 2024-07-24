@@ -54,17 +54,29 @@ function Invoke-BlueTuxedo {
     # Test Data
     if ($Demo) { Clear-Host }
     Write-Host 'Currently testing collected DNS data to identify possible issues...' -ForegroundColor Green
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] ADI Legacy Zones"
     $TestedADILegacyZones = Test-BTADILegacyZone -ADIZones $ADIZones
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] ADI Insecure Update Zones"
     $TestedADIInsecureUpdateZones = Test-BTADIInsecureUpdateZone -ADIZones $ADIZones
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Dynamic Update Service Accounts"
     $TestedDynamicUpdateServiceAccounts = Test-BTDynamicUpdateServiceAccount -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Forwarder Configurations"
     $TestedForwarderConfigurations = Test-BTForwarderConfiguration -ForwarderConfigurations $ForwarderConfigurations
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Global Query Block Lists"
     $TestedGlobalQueryBlockLists = Test-BTGlobalQueryBlockList -GlobalQueryBlockLists $GlobalQueryBlockLists
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor ACE"
     $TestedSecurityDescriptorACEs = Test-BTSecurityDescriptorACE -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor Owner"
     $TestedSecurityDescriptorOwners = Test-BTSecurityDescriptorOwner -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Socket Pool Sizes"
     $TestedSocketPoolSizes = Test-BTSocketPoolSize -SocketPoolSizes $SocketPoolSizes 
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Wildcard Records"
     $TestedWildcardRecords = Test-BTWildcardRecord -WildcardRecords $WildcardRecords
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] WPAD Records"
     $TestedWPADRecords = Test-BTWPADRecord -WPADRecords $WPADRecords
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Zone Scope Containers"
     $TestedZoneScopeContainers = Test-BTZoneScopeContainer -ZoneScopeContainers $ZoneScopeContainers
+    Write-Host 'Finished testing collected DNS data to identify possible issues.`n' -ForegroundColor Green
 
 
     # Display All Collected Data
