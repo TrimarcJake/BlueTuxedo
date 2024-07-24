@@ -1,4 +1,13 @@
 function Get-BTDanglingSPN {
+    <# Idea to make Get-BTDanglingSPN much faster:
+        - First grab all of the SPNs
+        - Check all of the hostnames:
+            - Extract a list of all SPNs' hostnames and remove the resulting duplicate hostnames (so we can just validate hosts)
+            - Check the deduplicated list of hostnames to see which ones resolve and then mark as pass/fail
+            - Optional: also check those that resolve to see which ones respond (?)
+            - For PowerShell 7+, use a parallel loop to speed up name resolution time even more
+        - Compare the [list of SPNs] with [the list of hostnames that do not resolve] and use this as the dangling SPN list
+    #>
     [CmdletBinding()]
     param (
         [Parameter()]
