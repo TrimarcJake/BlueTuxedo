@@ -63,18 +63,18 @@ function Get-BTDanglingSPN {
                 $HostnameResolves = $false
 
                 # Save time by only checking one of these if the first is successful. Don't always check both.
-                if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -Name $SPNHostName -ErrorAction Ignore) {
+                if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -Name $SPHostName -ErrorAction Ignore) {
                     $DnsResourceRecordExist = $true
-                } elseif (Resolve-DnsName -Name $SPNHostName -QuickTimeout -ErrorAction Ignore) {
+                } elseif (Resolve-DnsName -Name $SPHostName -QuickTimeout -ErrorAction Ignore) {
                     $HostnameResolves = $true
                 }
 
                 # If neither of the above are true, this is a dangling SPN.
                 if ( $DnsResourceRecordExist -or $HostnameResolves ) {
-                    Write-Host "$SPNHostName resolved OK." -ForegroundColor Green -BackgroundColor Black
+                    Write-Host "$SPHostName resolved OK." -ForegroundColor Green -BackgroundColor Black
                     continue
                 } else {
-                    Write-Host "$SPNHostName NOT resolved." -ForegroundColor Red -BackgroundColor Black
+                    Write-Host "$SPHostName NOT resolved." -ForegroundColor Red -BackgroundColor Black
                     $DanglingSPN = [PSCustomObject]@{
                         'Name'  = $principal.Name
                         'IdentityReference' = ConvertTo-IdentityReference -SID $principal.objectSID
@@ -83,7 +83,7 @@ function Get-BTDanglingSPN {
                     }
                     # Avoid adding duplicates
                     if ( ($DanglingSPNList.'DanglingSPN' -notcontains $DanglingSPN.'DanglingSPN') ) {
-                        Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Dangling SPN added for $SPNHostName."
+                        Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Dangling SPN added for $SPHostName."
                         $DanglingSPNList.Add($DanglingSPN)
                     }
                 }
