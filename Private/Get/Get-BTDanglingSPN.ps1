@@ -38,12 +38,11 @@ function Get-BTDanglingSPN {
                 } elseif ($SPHostName -match '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$') {
                     # Do not inspect domain controller SPNs as long as they are in the DC OU.
                     #$CheckSPN = $false
-                    Write-Host "$spn"
                     Write-Verbose "`n Domain controller GUID. [CheckSPN = $CheckSPN]"
                 } else {
                     # If the ServicePrincipal hostname does not match the principal's hostname, flag for inspection.
                     $CheckSPN = $true
-                    Write-Host "`n$spn" -ForegroundColor Red
+                    Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Inspecting: $spn" -ForegroundColor Cyan
                 }
             }
             if (-not $CheckSPN) {
@@ -71,10 +70,10 @@ function Get-BTDanglingSPN {
 
                 # If neither of the above are true, this is a dangling SPN.
                 if ( $DnsResourceRecordExist -or $HostnameResolves ) {
-                    Write-Host "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] $SPNHostName resolved OK." -ForegroundColor Green -BackgroundColor Black
+                    Write-Host "$SPNHostName resolved OK." -ForegroundColor Green -BackgroundColor Black
                     continue
                 } else {
-                    Write-Host "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] $SPNHostName NOT resolved." -ForegroundColor Red -BackgroundColor Black
+                    Write-Host "$SPNHostName NOT resolved." -ForegroundColor Red -BackgroundColor Black
                     $DanglingSPN = [PSCustomObject]@{
                         'Name'  = $principal.Name
                         'IdentityReference' = ConvertTo-IdentityReference -SID $principal.objectSID
