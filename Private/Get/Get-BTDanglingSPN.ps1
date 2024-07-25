@@ -30,9 +30,9 @@ function Get-BTDanglingSPN {
                     $dnsResourceRecordExist = $false
                     $hostnameResolves = $false
                     foreach ($rrtype in $RRTypes) {
-                        if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name $spnHost -ErrorAction Ignore) {
-                            $dnsResourceRecordExist = $true
-                        }
+                        # if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name $spnHost -ErrorAction Ignore) {
+                        #     $dnsResourceRecordExist = $true
+                        # }
 
                         if (Resolve-DnsName -Name $spnHost -Type $rrtype -ErrorAction Ignore) {
                             $hostnameResolves = $true
