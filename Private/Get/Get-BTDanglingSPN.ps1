@@ -9,10 +9,23 @@ function Get-BTDanglingSPN {
         $Domains = Get-BTTarget
     }
 
-    [System.Collections.Generic.List[PSCustomObject]]$danglingSPNList = @()
+    # Initialize the DanglingSPNList
+    [System.Collections.Generic.List[PSCustomObject]]$DanglingSPNList = @()
 
+    # Cache all DNS records from all domains to make lookups faster. Won't need Get-DnsServerResourceRecord or Resolve-DnsName.
+    # This is outside the next domain loop so all records will be available for the rest of the script.
+    Write-Host "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Getting DNS records from all domains." -ForegroundColor White -BackgroundColor Black
+    $DNSRecords = [ordered] @{}
     foreach ($domain in $Domains) {
-        # Get all objects with SPNs
+        $DomainDNSRecords = Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -ErrorAction SilentlyContinue
+        foreach ($DNS in $DomainDNSRecords) {
+            $DNSRecords[$DNS.HostName] = $DNS.RecordData.IPV4Address
+        }
+    }
+
+    # Analyze all SPNs in each domain.
+    foreach ($domain in $Domains) {
+        # Get all objects with SPNs.
         Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] Getting AD objects with SPNs." -ForegroundColor White -BackgroundColor Black
         $PrincipalWithSPN = Get-ADObject -Filter { ServicePrincipalName -ne "$null" -and ServicePrincipalName -ne 'kadmin/changepw' } -Properties * -Server $domain
         $PrincipalCount = $PrincipalWithSPN.Count
@@ -60,9 +73,13 @@ function Get-BTDanglingSPN {
 
                     # Check if DNS record exists for SPN hostname
                     $DnsResourceRecordExist = $false
-                    $HostnameResolves = $false
+                    #$HostnameResolves = $false
 
-                    # Save time by only checking one of these if the first is successful. Don't always check both.
+                    # Try to find or resolve the hostname in DNS
+                    if ($DNSRecords[$SPHostName]) {
+                        $DnsResourceRecordExist = $true
+                    }
+                    <# Won't need this if the above check for "cached" DNS records works!
                     if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -Name $SPHostName -ErrorAction Ignore) {
                         $DnsResourceRecordExist = $true
                     } elseif (Resolve-DnsName -Name $SPHostName -QuickTimeout -ErrorAction Ignore) {
@@ -70,9 +87,11 @@ function Get-BTDanglingSPN {
                     } else {
                         # Could track $Failed and automatically mark the rest of the SPNs on this principal as "dangling."
                     }
+                    #>
 
                     # If neither of the above are true, this is a dangling SPN.
-                    if ( $DnsResourceRecordExist -or $HostnameResolves ) {
+                    # if ( $DnsResourceRecordExist -or $HostnameResolves ) {
+                    if ( $DnsResourceRecordExist ) {
                         Write-Host "$SPHostName resolved OK." -ForegroundColor Green -BackgroundColor Black
                         continue
                     } else {
