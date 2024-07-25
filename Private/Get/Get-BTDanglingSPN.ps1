@@ -13,7 +13,7 @@ function Get-BTDanglingSPN {
 
     foreach ($domain in $Domains) {
         # Get all objects with SPNs
-        Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] Getting AD objects with SPNs.`n" -ForegroundColor White -BackgroundColor Black
+        Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] Getting AD objects with SPNs." -ForegroundColor White -BackgroundColor Black
         $PrincipalWithSPN = Get-ADObject -Filter { ServicePrincipalName -ne "$null" -and ServicePrincipalName -ne 'kadmin/changepw' } -Properties * -Server $domain
         $PrincipalCount = $PrincipalWithSPN.Count
         $PrincipalProgress = 0
@@ -26,7 +26,8 @@ function Get-BTDanglingSPN {
             $CheckSPN = $false
             foreach ($spn in ($principal.serviceprincipalname)) {
                 $PrincipalHostname = $principal.DnsHostName
-                $SPHostName = ($spn).Split('/')[1]
+                # Remove the service name, the forward slash, and the port from the SPN to get its hostname.
+                $SPHostName = ($spn).Split('/')[1].Split(':')[0]
                 if ($SPHostName -eq $PrincipalHostname) {
                     # Check if FQDNs match
                     #$CheckSPN = $false
