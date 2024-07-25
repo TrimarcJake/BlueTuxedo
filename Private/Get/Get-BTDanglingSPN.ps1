@@ -29,7 +29,7 @@ function Get-BTDanglingSPN {
         Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] Getting AD objects with SPNs." -ForegroundColor White -BackgroundColor Black
         $PrincipalWithSPN = Get-ADObject -Filter { ServicePrincipalName -ne "$null" -and ServicePrincipalName -ne 'kadmin/changepw' } -Properties * -Server $domain
         $PrincipalCount = $PrincipalWithSPN.Count
-        Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] Found $PrincipalCount AD objects with SPNs." -ForegroundColor White -BackgroundColor Black
+        Write-Host "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] Found $PrincipalCount AD objects with SPNs." -ForegroundColor White -BackgroundColor Black
 
         $PrincipalProgress = 0
         foreach ($principal in $PrincipalWithSPN) {
