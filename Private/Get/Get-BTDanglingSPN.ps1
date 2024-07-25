@@ -1,13 +1,4 @@
 function Get-BTDanglingSPN {
-    <# Idea to make Get-BTDanglingSPN much faster:
-        - First grab all of the SPNs
-        - Check all of the hostnames:
-            - Extract a list of all SPNs' hostnames and remove the resulting duplicate hostnames (so we can just validate hosts)
-            - Check the deduplicated list of hostnames to see which ones resolve and then mark as pass/fail
-            - Optional: also check those that resolve to see which ones respond (?)
-            - For PowerShell 7+, use a parallel loop to speed up name resolution time even more
-        - Compare the [list of SPNs] with [the list of hostnames that do not resolve] and use this as the dangling SPN list
-    #>
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -18,52 +9,88 @@ function Get-BTDanglingSPN {
         $Domains = Get-BTTarget
     }
 
-    $danglingSPNList = @()
+    [System.Collections.Generic.List[PSCustomObject]]$danglingSPNList = @()
 
     foreach ($domain in $Domains) {
-        # Get all objects w/SPNs
+        # Get all objects with SPNs
+        Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] Getting AD objects with SPNs.`n" -ForegroundColor White -BackgroundColor Black
         $PrincipalWithSPN = Get-ADObject -Filter { ServicePrincipalName -ne "$null" -and ServicePrincipalName -ne 'kadmin/changepw' } -Properties * -Server $domain
-
+        $PrincipalCount = $PrincipalWithSPN.Count
+        $PrincipalProgress = 0
         foreach ($principal in $PrincipalWithSPN) {
-            # Get SPN hostname and check if DNS record exists
-            foreach ($spn in $principal.ServicePrincipalName) {
+            ++$PrincipalProgress
+            Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] [$($principal.CanonicalName)]"
 
-                # Get SPN hostname
-                $spnHost = $spn.Split('/')[1]
-
-                # Regex filters out bare GUIDs. Intended for DCs, but need to add additional DC OU identification 
-                if ($spnHost -notmatch '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$') {  
-                    
-                    # Check if DNS record exists for SPN hostname
-                    $RRTypes = 'A', 'AAAA', 'TXT', 'CNAME'
-                    $dnsResourceRecordExist = $false
-                    $hostnameResolves = $false
-                    foreach ($rrtype in $RRTypes) {
-                        if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -RRType $rrtype -Name $spnHost -ErrorAction Ignore) {
-                            $dnsResourceRecordExist = $true
-                        }
-
-                        if (Resolve-DnsName -Name $spnHost -Type $rrtype -ErrorAction Ignore) {
-                            $hostnameResolves = $true
-                        }
-
-                        if ( $dnsResourceRecordExist -or $hostnameResolves ) {
-                        } else {
-                            $danglingSPN = [PSCustomObject]@{
-                                Name  = $principal.Name
-                                'Identity Reference' = ConvertTo-IdentityReference -SID $principal.objectSID
-                                'Dangling SPN' = $spn
-                                'Distinguished Name' = $principal.distinguishedName
-                            }
-
-                            if ( ($danglingSPNList.'Dangling SPN' -notcontains $danglingSPN.'Dangling SPN') ) {
-                                $danglingSPNList += $danglingSPN
-                            }
-                        }
-                    }
+            #region HostnameMatch
+            # Skip this principal if the hostname in each SPN matches the principal's hostname.
+            $CheckSPN = $false
+            foreach ($spn in ($principal.serviceprincipalname)) {
+                $PrincipalHostname = $principal.DnsHostName
+                $SPHostName = ($spn).Split('/')[1]
+                if ($SPHostName -eq $PrincipalHostname) {
+                    # Check if FQDNs match
+                    #$CheckSPN = $false
+                    Write-Verbose "$spn`n FQDN Match: `'$PrincipalHostname`' = `'$SPHostName`'. [CheckSPN = $CheckSPN]"
+                } elseif ( $($SPHostName+".$domain") -eq $PrincipalHostname ) {
+                    # Handle SPNs with short names for the host
+                    #$CheckSPN = $false
+                    Write-Verbose "`n Short Name Match: `'$PrincipalHostname`' = `'$($SPHostName+".$domain")`'. [CheckSPN = $CheckSPN]"
+                } elseif ($SPHostName -match '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$') {
+                    # Do not inspect domain controller SPNs as long as they are in the DC OU.
+                    #$CheckSPN = $false
+                    Write-Host "$spn"
+                    Write-Verbose "`n Domain controller GUID. [CheckSPN = $CheckSPN]"
+                } else {
+                    # If the ServicePrincipal hostname does not match the principal's hostname, flag for inspection.
+                    $CheckSPN = $true
+                    Write-Host "`n$spn" -ForegroundColor Red
                 }
             }
-        }
-    }
+            if (-not $CheckSPN) {
+                # If this principal is not flagged for inspection, continue to the next one.
+                continue
+            }
+            #endregion HostnameMatch
+
+            if ($CheckSPN) {
+            # Get SPN hostname and check if DNS record exists
+            foreach ($spn in $principal.ServicePrincipalName) {
+                # Get SPN hostname
+                $SPNHostName = $spn.Split('/')[1]
+
+                # Check if DNS record exists for SPN hostname
+                $DnsResourceRecordExist = $false
+                $HostnameResolves = $false
+
+                # Save time by only checking one of these if the first is successful. Don't always check both.
+                if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -Name $SPNHostName -ErrorAction Ignore) {
+                    $DnsResourceRecordExist = $true
+                } elseif (Resolve-DnsName -Name $SPNHostName -QuickTimeout -ErrorAction Ignore) {
+                    $HostnameResolves = $true
+                }
+
+                # If neither of the above are true, this is a dangling SPN.
+                if ( $DnsResourceRecordExist -or $HostnameResolves ) {
+                    Write-Host "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] $SPNHostName resolved OK." -ForegroundColor Green -BackgroundColor Black
+                    continue
+                } else {
+                    Write-Host "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] $SPNHostName NOT resolved." -ForegroundColor Red -BackgroundColor Black
+                    $DanglingSPN = [PSCustomObject]@{
+                        'Name'  = $principal.Name
+                        'IdentityReference' = ConvertTo-IdentityReference -SID $principal.objectSID
+                        'DanglingSPN' = $spn
+                        'DistinguishedName' = $principal.distinguishedName
+                    }
+                    # Avoid adding duplicates
+                    if ( ($DanglingSPNList.'DanglingSPN' -notcontains $DanglingSPN.'DanglingSPN') ) {
+                        Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Dangling SPN added for $SPNHostName."
+                        $DanglingSPNList.Add($DanglingSPN)
+                    }
+                }
+            } # end foreach SPN
+        } # end if CheckSPN
+        } # end foreach principal
+        Write-Host "$($PrincipalWithSPN.Count) principles found with SPNs in $domain." -ForegroundColor Cyan -BackgroundColor Black
+    } # end foreach domain
     $danglingSPNList
-}
+} # end function
