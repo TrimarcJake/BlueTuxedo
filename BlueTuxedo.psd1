@@ -12,6 +12,7 @@
     PrivateData          = @{
         PSData = @{
             ExternalModuleDependencies = @('ActiveDirectory', 'DhcpServer', 'DnsServer', 'DnsClient', 'Microsoft.PowerShell.Security', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.LocalAccounts', 'Microsoft.PowerShell.Management')
+            ProjectUri                 = 'https://github.com/TrimarcJake/BlueTuxedo'
             Tags                       = @('Windows', 'BlueTuxedo', 'DNS', 'AD', 'ActiveDirectory', 'DomainNameSystem', 'ADIDNS')
         }
     }

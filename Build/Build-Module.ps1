@@ -25,6 +25,7 @@ Build-Module -ModuleName 'BlueTuxedo' {
         Copyright            = "(c) 2023 - $((Get-Date).Year). All rights reserved."
         Description          = 'A tiny tool to identify and remediate common misconfigurations in Active Directory-Integrated DNS.'
         PowerShellVersion    = '5.1'
+        ProjectUri           = 'https://github.com/TrimarcJake/BlueTuxedo'
         Tags                 = @('Windows', 'BlueTuxedo', 'DNS', 'AD', 'ActiveDirectory', 'DomainNameSystem','ADIDNS')
     }
     New-ConfigurationManifest @Manifest
@@ -101,17 +102,14 @@ Build-Module -ModuleName 'BlueTuxedo' {
     New-ConfigurationBuild -Enable:$true -SignModule:$false -DeleteTargetModuleBeforeBuild -MergeModuleOnBuild -UseWildcardForFunctions
 
     $PreScriptMerge = {
-        param (
-            [int]$Mode
-        )
     }
 
-    $PostScriptMerge = { Invoke-BlueTuxedo -Mode $Mode }
+    $PostScriptMerge = { Invoke-BlueTuxedo }
 
     New-ConfigurationArtefact -Type Packed -Enable -Path "$PSScriptRoot\..\Artefacts\Packed" -ArtefactName '<ModuleName>.zip'
     New-ConfigurationArtefact -Type Script -Enable -Path "$PSScriptRoot\..\Artefacts\Script" -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName "Invoke-<ModuleName>.ps1"
     New-ConfigurationArtefact -Type ScriptPacked -Enable -Path "$PSScriptRoot\..\Artefacts\ScriptPacked" -ArtefactName "Invoke-<ModuleName>.zip" -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName "Invoke-<ModuleName>.ps1"
     New-ConfigurationArtefact -Type Unpacked -Enable -Path "$PSScriptRoot\..\Artefacts\Unpacked"
-
-    # Copy-Item "$PSScriptRoot\..\Artefacts\Script\Invoke-BlueTuxedo.ps1" "$PSScriptRoot\..\"
 }
+
+# Copy-Item "$PSScriptRoot\..\Artefacts\Script\Invoke-BlueTuxedo.ps1" "$PSScriptRoot\..\"
