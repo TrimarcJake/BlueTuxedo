@@ -56,7 +56,7 @@ function Get-BTDanglingSPN {
             # Get SPN hostname and check if DNS record exists
             foreach ($spn in $principal.ServicePrincipalName) {
                 # Get SPN hostname
-                $SPNHostName = $spn.Split('/')[1]
+                $SPHostName = ($spn).Split('/')[1].Split(':')[0]
 
                 # Check if DNS record exists for SPN hostname
                 $DnsResourceRecordExist = $false
