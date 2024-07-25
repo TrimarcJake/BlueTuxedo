@@ -53,42 +53,44 @@ function Get-BTDanglingSPN {
             #endregion HostnameMatch
 
             if ($CheckSPN) {
-            # Get SPN hostname and check if DNS record exists
-            foreach ($spn in $principal.ServicePrincipalName) {
-                # Get SPN hostname
-                $SPHostName = ($spn).Split('/')[1].Split(':')[0]
+                # Get SPN hostname and check if DNS record exists
+                foreach ($spn in $principal.ServicePrincipalName) {
+                    # Get SPN hostname
+                    $SPHostName = ($spn).Split('/')[1].Split(':')[0]
 
-                # Check if DNS record exists for SPN hostname
-                $DnsResourceRecordExist = $false
-                $HostnameResolves = $false
+                    # Check if DNS record exists for SPN hostname
+                    $DnsResourceRecordExist = $false
+                    $HostnameResolves = $false
 
-                # Save time by only checking one of these if the first is successful. Don't always check both.
-                if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -Name $SPHostName -ErrorAction Ignore) {
-                    $DnsResourceRecordExist = $true
-                } elseif (Resolve-DnsName -Name $SPHostName -QuickTimeout -ErrorAction Ignore) {
-                    $HostnameResolves = $true
-                }
-
-                # If neither of the above are true, this is a dangling SPN.
-                if ( $DnsResourceRecordExist -or $HostnameResolves ) {
-                    Write-Host "$SPHostName resolved OK." -ForegroundColor Green -BackgroundColor Black
-                    continue
-                } else {
-                    Write-Host "$SPHostName NOT resolved." -ForegroundColor Red -BackgroundColor Black
-                    $DanglingSPN = [PSCustomObject]@{
-                        'Name'  = $principal.Name
-                        'IdentityReference' = ConvertTo-IdentityReference -SID $principal.objectSID
-                        'DanglingSPN' = $spn
-                        'DistinguishedName' = $principal.distinguishedName
+                    # Save time by only checking one of these if the first is successful. Don't always check both.
+                    if (Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -Name $SPHostName -ErrorAction Ignore) {
+                        $DnsResourceRecordExist = $true
+                    } elseif (Resolve-DnsName -Name $SPHostName -QuickTimeout -ErrorAction Ignore) {
+                        $HostnameResolves = $true
+                    } else {
+                        # Could track $Failed and automatically mark the rest of the SPNs on this principal as "dangling."
                     }
-                    # Avoid adding duplicates
-                    if ( ($DanglingSPNList.'DanglingSPN' -notcontains $DanglingSPN.'DanglingSPN') ) {
-                        Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Dangling SPN added for $SPHostName."
-                        $DanglingSPNList.Add($DanglingSPN)
+
+                    # If neither of the above are true, this is a dangling SPN.
+                    if ( $DnsResourceRecordExist -or $HostnameResolves ) {
+                        Write-Host "$SPHostName resolved OK." -ForegroundColor Green -BackgroundColor Black
+                        continue
+                    } else {
+                        Write-Host "$SPHostName NOT resolved." -ForegroundColor Red -BackgroundColor Black
+                        $DanglingSPN = [PSCustomObject]@{
+                            'Name'  = $principal.Name
+                            'IdentityReference' = ConvertTo-IdentityReference -SID $principal.objectSID
+                            'DanglingSPN' = $spn
+                            'DistinguishedName' = $principal.distinguishedName
+                        }
+                        # Avoid adding duplicates
+                        if ( ($DanglingSPNList.'DanglingSPN' -notcontains $DanglingSPN.'DanglingSPN') ) {
+                            Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Dangling SPN added for $SPHostName."
+                            $DanglingSPNList.Add($DanglingSPN)
+                        }
                     }
-                }
-            } # end foreach SPN
-        } # end if CheckSPN
+                } # end foreach SPN
+            } # end if CheckSPN
         } # end foreach principal
         Write-Host "$($PrincipalWithSPN.Count) principles found with SPNs in $domain." -ForegroundColor Cyan -BackgroundColor Black
     } # end foreach domain
