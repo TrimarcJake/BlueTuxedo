@@ -1,4 +1,4 @@
-﻿if (Get-Module -Name 'PSPublishModule' -ListAvailable) { 
+﻿if (Get-Module -Name 'PSPublishModule' -ListAvailable) {
     Write-Information 'PSPublishModule is installed.'
 } else {
     Write-Information 'PSPublishModule is not installed. Attempting installation.'
@@ -18,7 +18,7 @@ Import-Module -Name PSPublishModule -Force
 Build-Module -ModuleName 'BlueTuxedo' {
     # Usual defaults as per standard module
     $Manifest = [ordered] @{
-        ModuleVersion        = '2024.1'
+        ModuleVersion        = '2024.7'
         CompatiblePSEditions = @('Desktop', 'Core')
         GUID                 = 'e98445b3-1d76-4a51-831d-ddfc7e0213fa'
         Author               = 'Jake Hildreth and Jim Sykora'
@@ -112,4 +112,4 @@ Build-Module -ModuleName 'BlueTuxedo' {
     New-ConfigurationArtefact -Type Unpacked -Enable -Path "$PSScriptRoot\..\Artefacts\Unpacked"
 }
 
-# Copy-Item "$PSScriptRoot\..\Artefacts\Script\Invoke-BlueTuxedo.ps1" "$PSScriptRoot\..\"
+Copy-Item "$PSScriptRoot\..\Artefacts\Script\Invoke-BlueTuxedo.ps1" "$PSScriptRoot\..\"
