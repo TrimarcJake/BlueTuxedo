@@ -99,7 +99,7 @@ function Get-BTDanglingSPN {
                         Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Inspecting: $spn" -ForegroundColor Cyan
                         # Try to find the hostname in internal DNS zones.
                         if ($DNSRecords[$SPNHostname] -or $DNSRecords["${SPNHostname}.${domain}"]) {
-                            # Chcek the cached internal DNS records for the hostname.
+                            # Check the cached internal DNS records for the hostname.
                             $DnsResourceRecordExist = $true
                             Write-Host "A DNS record was found for ${SPNHostname}." -ForegroundColor Green -BackgroundColor Black
                             continue
