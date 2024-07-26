@@ -50,7 +50,7 @@ function Get-BTDanglingSPN {
     process {
         # Cache all DNS records from all domains to make lookups faster. Will only need Resolve-DnsName for SPNs that refer to public names.
         # Keep this outside the other domain loop so all DNS records will be available for the entire script.
-        Write-Host "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Getting DNS records from all domains." -ForegroundColor White -BackgroundColor Black
+        Write-Host "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Getting DNS records from domains: $($Domains -join ', ')" -ForegroundColor White -BackgroundColor Black
         foreach ($domain in $Domains) {
             $DomainDNSRecords = Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $domain -ErrorAction SilentlyContinue
             foreach ($record in $DomainDNSRecords) {
@@ -96,31 +96,33 @@ function Get-BTDanglingSPN {
                         $CheckSPN = $true
                         $DnsResourceRecordExist = $false
 
-                        Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Inspecting: $spn" -ForegroundColor Cyan
+                        Write-Host "`n[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Inspecting: " -NoNewline -ForegroundColor White -BackgroundColor Black
+                        Write-Host "$spn" -NoNewline -ForegroundColor Cyan -BackgroundColor Black
+                        Write-Host " > " -NoNewline -ForegroundColor White -BackgroundColor Black
                         # Try to find the hostname in internal DNS zones.
                         if ($DNSRecords[$SPNHostname] -or $DNSRecords["${SPNHostname}.${domain}"]) {
                             # Check the cached internal DNS records for the hostname.
                             $DnsResourceRecordExist = $true
-                            Write-Host "A DNS record was found for ${SPNHostname}." -ForegroundColor Green -BackgroundColor Black
+                            Write-Host "[PASS] DNS record found." -ForegroundColor Green -BackgroundColor Black
                             continue
                         }
 
                         # Check for FQDNs not found in the internal $Domains list.
                         if ( ($SPNHostname -match $RegexHostname) -and -not (($domains | ForEach-Object {$SPNHostname.Contains($_)}) -contains $true) ) {
-                            Write-Host "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] [$domain] [$PrincipalProgress`/$PrincipalCount] Checking external hostname: $SPNHostname" -ForegroundColor Cyan
                             # Try to resolve the external hostname.
                             if (Resolve-DnsName -Name $SPNHostname -ErrorAction SilentlyContinue) {
                                 $DnsResourceRecordExist = $true
-                                Write-Host "$SPNHostname was resolved externally." -ForegroundColor Cyan -BackgroundColor Black
+                                Write-Host "[PASS] External DNS record found." -ForegroundColor Green -BackgroundColor Black
                             } else {
                                 # Might need more error handling, but basically the name didn't resolve and it is a dangling SPN.
+                                Write-Host "[FAIL] No DNS record found for $SPNHostname." -ForegroundColor Red -BackgroundColor Black
                                 $DnsResourceRecordExist = $false
                             }
                         }
 
                         # If a DNS record was not found, this is a dangling SPN.
                         if ( -not $DnsResourceRecordExist ) {
-                            Write-Host "A DNS record for $SPNHostname was NOT FOUND." -ForegroundColor Red -BackgroundColor Black
+                            Write-Host "[FAIL] No DNS record found for $SPNHostname." -ForegroundColor Red -BackgroundColor Black
                             $DanglingSPN = [PSCustomObject]@{
                                 'PrincipalIdentityReference' = ConvertTo-IdentityReference -SID $principal.objectSID
                                 'DanglingSPN' = $spn
