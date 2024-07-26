@@ -115,14 +115,14 @@ function Get-BTDanglingSPN {
                                 Write-Host "[PASS] External DNS record found." -ForegroundColor Green -BackgroundColor Black
                             } else {
                                 # Might need more error handling, but basically the name didn't resolve and it is a dangling SPN.
-                                Write-Host "[FAIL] No DNS record found for $SPNHostname." -ForegroundColor Red -BackgroundColor Black
+                                Write-Host "[FAIL] DNS record not found found for $SPNHostname." -ForegroundColor Red -BackgroundColor Black
                                 $DnsResourceRecordExist = $false
                             }
                         }
 
                         # If a DNS record was not found, this is a dangling SPN.
                         if ( -not $DnsResourceRecordExist ) {
-                            Write-Host "[FAIL] No DNS record found for $SPNHostname." -ForegroundColor Red -BackgroundColor Black
+                            Write-Host "[FAIL] DNS record not found found for $SPNHostname." -ForegroundColor Red -BackgroundColor Black
                             $DanglingSPN = [PSCustomObject]@{
                                 'PrincipalIdentityReference' = ConvertTo-IdentityReference -SID $principal.objectSID
                                 'DanglingSPN' = $spn
@@ -137,7 +137,7 @@ function Get-BTDanglingSPN {
                     } # end if/else hostname checks
                 } # end foreach SPN
             } # end foreach principal
-            Write-Host "$($PrincipalWithSPN.Count) principles found with SPNs in $domain." -ForegroundColor Cyan -BackgroundColor Black
+            Write-Host "Finished analzying $($PrincipalWithSPN.Count) principles with SPNs in $domain." -ForegroundColor Cyan -BackgroundColor Black
         } # end foreach domain
     } # end process block
 
