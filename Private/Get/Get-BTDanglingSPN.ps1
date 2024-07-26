@@ -15,9 +15,9 @@ function Get-BTDanglingSPN {
     Get dangling SPNs in all domains in the current forest.
 
     .EXAMPLE
-    Get-BTDanglingSPN -Domains 'domain.com'
+    $DanglingSPNs = Get-BTDanglingSPN -Domains 'domain.com' | Group-Object PrincipalIdentityReference
 
-    Get dangling SPNs in domain.com.
+    Get dangling SPNs in domain.com and group them by the principal they are attached to.
 
     .EXAMPLE
     Get-BTDanglingSPN -Domains @('domain1.com','domain2.com','domain3.com')
