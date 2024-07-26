@@ -9,7 +9,7 @@ function Invoke-BlueTuxedo {
     if ($Demo) { Clear-Host }
     $Domains = Get-BTTarget -Forest $Forest -InputPath $InputPath
 
-    Show-BTLogo -Version "v2024.2-testing"
+    Show-BTLogo -Version "v2024.7"
 
     # Get Data
     Write-Host 'Please hold. Collecting DNS data from the following domains:' -ForegroundColor Green
@@ -18,8 +18,8 @@ function Invoke-BlueTuxedo {
     $ADIZones = Get-BTADIZone -Domains $Domains
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Conditional Forwarders"
     $ConditionalForwarders = Get-BTConditionalForwarder -Domains $Domains
-    #Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Dangling SPNs"
-    #$DanglingSPNs = Get-BTDanglingSPN -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Dangling SPNs"
+    $DanglingSPNs = Get-BTDanglingSPN -Domains $Domains
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] DNS Admins Memberships"
     $DnsAdminsMemberships = Get-BTDnsAdminsMembership -Domains $Domains
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] DNS Update Proxy Memberships"
@@ -34,8 +34,8 @@ function Invoke-BlueTuxedo {
     $NonADIZones = Get-BTNonADIZone -Domains $Domains
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Query Resolution Policies"
     $QueryResolutionPolicys = Get-BTQueryResolutionPolicy -Domains $Domains
-    #Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptors"
-    #$SecurityDescriptors = Get-BTSecurityDescriptor -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptors"
+    $SecurityDescriptors = Get-BTSecurityDescriptor -Domains $Domains
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Socket Pool Sizes"
     $SocketPoolSizes = Get-BTSocketPoolSize -Domains $Domains
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Tombstoned Nodes"
@@ -98,12 +98,12 @@ function Invoke-BlueTuxedo {
     $TestedForwarderConfigurations = Test-BTForwarderConfiguration -ForwarderConfigurations $ForwarderConfigurations
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Global Query Block Lists"
     $TestedGlobalQueryBlockLists = Test-BTGlobalQueryBlockList -GlobalQueryBlockLists $GlobalQueryBlockLists
-    #Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor ACE"
-    #$TestedSecurityDescriptorACEs = Test-BTSecurityDescriptorACE -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
-    #Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor Owner"
-    #$TestedSecurityDescriptorOwners = Test-BTSecurityDescriptorOwner -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor ACE"
+    $TestedSecurityDescriptorACEs = Test-BTSecurityDescriptorACE -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+    Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor Owner"
+    $TestedSecurityDescriptorOwners = Test-BTSecurityDescriptorOwner -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Socket Pool Sizes"
-    $TestedSocketPoolSizes = Test-BTSocketPoolSize -SocketPoolSizes $SocketPoolSizes 
+    $TestedSocketPoolSizes = Test-BTSocketPoolSize -SocketPoolSizes $SocketPoolSizes
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Wildcard Records"
     $TestedWildcardRecords = Test-BTWildcardRecord -WildcardRecords $WildcardRecords
     Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] WPAD Records"
@@ -133,7 +133,7 @@ function Invoke-BlueTuxedo {
         'TestedWPADRecords' = $TestedWPADRecords
         'TestedZoneScopeContainers' = $TestedZoneScopeContainers
     }
-    
+
     # Display All Tested Data
     $show = Read-Host "Show possible DNS issues in the environment? [Y]/n"
     if (($show -eq 'y') -or ($show -eq '') -or ($null -eq $show) ) {
