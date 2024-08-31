@@ -3,12 +3,23 @@ function Show-BTLogo {
         [string]$Version
     )
 
-    Write-Host '      ::::::::: :::      :::    :::::::::::::::::::::::::::    ::::::    ::::::::::::::::::::::  :::::::: ' -ForegroundColor DarkMagenta -BackgroundColor Black
-    Write-Host '     :+:    :+::+:      :+:    :+::+:           :+:    :+:    :+::+:    :+::+:       :+:    :+::+:    :+: ' -ForegroundColor Magenta -BackgroundColor Black
-    Write-Host '    +:+    +:++:+      +:+    +:++:+           +:+    +:+    +:+ +:+  +:+ +:+       +:+    +:++:+    +:+  ' -ForegroundColor Magenta -BackgroundColor Black
-    Write-Host '   +#++:++#+ +#+      +#+    +:++#++:++#      +#+    +#+    +:+  +#++:+  +#++:++#  +#+    +:++#+    +:+   ' -ForegroundColor DarkBlue -BackgroundColor Black
-    Write-Host '  +#+    +#++#+      +#+    +#++#+           +#+    +#+    +#+ +#+  +#+ +#+       +#+    +#++#+    +#+    ' -ForegroundColor DarkBlue -BackgroundColor Black
-    Write-Host ' #+#    #+##+#      #+#    #+##+#           #+#    #+#    #+##+#    #+##+#       #+#    #+##+#    #+#     ' -ForegroundColor Blue -BackgroundColor Black
-    Write-Host '######### ################## ##########    ###     ######## ###    ######################  ########       ' -ForegroundColor Blue -BackgroundColor Black
-    Write-Host "                                                                                           v$Version"   
+    $BGColor = $host.UI.RawUI.BackgroundColor
+
+    Write-Host ' ' -BackgroundColor $BGColor
+    Write-Host '        :::::::::  :::       :::    ::: :::::::::: ::::::::::: :::    ::: :::    ::: :::::::::: :::::::::   ::::::::  ' -ForegroundColor DarkMagenta -BackgroundColor Black -NoNewline
+    Write-Host ' ' -BackgroundColor $BGColor
+    Write-Host '       :+:    :+: :+:       :+:    :+: :+:            :+:     :+:    :+: :+:    :+: :+:        :+:    :+: :+:    :+:  ' -ForegroundColor Magenta -BackgroundColor Black -NoNewline
+    Write-Host ' ' -BackgroundColor $BGColor
+    Write-Host '      +:+    +:+ +:+       +:+    +:+ +:+            +:+     +:+    +:+  +:+  +:+  +:+        +:+    +:+ +:+    +:+   ' -ForegroundColor Magenta -BackgroundColor Black -NoNewline
+    Write-Host ' ' -BackgroundColor $BGColor
+    Write-Host '     +#++:++#+  +#+       +#+    +:+ +#++:++#       +#+     +#+    +:+   +#++:+   +#++:++#   +#+    +:+ +#+    +:+    ' -ForegroundColor DarkBlue -BackgroundColor Black -NoNewline
+    Write-Host ' ' -BackgroundColor $BGColor
+    Write-Host '    +#+    +#+ +#+       +#+    +#+ +#+            +#+     +#+    +#+  +#+  +#+  +#+        +#+    +#+ +#+    +#+     ' -ForegroundColor DarkBlue -BackgroundColor Black -NoNewline
+    Write-Host ' ' -BackgroundColor $BGColor
+    Write-Host '   #+#    #+# #+#       #+#    #+# #+#            #+#     #+#    #+# #+#    #+# #+#        #+#    #+# #+#    #+#      ' -ForegroundColor Blue -BackgroundColor Black -NoNewline
+    Write-Host ' ' -BackgroundColor $BGColor
+    Write-Host '  #########  ######### #########  ##########     ###      ########  ###    ### ########## #########   ########        ' -ForegroundColor Blue -BackgroundColor Black -NoNewline
+    Write-Host ' ' -BackgroundColor $BGColor
+    Write-Host ' ' -BackgroundColor $BGColor
+    Write-Host "                                                                                                      v$Version"
 }
