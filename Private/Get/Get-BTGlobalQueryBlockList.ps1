@@ -2,30 +2,44 @@ function Get-BTGlobalQueryBlockList {
     [CmdletBinding()]
     param (
         [Parameter()]
-        [array]$Domains
+        [array]$Domains,
+
+        # Name of the DNS server[s] to exclude
+        [Parameter()]
+        [string[]]
+        $Exclude
     )
 
     if ($null -eq $Domains) {
         $Domains = Get-BTTarget
     }
 
-    $GlobalQueryBlockListList = @()
-    foreach ($domain in $Domains) {
-        $DNSServers = Resolve-DnsName -Type NS -Name $domain | Where-Object QueryType -eq 'A'
-        foreach ($dnsServer in $DNSServers) {
-            [array]$GlobalQueryBlockList = Get-DnsServerGlobalQueryBlockList -ComputerName $dnsServer.IP4Address
-            if ($GlobalQueryBlockListList.'Server IP' -notcontains $dnsServer.IP4Address) {
-                $AddToList = [PSCustomObject]@{
-                    'Server Name'   = $dnsServer.Name
-                    'Server IP'     = $dnsServer.IP4Address
-                    'Enabled?'      = $GlobalQueryBlockList.Enable
-                    GQBL            = $GlobalQueryBlockList.List
-                }
-            }
+    if ($null -eq $script:DNSServers) {
+        $script:DNSServers = Get-BTDnsServers -Domains $Domains -Exclude $Exclude
+    }
 
+    $GlobalQueryBlockListList = @()
+
+    foreach ($dnsServer in $script:DNSServers) {
+
+        # Enumerate the global query blocklists on each DNS server
+        [array]$ServerGQBLs = Get-DnsServerGlobalQueryBlockList -ComputerName $dnsServer.IPAddress
+
+        foreach ($gqbl in $ServerGQBLs) {
+            # Add it to the list with server information
+            $AddToList = [PSCustomObject]@{
+                'ServerName' = $($dnsServer.Name)
+                'ServerIP'   = $($dnsServer.IPAddress)
+                'Enabled'    = $($gqbl.Enable)
+                'GQBL'       = $($gqbl.List)
+            }
             $GlobalQueryBlockListList += $AddToList
         }
     }
 
+    if ($GlobalQueryBlockListList.Count -lt 1) {
+        Write-Host 'No global query blocklists were found.'
+    }
+    # Return the GlobalQueryBlockList object
     $GlobalQueryBlockListList
 }

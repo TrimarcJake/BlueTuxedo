@@ -2,14 +2,24 @@ function Get-BTTombstonedNode {
     [CmdletBinding()]
     param (
         [Parameter()]
-        [array]$Domains
+        [array]$Domains,
+
+        # Name of the DNS server[s] to exclude
+        [Parameter()]
+        [string[]]
+        $Exclude
     )
 
     if ($null -eq $Domains) {
         $Domains = Get-BTTarget
     }
 
+    if ($null -eq $script:DNSServers) {
+        $script:DNSServers = Get-BTDnsServers -Domains $Domains -Exclude $Exclude
+    }
+
     $TombstonedNodeList = @()
+
     foreach ($domain in $Domains) {
         $domainDN = (Get-ADDomain $domain).DistinguishedName
         $Zones = Get-DnsServerZone -ComputerName $domain
@@ -17,7 +27,11 @@ function Get-BTTombstonedNode {
             $Nodes = Get-DnsServerResourceRecord -ComputerName $domain -ZoneName $zone.ZoneName
             foreach ($node in $Nodes) {
                 if ($node.DistinguishedName -like "*$domainDN") {
-                    $nodeDetails = Get-ADObject -Identity $node.DistinguishedName -Properties dNSTombstoned -Server $domain
+                    try {
+                        $nodeDetails = Get-ADObject -Identity $node.DistinguishedName -Properties dNSTombstoned -Server $domain
+                    } catch {
+                        Write-Verbose "Unable to find tombstoned node $($node.DistinguishedName)" -Verbose
+                    }
                 }
                 if ($nodeDetails.dNSTombstoned) {
                     $AddToList = [PSCustomObject]@{
@@ -26,7 +40,7 @@ function Get-BTTombstonedNode {
                         'Record Type' = $node.RecordType
                         'Node DN'     = $node.DistinguishedName
                     }
-                
+
                     $TombstonedNodeList += $AddToList
                 }
             }
