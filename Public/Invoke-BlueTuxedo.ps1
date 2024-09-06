@@ -4,6 +4,8 @@ function Invoke-BlueTuxedo {
         [string]$Forest = (Get-ADForest).Name,
         [string]$InputPath,
         [switch]$ShowSecurityDescriptors = $false,
+        [switch]$ExportCollectedData,
+        [switch]$ExportTestedData,
         [switch]$Demo = $false
     )
 
@@ -73,7 +75,7 @@ function Invoke-BlueTuxedo {
     Write-Host 'Finished collecting DNS data from the following domains:' -ForegroundColor Green
     Write-Host $Domains -ForegroundColor Yellow
 
-    $CollectedData = @{
+    $CollectedData = [ordered]@{
         'ADIZones'                     = $ADIZones
         'ConditionalForwarders'        = $ConditionalForwarders
         'DanglingSPNs'                 = $DanglingSPNs
@@ -95,6 +97,15 @@ function Invoke-BlueTuxedo {
     }
     #endregion Get Data
 
+    # Export the collected data to an individual file for each test
+    if ($PSBoundParameters.ContainsKey('ExportCollectedData')) {
+        foreach ($item in $CollectedData.Keys) {
+            if ($CollectedData.$Item -and $CollectedData.item.ToString().Length -gt 0) {
+                Export-Results -Name "Collected $item" -Data $($CollectedData.$Item)
+            }
+        }
+    }
+
     # Display All Collected Data
     $show = Read-Host 'Show all collected DNS data? [Y]/n'
     if (($show -eq 'y') -or ($show -eq '') -or ($null -eq $show) ) {
@@ -112,31 +123,43 @@ function Invoke-BlueTuxedo {
     # Test Data
     if ($Demo) { Clear-Host }
     Write-Host 'Currently testing collected DNS data to identify possible issues...' -ForegroundColor Green
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] ADI Legacy Zones"
     $TestedADILegacyZones = Test-BTADILegacyZone -ADIZones $ADIZones
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] ADI Insecure Update Zones"
     $TestedADIInsecureUpdateZones = Test-BTADIInsecureUpdateZone -ADIZones $ADIZones
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Dynamic Update Service Accounts"
     $TestedDynamicUpdateServiceAccounts = Test-BTDynamicUpdateServiceAccount -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Forwarder Configurations"
     $TestedForwarderConfigurations = Test-BTForwarderConfiguration -ForwarderConfigurations $ForwarderConfigurations
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Global Query Block Lists"
     $TestedGlobalQueryBlockLists = Test-BTGlobalQueryBlockList -GlobalQueryBlockLists $GlobalQueryBlockLists
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor ACE"
     $TestedSecurityDescriptorACEs = Test-BTSecurityDescriptorACE -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor Owner"
     $TestedSecurityDescriptorOwners = Test-BTSecurityDescriptorOwner -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Socket Pool Sizes"
     $TestedSocketPoolSizes = Test-BTSocketPoolSize -SocketPoolSizes $SocketPoolSizes
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Wildcard Records"
     $TestedWildcardRecords = Test-BTWildcardRecord -WildcardRecords $WildcardRecords
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] WPAD Records"
     $TestedWPADRecords = Test-BTWPADRecord -WPADRecords $WPADRecords
+
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Zone Scope Containers"
     $TestedZoneScopeContainers = Test-BTZoneScopeContainer -ZoneScopeContainers $ZoneScopeContainers
+
     Write-Host 'Finished testing collected DNS data to identify possible issues.`n' -ForegroundColor Green
 
-    $TestedData = @{
+    $TestedData = [ordered]@{
         'ConditionalForwarders'              = $ConditionalForwarders
         'DanglingSPNs'                       = $DanglingSPNs
         'DnsAdminsMemberships'               = $DnsAdminsMemberships
@@ -156,6 +179,15 @@ function Invoke-BlueTuxedo {
         'TestedWildcardRecords'              = $TestedWildcardRecords
         'TestedWPADRecords'                  = $TestedWPADRecords
         'TestedZoneScopeContainers'          = $TestedZoneScopeContainers
+    }
+
+    # Export the tested data to individual files for each test
+    if ($PSBoundParameters.ContainsKey('ExportTestedData')) {
+        foreach ($item in $TestedData.Keys) {
+            if ($TestedData.$Item -and $TestedData.item.ToString().Length -gt 0) {
+                Export-Results -Name "Tested $item" -Data $TestedData.$Item
+            }
+        }
     }
 
     # Display All Tested Data
@@ -185,4 +217,8 @@ function Invoke-BlueTuxedo {
             Show-BTFixes @TestedData
         }
     }
+
+    # Return the TestedData
+    Write-Host 'Tested Data: '
+    return $TestedData
 }
