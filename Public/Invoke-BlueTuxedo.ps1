@@ -4,6 +4,7 @@ function Invoke-BlueTuxedo {
         [string]$Forest = (Get-ADForest).Name,
         [string]$InputPath,
         [switch]$ShowSecurityDescriptors = $false,
+        [string[]]$Exclude,
         [switch]$ExportCollectedData,
         [switch]$ExportTestedData,
         [switch]$Demo = $false
@@ -22,7 +23,7 @@ function Invoke-BlueTuxedo {
     $ADIZones = Get-BTADIZone -Domains $Domains
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Conditional Forwarders" -Verbose
-    $ConditionalForwarders = Get-BTConditionalForwarder -Domains $Domains
+    $ConditionalForwarders = Get-BTConditionalForwarder -Domains $Domains -Exclude $Exclude
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Dangling SPNs" -Verbose
     $DanglingSPNs = Get-BTDanglingSPN -Domains $Domains
@@ -37,28 +38,28 @@ function Invoke-BlueTuxedo {
     $DynamicUpdateServiceAccounts = Get-BTDynamicUpdateServiceAccount -Domains $Domains
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Forwarder Configuration" -Verbose
-    $ForwarderConfigurations = Get-BTForwarderConfiguration -Domains $Domains
+    $ForwarderConfigurations = Get-BTForwarderConfiguration -Domains $Domains -Exclude $Exclude
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Global Query Blocklists" -Verbose
-    $GlobalQueryBlockLists = Get-BTGlobalQueryBlockList -Domains $Domains
+    $GlobalQueryBlockLists = Get-BTGlobalQueryBlockList -Domains $Domains -Exclude $Exclude
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Name Protection Configuration Lists" -Verbose
-    $NameProtectionConfigurationLists = Get-BTNameProtectionConfiguration -Domains $Domains
+    #$NameProtectionConfigurationLists = Get-BTNameProtectionConfiguration -Domains $Domains
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Non ADI Zones" -Verbose
-    $NonADIZones = Get-BTNonADIZone -Domains $Domains
+    $NonADIZones = Get-BTNonADIZone -Domains $Domains -Exclude $Exclude
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Query Resolution Policies" -Verbose
-    $QueryResolutionPolicys = Get-BTQueryResolutionPolicy -Domains $Domains
+    $QueryResolutionPolicys = Get-BTQueryResolutionPolicy -Domains $Domains -Exclude $Exclude
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Security Descriptors" -Verbose
-    $SecurityDescriptors = Get-BTSecurityDescriptor -Domains $Domains
+    #Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptors" -Verbose
+    #$SecurityDescriptors = Get-BTSecurityDescriptor -Domains $Domains
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Socket Pool Sizes" -Verbose
-    $SocketPoolSizes = Get-BTSocketPoolSize -Domains $Domains
+    $SocketPoolSizes = Get-BTSocketPoolSize -Domains $Domains -Exclude $Exclude
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Tombstoned Nodes" -Verbose
-    $TombstonedNodes = Get-BTTombstonedNode -Domains $Domains
+    $TombstonedNodes = Get-BTTombstonedNode -Domains $Domains -Exclude $Exclude
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Wildcard Records" -Verbose
     $WildcardRecords = Get-BTWildcardRecord -Domains $Domains
@@ -67,7 +68,7 @@ function Invoke-BlueTuxedo {
     $WPADRecords = Get-BTWPADRecord -Domains $Domains
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Zone Scopes" -Verbose
-    $ZoneScopes = Get-BTZoneScope -Domains $Domains
+    $ZoneScopes = Get-BTZoneScope -Domains $Domains -Exclude $Exclude
 
     Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Zone Scope Containers" -Verbose
     $ZoneScopeContainers = Get-BTZoneScopeContainer -ADIZones $ADIZones
