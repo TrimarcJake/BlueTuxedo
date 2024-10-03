@@ -16,7 +16,7 @@ function Repair-BTTombstonedNode {
         }
     } else {
         foreach ($tombstonednode in $TombstonedNodes) {
-            Write-Host "Run the following code block to delete the $($tombstonednode.'Node Name') node from the $($tombstonednode.'Zonee Name') zone." -ForegroundColor Green
+            Write-Host "Run the following code block to delete the $($tombstonednode.'Node Name') node from the $($tombstonednode.'Zone Name') zone." -ForegroundColor Green
             Write-Host @"
 Remove-ADObject '$($tombstonednode.'Node DN')'
 
