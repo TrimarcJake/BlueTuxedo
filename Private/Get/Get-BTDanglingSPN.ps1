@@ -86,7 +86,7 @@ function Get-BTDanglingSPN {
                         # Construct FQDN from SPNHostname + Domain and check for an FQDN match with PrincipalHostname.
                         Write-Verbose "`n Short Name Match: `'$PrincipalHostname`' = `'${SPNHostname}.${domain}`'. [CheckSPN = $CheckSPN]"
                         continue
-                    } elseif ($SPNHostname -match '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$') {
+                    } elseif ($SPNHostname -match '[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?\._msdcs\.') {
                         # Do not inspect domain controller SPNs as long as they are in the DC OU.
                         ## NEED TO ADD EXTRA VALIDATION ##
                         Write-Verbose "`n Domain controller GUID. [CheckSPN = $CheckSPN]"
@@ -124,8 +124,8 @@ function Get-BTDanglingSPN {
                         if ( -not $DnsResourceRecordExist ) {
                             Write-Host "[FAIL] DNS record not found found for $SPNHostname." -ForegroundColor Red -BackgroundColor Black
                             $DanglingSPN = [PSCustomObject]@{
-                                'PrincipalIdentityReference' = ConvertTo-IdentityReference -SID $principal.objectSID
-                                'DanglingSPN' = $spn
+                                'Identity Reference' = ConvertTo-IdentityReference -SID $principal.objectSID
+                                'Dangling SPN' = $spn
                                 'PrincipalDistinguishedName' = $principal.distinguishedName
                             }
                             # Avoid adding duplicates to the list (construct a unique key from the CN + SPN).
