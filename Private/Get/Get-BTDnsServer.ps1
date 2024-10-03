@@ -1,4 +1,4 @@
-function Get-BTDnsServers {
+function Get-BTDnsServer {
     [CmdletBinding()]
     param (
         # Domains to inspect
@@ -36,10 +36,15 @@ function Get-BTDnsServers {
 
     # Loop through each domain
     foreach ($domain in $Domains) {
-
         # Find and loop through each DNS server
-        $DNSServers = Resolve-DnsName -Type NS -Name $domain | Where-Object { $ExcludeList -notin $_.Name } | Where-Object { $_.QueryType -eq 'A' } | Sort-Object Name
-        $DnsServerList += $DNSServers
+        $DnsServers = @(Resolve-DnsName -Type NS -Name $domain |
+            Where-Object {$ExcludeList -notin $_.Name } |
+            Where-Object { $_.QueryType -eq 'A' } |
+            Sort-Object Name)
+        $DnsServers | ForEach-Object {
+            $_ | Add-Member -NotePropertyName Domain -NotePropertyValue $domain -Force
+        }
+        $DnsServerList += $DnsServers
     }
 
     Write-Verbose "Found $($DNSServers.Count) DNS servers in $($Domains.Count) domains."

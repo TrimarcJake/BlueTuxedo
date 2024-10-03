@@ -5,76 +5,76 @@ function Invoke-BlueTuxedo {
         [string]$InputPath,
         [switch]$ShowSecurityDescriptors = $false,
         [string[]]$Exclude,
-        [switch]$ExportCollectedData,
-        [switch]$ExportTestedData,
+        [switch]$ExportCollectedData = $false,
+        [switch]$ExportTestedData = $false,
         [switch]$Demo = $false
     )
 
     if ($Demo) { Clear-Host }
-    Show-BTLogo -Version 'v2024.2-testing'
+    Show-BTLogo -Version '2024.10-testing'
 
     $Domains = Get-BTTarget -Forest $Forest -InputPath $InputPath
 
     #region Get Data
     Write-Host 'Please hold. Collecting DNS data from the following domains:' -ForegroundColor Green
-    Write-Host $Domains -ForegroundColor Yellow
+    Write-Host $Domains.split(' ') -ForegroundColor Yellow
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] ADI Zones" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting ADI Zones" -Verbose
     $ADIZones = Get-BTADIZone -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Conditional Forwarders" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Conditional Forwarders" -Verbose
     $ConditionalForwarders = Get-BTConditionalForwarder -Domains $Domains -Exclude $Exclude
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Dangling SPNs" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Dangling SPNs" -Verbose
     $DanglingSPNs = Get-BTDanglingSPN -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] DNS Admins Memberships" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting DNS Admins Memberships" -Verbose
     $DnsAdminsMemberships = Get-BTDnsAdminsMembership -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] DNS Update Proxy Memberships" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting DNS Update Proxy Memberships" -Verbose
     $DnsUpdateProxyMemberships = Get-BTDnsUpdateProxyMembership -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Dynamic Update Service Accounts" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Dynamic Update Service Accounts" -Verbose
     $DynamicUpdateServiceAccounts = Get-BTDynamicUpdateServiceAccount -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Forwarder Configuration" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Forwarder Configuration" -Verbose
     $ForwarderConfigurations = Get-BTForwarderConfiguration -Domains $Domains -Exclude $Exclude
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Global Query Blocklists" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Global Query Blocklists" -Verbose
     $GlobalQueryBlockLists = Get-BTGlobalQueryBlockList -Domains $Domains -Exclude $Exclude
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Name Protection Configuration Lists" -Verbose
-    #$NameProtectionConfigurationLists = Get-BTNameProtectionConfiguration -Domains $Domains
+    # Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Name Protection Configuration Lists" -Verbose
+    # $NameProtectionConfigurationLists = Get-BTNameProtectionConfiguration -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Non ADI Zones" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Non ADI Zones" -Verbose
     $NonADIZones = Get-BTNonADIZone -Domains $Domains -Exclude $Exclude
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Query Resolution Policies" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Query Resolution Policies" -Verbose
     $QueryResolutionPolicys = Get-BTQueryResolutionPolicy -Domains $Domains -Exclude $Exclude
 
-    #Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Security Descriptors" -Verbose
-    #$SecurityDescriptors = Get-BTSecurityDescriptor -Domains $Domains
+    # Write-Verbose "[$(Get-Date -format 'yyyy-MM-dd hh:mm:ss')] Collecting Security Descriptors" -Verbose
+    # $SecurityDescriptors = Get-BTSecurityDescriptor -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Socket Pool Sizes" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Socket Pool Sizes" -Verbose
     $SocketPoolSizes = Get-BTSocketPoolSize -Domains $Domains -Exclude $Exclude
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Tombstoned Nodes" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Tombstoned Nodes" -Verbose
     $TombstonedNodes = Get-BTTombstonedNode -Domains $Domains -Exclude $Exclude
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Wildcard Records" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Wildcard Records" -Verbose
     $WildcardRecords = Get-BTWildcardRecord -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] WPAD Records" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting WPAD Records" -Verbose
     $WPADRecords = Get-BTWPADRecord -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Zone Scopes" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Zone Scopes" -Verbose
     $ZoneScopes = Get-BTZoneScope -Domains $Domains -Exclude $Exclude
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Zone Scope Containers" -Verbose
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Collecting Zone Scope Containers" -Verbose
     $ZoneScopeContainers = Get-BTZoneScopeContainer -ADIZones $ADIZones
 
     Write-Host 'Finished collecting DNS data from the following domains:' -ForegroundColor Green
-    Write-Host $Domains -ForegroundColor Yellow
+    Write-Host $Domains.split(' ')-ForegroundColor Yellow
 
     $CollectedData = [ordered]@{
         'ADIZones'                     = $ADIZones
@@ -85,10 +85,10 @@ function Invoke-BlueTuxedo {
         'DynamicUpdateServiceAccounts' = $DynamicUpdateServiceAccounts
         'ForwarderConfigurations'      = $ForwarderConfigurations
         'GlobalQueryBlockLists'        = $GlobalQueryBlockLists
-        #'NameProtectionLists'         = $NameProtectionConfigurationLists
+        # 'NameProtectionLists'         = $NameProtectionConfigurationLists
         'NonADIZones'                  = $NonADIZones
         'QueryResolutionPolicys'       = $QueryResolutionPolicys
-        'SecurityDescriptors'          = $SecurityDescriptors
+        # 'SecurityDescriptors'          = $SecurityDescriptors
         'SocketPoolSizes'              = $SocketPoolSizes
         'TombstonedNodes'              = $TombstonedNodes
         'WildcardRecords'              = $WildcardRecords
@@ -99,7 +99,7 @@ function Invoke-BlueTuxedo {
     #endregion Get Data
 
     # Export the collected data to an individual file for each test
-    if ($PSBoundParameters.ContainsKey('ExportCollectedData')) {
+    if ($ExportCollectedData) {
         foreach ($item in $CollectedData.Keys) {
             if ($CollectedData.$Item -and $CollectedData.item.ToString().Length -gt 0) {
                 Export-Results -Name "Collected $item" -Data $($CollectedData.$Item)
@@ -125,40 +125,40 @@ function Invoke-BlueTuxedo {
     if ($Demo) { Clear-Host }
     Write-Host 'Currently testing collected DNS data to identify possible issues...' -ForegroundColor Green
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] ADI Legacy Zones"
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing ADI Legacy Zones"
     $TestedADILegacyZones = Test-BTADILegacyZone -ADIZones $ADIZones
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] ADI Insecure Update Zones"
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing ADI Insecure Update Zones"
     $TestedADIInsecureUpdateZones = Test-BTADIInsecureUpdateZone -ADIZones $ADIZones
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Dynamic Update Service Accounts"
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing Dynamic Update Service Accounts"
     $TestedDynamicUpdateServiceAccounts = Test-BTDynamicUpdateServiceAccount -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Forwarder Configurations"
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing Forwarder Configurations"
     $TestedForwarderConfigurations = Test-BTForwarderConfiguration -ForwarderConfigurations $ForwarderConfigurations
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Global Query Block Lists"
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing Global Query Block Lists"
     $TestedGlobalQueryBlockLists = Test-BTGlobalQueryBlockList -GlobalQueryBlockLists $GlobalQueryBlockLists
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor ACE"
-    $TestedSecurityDescriptorACEs = Test-BTSecurityDescriptorACE -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+    # Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing Security Descriptor ACE"
+    # $TestedSecurityDescriptorACEs = Test-BTSecurityDescriptorACE -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Security Descriptor Owner"
-    $TestedSecurityDescriptorOwners = Test-BTSecurityDescriptorOwner -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
+    # Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing Security Descriptor Owner"
+    # $TestedSecurityDescriptorOwners = Test-BTSecurityDescriptorOwner -SecurityDescriptors $SecurityDescriptors -DynamicUpdateServiceAccounts $DynamicUpdateServiceAccounts -Domains $Domains
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Socket Pool Sizes"
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing Socket Pool Sizes"
     $TestedSocketPoolSizes = Test-BTSocketPoolSize -SocketPoolSizes $SocketPoolSizes
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Wildcard Records"
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing Wildcard Records"
     $TestedWildcardRecords = Test-BTWildcardRecord -WildcardRecords $WildcardRecords
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] WPAD Records"
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing WPAD Records"
     $TestedWPADRecords = Test-BTWPADRecord -WPADRecords $WPADRecords
 
-    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Zone Scope Containers"
+    Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Testing Zone Scope Containers"
     $TestedZoneScopeContainers = Test-BTZoneScopeContainer -ZoneScopeContainers $ZoneScopeContainers
 
-    Write-Host 'Finished testing collected DNS data to identify possible issues.`n' -ForegroundColor Green
+    Write-Host "Finished testing collected DNS data to identify possible issues.`n" -ForegroundColor Green
 
     $TestedData = [ordered]@{
         'ConditionalForwarders'              = $ConditionalForwarders
@@ -183,7 +183,7 @@ function Invoke-BlueTuxedo {
     }
 
     # Export the tested data to individual files for each test
-    if ($PSBoundParameters.ContainsKey('ExportTestedData')) {
+    if ($ExportTestedData) {
         foreach ($item in $TestedData.Keys) {
             if ($TestedData.$Item -and $TestedData.item.ToString().Length -gt 0) {
                 Export-Results -Name "Tested $item" -Data $TestedData.$Item

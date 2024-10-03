@@ -15,7 +15,7 @@ function Get-BTForwarderConfiguration {
     }
 
     if ($null -eq $script:DNSServers) {
-        $script:DNSServers = Get-BTDnsServers -Domains $Domains -Exclude $Exclude
+        $script:DNSServers = Get-BTDnsServer -Domains $Domains -Exclude $Exclude
     }
 
     $ForwarderList = @()

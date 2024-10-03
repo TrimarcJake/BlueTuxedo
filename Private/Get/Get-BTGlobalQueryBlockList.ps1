@@ -15,7 +15,7 @@ function Get-BTGlobalQueryBlockList {
     }
 
     if ($null -eq $script:DNSServers) {
-        $script:DNSServers = Get-BTDnsServers -Domains $Domains -Exclude $Exclude
+        $script:DNSServers = Get-BTDnsServer -Domains $Domains -Exclude $Exclude
     }
 
     $GlobalQueryBlockListList = @()
@@ -28,10 +28,10 @@ function Get-BTGlobalQueryBlockList {
         foreach ($gqbl in $ServerGQBLs) {
             # Add it to the list with server information
             $AddToList = [PSCustomObject]@{
-                'ServerName' = $($dnsServer.Name)
-                'ServerIP'   = $($dnsServer.IPAddress)
-                'Enabled'    = $($gqbl.Enable)
-                'GQBL'       = $($gqbl.List)
+                'Server Name' = $($dnsServer.Name)
+                'Server IP'   = $($dnsServer.IPAddress)
+                'Enabled?'    = $($gqbl.Enable)
+                'GQBL'        = $($gqbl.List)
             }
             $GlobalQueryBlockListList += $AddToList
         }

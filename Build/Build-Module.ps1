@@ -51,7 +51,7 @@ Build-Module -ModuleName 'BlueTuxedo' {
         New-ConfigurationModule -Type ExternalModule -Name $Module
     }
 
-    New-ConfigurationModuleSkip -IgnoreFunctionName 'Clear-Host'
+    New-ConfigurationModuleSkip -IgnoreFunctionName 'Clear-Host', 'Pause'
 
     $ConfigurationFormat = [ordered] @{
         RemoveComments                              = $false
@@ -123,5 +123,3 @@ Build-Module -ModuleName 'BlueTuxedo' {
     New-ConfigurationArtefact -Type ScriptPacked -Enable -Path "$PSScriptRoot\..\Artefacts\ScriptPacked" -ArtefactName 'Invoke-<ModuleName>.zip' -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName 'Invoke-<ModuleName>.ps1'
     New-ConfigurationArtefact -Type Unpacked -Enable -Path "$PSScriptRoot\..\Artefacts\Unpacked"
 }
-
-Copy-Item "$PSScriptRoot\..\Artefacts\Script\Invoke-BlueTuxedo.ps1" "$PSScriptRoot\..\"

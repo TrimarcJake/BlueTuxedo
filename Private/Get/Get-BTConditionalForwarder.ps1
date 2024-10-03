@@ -15,7 +15,7 @@ function Get-BTConditionalForwarder {
     }
 
     if ($null -eq $script:DNSServers) {
-        $script:DNSServers = Get-BTDnsServers -Domains $Domains -Exclude $Exclude
+        $script:DNSServers = Get-BTDnsServer -Domains $Domains -Exclude $Exclude
     }
 
     $ZoneList = @()
@@ -32,7 +32,7 @@ function Get-BTConditionalForwarder {
         # Loop through each zone on the server
         foreach ($zone in $Zones) {
             $AddToList = [PSCustomObject]@{
-                'Domain'    = $domain
+                'Domain'    = $dnsServer.Domain
                 'Zone Name' = $zone.ZoneName
             }
 
