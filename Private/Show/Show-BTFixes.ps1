@@ -44,13 +44,13 @@ function Show-BTFixes {
     )
 
     $TitleHashtable = @{
-        'Section' = 'Friendly Name'
+        'Section'               = 'Friendly Name'
         'TestedSocketPoolSizes' = 'Set Socket Pool Size To Maximum'
-        'TombstonedNodes' = 'Delete All Tombstoned Nodes'
+        'TombstonedNodes'       = 'Delete All Tombstoned Nodes'
         'TestedWildcardRecords' = 'Fix Wildcard Record Configuration by Domain'
-        'TestedWPADRecords' = 'Fix WPAD Record Configuration by Domain'
-        'DanglingSPNs' = 'Delete Dangling SPNs'
-        'TestedADILegacyZones' = 'Convert Legacy Zones to ForestDNS Zones'
+        'TestedWPADRecords'     = 'Fix WPAD Record Configuration by Domain'
+        'DanglingSPNs'          = 'Delete Dangling SPNs'
+        'TestedADILegacyZones'  = 'Convert Legacy Zones to ForestDNS Zones'
     }
 
     if ($ShowSecurityDescriptors) {
@@ -63,6 +63,8 @@ function Show-BTFixes {
             if ($null -ne (Get-Variable $entry).Value) {
                 if ($Demo) { Clear-Host }
                 Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
+                $SectionScriptBlock = "Repair-BT$entry"
+                $SectionScriptBlock = $SectionScriptBlock.TrimEnd('s') + " -$entry `$$entry"
                 $ScriptBlock = [scriptblock]::Create($SectionScriptBlock)
                 Invoke-Command -ScriptBlock $ScriptBlock
                 Write-Host "\--------------- $Title ---------------/" -ForegroundColor Green
@@ -75,8 +77,7 @@ function Show-BTFixes {
         Write-Host "/--------------- $Title ---------------\" -ForegroundColor Green
         if ($null -eq (Get-Variable $Section).Value) {
             Write-Host "No data collected for $Title" -ForegroundColor Yellow
-        }
-        else {
+        } else {
             $SectionScriptBlock = "Repair-BT$Section"
             $SectionScriptBlock = $SectionScriptBlock.TrimEnd('s') + " -$Section `$$Section"
             $ScriptBlock = [scriptblock]::Create($SectionScriptBlock)
