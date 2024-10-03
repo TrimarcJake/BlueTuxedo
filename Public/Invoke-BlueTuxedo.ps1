@@ -11,7 +11,7 @@ function Invoke-BlueTuxedo {
     )
 
     if ($Demo) { Clear-Host }
-    Show-BTLogo -Version '2024.10-testing'
+    Show-BTLogo -Version '2024.10'
 
     $Domains = Get-BTTarget -Forest $Forest -InputPath $InputPath
 
