@@ -1,4 +1,4 @@
-function Repair-BTSocketPoolSize {
+function Repair-BTTestedSocketPoolSize {
     [CmdletBinding()]
     param (
         [Parameter()]

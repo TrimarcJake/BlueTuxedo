@@ -1,4 +1,4 @@
-﻿if (Get-Module -Name 'PSPublishModule' -ListAvailable) { 
+﻿if (Get-Module -Name 'PSPublishModule' -ListAvailable) {
     Write-Information 'PSPublishModule is installed.'
 } else {
     Write-Information 'PSPublishModule is not installed. Attempting installation.'
@@ -6,8 +6,7 @@
         Install-Module -Name Pester -AllowClobber -Scope CurrentUser -SkipPublisherCheck -Force
         Install-Module -Name PSScriptAnalyzer -Scope CurrentUser -Force
         Install-Module -Name PSPublishModule -AllowClobber -Scope CurrentUser -Force
-    }
-    catch {
+    } catch {
         Write-Error 'PSPublishModule installation failed.'
     }
 }
@@ -18,14 +17,15 @@ Import-Module -Name PSPublishModule -Force
 Build-Module -ModuleName 'BlueTuxedo' {
     # Usual defaults as per standard module
     $Manifest = [ordered] @{
-        ModuleVersion        = '2024.1'
+        ModuleVersion        = '2024.10'
         CompatiblePSEditions = @('Desktop', 'Core')
         GUID                 = 'e98445b3-1d76-4a51-831d-ddfc7e0213fa'
         Author               = 'Jake Hildreth and Jim Sykora'
         Copyright            = "(c) 2023 - $((Get-Date).Year). All rights reserved."
         Description          = 'A tiny tool to identify and remediate common misconfigurations in Active Directory-Integrated DNS.'
         PowerShellVersion    = '5.1'
-        Tags                 = @('Windows', 'BlueTuxedo', 'DNS', 'AD', 'ActiveDirectory', 'DomainNameSystem','ADIDNS')
+        ProjectUri           = 'https://github.com/TrimarcJake/BlueTuxedo'
+        Tags                 = @('Windows', 'BlueTuxedo', 'DNS', 'AD', 'ActiveDirectory', 'DomainNameSystem', 'ADIDNS')
     }
     New-ConfigurationManifest @Manifest
 
@@ -44,15 +44,14 @@ Build-Module -ModuleName 'BlueTuxedo' {
         # those modules are builtin in PowerShell so no need to install them
         # could as well be ignored with New-ConfigurationModuleSkip
         'Microsoft.PowerShell.Utility'
-        'Microsoft.PowerShell.LocalAccounts',
-        'Microsoft.PowerShell.Utility'
+        'Microsoft.PowerShell.LocalAccounts'
         'Microsoft.PowerShell.Management'
     )
     foreach ($Module in $ExternalModules) {
         New-ConfigurationModule -Type ExternalModule -Name $Module
     }
 
-    New-ConfigurationModuleSkip -IgnoreFunctionName 'Clear-Host'
+    New-ConfigurationModuleSkip -IgnoreFunctionName 'Clear-Host', 'Pause'
 
     $ConfigurationFormat = [ordered] @{
         RemoveComments                              = $false
@@ -103,16 +102,25 @@ Build-Module -ModuleName 'BlueTuxedo' {
 
     $PreScriptMerge = {
         param (
-            [int]$Mode
+            # DNS server(s) to exclude from checks.
+            [string[]]$Exclude
         )
+
     }
 
-    $PostScriptMerge = { Invoke-BlueTuxedo -Mode $Mode }
+    $PostScriptMerge = {
+
+        if ($Exclude) {
+            $BTData = Invoke-BlueTuxedo -Exclude $Exclude -ExportCollectedData -ExportTestedData
+        } else {
+            $BTData = Invoke-BlueTuxedo -ExportCollectedData -ExportTestedData
+        }
+        $BTData
+    }
 
     New-ConfigurationArtefact -Type Packed -Enable -Path "$PSScriptRoot\..\Artefacts\Packed" -ArtefactName '<ModuleName>.zip'
-    New-ConfigurationArtefact -Type Script -Enable -Path "$PSScriptRoot\..\Artefacts\Script" -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName "Invoke-<ModuleName>.ps1"
-    New-ConfigurationArtefact -Type ScriptPacked -Enable -Path "$PSScriptRoot\..\Artefacts\ScriptPacked" -ArtefactName "Invoke-<ModuleName>.zip" -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName "Invoke-<ModuleName>.ps1"
+    New-ConfigurationArtefact -Type Script -Enable -Path "$PSScriptRoot\..\Artefacts\Script" -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName 'Invoke-<ModuleName>.ps1'
+    New-ConfigurationArtefact -Type ScriptPacked -Enable -Path "$PSScriptRoot\..\Artefacts\ScriptPacked" -ArtefactName 'Invoke-<ModuleName>.zip' -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName 'Invoke-<ModuleName>.ps1'
     New-ConfigurationArtefact -Type Unpacked -Enable -Path "$PSScriptRoot\..\Artefacts\Unpacked"
-
-    # Copy-Item "$PSScriptRoot\..\Artefacts\Script\Invoke-BlueTuxedo.ps1" "$PSScriptRoot\..\"
+    New-ConfigurationPublish -Type PowerShellGallery -FilePath 'C:\Users\jake.BLUETUXEDO\Documents\API Keys\PSGallery.txt'
 }

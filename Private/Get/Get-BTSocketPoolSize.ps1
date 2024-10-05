@@ -2,28 +2,37 @@ function Get-BTSocketPoolSize {
     [CmdletBinding()]
     param (
         [Parameter()]
-        [array]$Domains
+        [array]$Domains,
+
+        # Name of the DNS server[s] to exclude
+        [Parameter()]
+        [string[]]
+        $Exclude
     )
 
     if ($null -eq $Domains) {
         $Domains = Get-BTTarget
     }
 
-    $SocketPoolSizeList = @()
-    foreach ($domain in $Domains) {
-        $DNSServers = Resolve-DnsName -Type NS -Name $domain | Where-Object QueryType -eq 'A'
-        foreach ($dnsServer in $DNSServers) {
-            [int32]$SocketPoolSize = (Get-DnsServerSetting -ComputerName $dnsServer.IP4Address -All -WarningAction Ignore).SocketPoolSize
-            if ($SocketPoolSizeList.'Server IP' -notcontains $dnsServer.IP4Address) {
-                $AddToList = [PSCustomObject]@{
-                    'Server Name'         = $dnsServer.Name
-                    'Server IP'           = $dnsServer.IP4Address
-                    'Socket Pool Size'    = $SocketPoolSize
-                }
-            }
+    if ($null -eq $script:DNSServers) {
+        $script:DNSServers = Get-BTDnsServer -Domains $Domains -Exclude $Exclude
+    }
 
-            $SocketPoolSizeList += $AddToList
+    $SocketPoolSizeList = @()
+
+    foreach ($dnsServer in $script:DNSServers) {
+
+        # Enumerate the socket pool size on each DNS server.
+        [int32]$SocketPoolSize = (Get-DnsServerSetting -ComputerName $dnsServer.IPAddress -All -WarningAction Ignore).SocketPoolSize
+        if ($SocketPoolSizeList.'Server IP' -notcontains $dnsServer.IPAddress) {
+            $AddToList = [PSCustomObject]@{
+                'Server Name'      = $dnsServer.Name
+                'Server IP'        = $dnsServer.IPAddress
+                'Socket Pool Size' = $SocketPoolSize
+            }
         }
+
+        $SocketPoolSizeList += $AddToList
     }
 
     $SocketPoolSizeList
