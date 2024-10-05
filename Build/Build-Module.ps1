@@ -17,7 +17,7 @@ Import-Module -Name PSPublishModule -Force
 Build-Module -ModuleName 'BlueTuxedo' {
     # Usual defaults as per standard module
     $Manifest = [ordered] @{
-        ModuleVersion        = '2024.1'
+        ModuleVersion        = '2024.10'
         CompatiblePSEditions = @('Desktop', 'Core')
         GUID                 = 'e98445b3-1d76-4a51-831d-ddfc7e0213fa'
         Author               = 'Jake Hildreth and Jim Sykora'
@@ -122,4 +122,5 @@ Build-Module -ModuleName 'BlueTuxedo' {
     New-ConfigurationArtefact -Type Script -Enable -Path "$PSScriptRoot\..\Artefacts\Script" -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName 'Invoke-<ModuleName>.ps1'
     New-ConfigurationArtefact -Type ScriptPacked -Enable -Path "$PSScriptRoot\..\Artefacts\ScriptPacked" -ArtefactName 'Invoke-<ModuleName>.zip' -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge -ScriptName 'Invoke-<ModuleName>.ps1'
     New-ConfigurationArtefact -Type Unpacked -Enable -Path "$PSScriptRoot\..\Artefacts\Unpacked"
+    New-ConfigurationPublish -Type PowerShellGallery -FilePath 'C:\Users\jake.BLUETUXEDO\Documents\API Keys\PSGallery.txt'
 }
